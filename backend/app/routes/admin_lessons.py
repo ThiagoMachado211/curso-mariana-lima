@@ -6,6 +6,7 @@ from app.core.deps import admin_required
 from app.db.deps import get_db
 from app.models.lesson import Lesson
 from app.models.module import Module
+from app.models.user import User
 from app.schemas.lesson import LessonCreate, LessonUpdate, LessonOut
 
 router = APIRouter(prefix="/admin/lessons", tags=["admin-lessons"])
@@ -15,15 +16,19 @@ router = APIRouter(prefix="/admin/lessons", tags=["admin-lessons"])
 def create_lesson(
     data: LessonCreate,
     db: Session = Depends(get_db),
-    _admin=Depends(admin_required),
+    admin: User = Depends(admin_required),
 ):
-    module = db.query(Module).filter(Module.id == data.module_id).first()
+    module = (
+        db.query(Module)
+        .filter(Module.id == data.module_id, Module.tenant_id == admin.tenant_id)
+        .first()
+    )
     if not module:
         raise HTTPException(status_code=404, detail="Módulo não encontrado")
 
     lesson = Lesson(
-        tenant_id=module.tenant_id,
-        module_id=data.module_id,
+        tenant_id=admin.tenant_id,
+        module_id=module.id,
         title=data.title,
         order=data.order,
         video_embed_url=data.video_embed_url,
@@ -39,11 +44,11 @@ def create_lesson(
 def list_lessons(
     module_id: uuid.UUID,
     db: Session = Depends(get_db),
-    _admin=Depends(admin_required),
+    admin: User = Depends(admin_required),
 ):
     return (
         db.query(Lesson)
-        .filter(Lesson.module_id == module_id)
+        .filter(Lesson.module_id == module_id, Lesson.tenant_id == admin.tenant_id)
         .order_by(Lesson.order.asc())
         .all()
     )
@@ -54,9 +59,13 @@ def update_lesson(
     lesson_id: uuid.UUID,
     data: LessonUpdate,
     db: Session = Depends(get_db),
-    _admin=Depends(admin_required),
+    admin: User = Depends(admin_required),
 ):
-    lesson = db.query(Lesson).filter(Lesson.id == lesson_id).first()
+    lesson = (
+        db.query(Lesson)
+        .filter(Lesson.id == lesson_id, Lesson.tenant_id == admin.tenant_id)
+        .first()
+    )
     if not lesson:
         raise HTTPException(status_code=404, detail="Aula não encontrada")
 
@@ -72,3 +81,22 @@ def update_lesson(
     db.commit()
     db.refresh(lesson)
     return lesson
+
+
+@router.delete("/{lesson_id}")
+def delete_lesson(
+    lesson_id: uuid.UUID,
+    db: Session = Depends(get_db),
+    admin: User = Depends(admin_required),
+):
+    lesson = (
+        db.query(Lesson)
+        .filter(Lesson.id == lesson_id, Lesson.tenant_id == admin.tenant_id)
+        .first()
+    )
+    if not lesson:
+        raise HTTPException(status_code=404, detail="Aula não encontrada")
+
+    db.delete(lesson)
+    db.commit()
+    return {"deleted": True}

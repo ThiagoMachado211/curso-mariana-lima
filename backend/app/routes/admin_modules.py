@@ -6,6 +6,7 @@ from app.core.deps import admin_required
 from app.db.deps import get_db
 from app.models.module import Module
 from app.models.course import Course
+from app.models.user import User
 from app.schemas.module import ModuleCreate, ModuleUpdate, ModuleOut
 
 router = APIRouter(prefix="/admin/modules", tags=["admin-modules"])
@@ -15,15 +16,19 @@ router = APIRouter(prefix="/admin/modules", tags=["admin-modules"])
 def create_module(
     data: ModuleCreate,
     db: Session = Depends(get_db),
-    _admin=Depends(admin_required),
+    admin: User = Depends(admin_required),
 ):
-    course = db.query(Course).filter(Course.id == data.course_id).first()
+    course = (
+        db.query(Course)
+        .filter(Course.id == data.course_id, Course.tenant_id == admin.tenant_id)
+        .first()
+    )
     if not course:
         raise HTTPException(status_code=404, detail="Curso não encontrado")
 
     module = Module(
-        tenant_id=course.tenant_id,
-        course_id=data.course_id,
+        tenant_id=admin.tenant_id,
+        course_id=course.id,
         title=data.title,
         order=data.order,
     )
@@ -37,11 +42,11 @@ def create_module(
 def list_modules(
     course_id: uuid.UUID,
     db: Session = Depends(get_db),
-    _admin=Depends(admin_required),
+    admin: User = Depends(admin_required),
 ):
     return (
         db.query(Module)
-        .filter(Module.course_id == course_id)
+        .filter(Module.course_id == course_id, Module.tenant_id == admin.tenant_id)
         .order_by(Module.order.asc())
         .all()
     )
@@ -52,9 +57,13 @@ def update_module(
     module_id: uuid.UUID,
     data: ModuleUpdate,
     db: Session = Depends(get_db),
-    _admin=Depends(admin_required),
+    admin: User = Depends(admin_required),
 ):
-    module = db.query(Module).filter(Module.id == module_id).first()
+    module = (
+        db.query(Module)
+        .filter(Module.id == module_id, Module.tenant_id == admin.tenant_id)
+        .first()
+    )
     if not module:
         raise HTTPException(status_code=404, detail="Módulo não encontrado")
 
@@ -66,3 +75,22 @@ def update_module(
     db.commit()
     db.refresh(module)
     return module
+
+
+@router.delete("/{module_id}")
+def delete_module(
+    module_id: uuid.UUID,
+    db: Session = Depends(get_db),
+    admin: User = Depends(admin_required),
+):
+    module = (
+        db.query(Module)
+        .filter(Module.id == module_id, Module.tenant_id == admin.tenant_id)
+        .first()
+    )
+    if not module:
+        raise HTTPException(status_code=404, detail="Módulo não encontrado")
+
+    db.delete(module)
+    db.commit()
+    return {"deleted": True}
