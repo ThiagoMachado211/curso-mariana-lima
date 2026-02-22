@@ -1,16 +1,18 @@
 from fastapi import FastAPI
-from fastapi.responses import Response
+from sqlalchemy import text
+from app.db.session import engine
+from app.routes.auth import router as auth_router
 
 app = FastAPI(title="Curso Mariana Lima API")
 
-@app.get("/")
-def read_root():
-    return {"message": "API Curso Mariana Lima online 🚀"}
+app.include_router(auth_router)
 
 @app.get("/health")
-def healthcheck():
+def health():
     return {"status": "ok"}
 
-@app.get("/favicon.ico", include_in_schema=False)
-def favicon():
-    return Response(status_code=204)
+@app.get("/db-check")
+def db_check():
+    with engine.connect() as conn:
+        result = conn.execute(text("SELECT 1")).scalar()
+    return {"db": "ok", "result": result}

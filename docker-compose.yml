@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16
+    container_name: curso_mariana_db
+    environment:
+      POSTGRES_DB: curso_mariana
+      POSTGRES_USER: curso_mariana
+      POSTGRES_PASSWORD: curso_mariana_pwd
+    ports:
+      - "5432:5432"
+    volumes:
+      - curso_mariana_pgdata:/var/lib/postgresql/data
+
+volumes:
+  curso_mariana_pgdata:
