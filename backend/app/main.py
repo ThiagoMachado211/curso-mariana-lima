@@ -2,10 +2,15 @@ from fastapi import FastAPI
 from sqlalchemy import text
 from app.db.session import engine
 from app.routes.auth import router as auth_router
+from app.routes.admin_modules import router as admin_modules_router
+from app.routes.admin_lessons import router as admin_lessons_router
+
 
 app = FastAPI(title="Curso Mariana Lima API")
 
 app.include_router(auth_router)
+app.include_router(admin_modules_router)
+app.include_router(admin_lessons_router)
 
 @app.get("/health")
 def health():
