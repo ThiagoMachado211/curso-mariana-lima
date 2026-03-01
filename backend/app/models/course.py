@@ -18,3 +18,6 @@ class Course(Base):
 
     price_cents: Mapped[int] = mapped_column(Integer, nullable=False)  # ex: 29700 = R$297,00
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+
+    is_published: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    currency: Mapped[str] = mapped_column(String(3), default="BRL", nullable=False)
