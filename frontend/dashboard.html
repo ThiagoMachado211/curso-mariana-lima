@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard - Matemática Essencial</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    html, body {
+      background: #000;
+      color: #fff;
+      min-height: 100%;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+    }
+
+    .blue {
+      color: #3b82f6;
+    }
+
+    .purple {
+      color: #a855f7;
+    }
+
+    .text-soft {
+      color: #cfcfcf;
+    }
+
+    .text-soft-2 {
+      color: #bdbdbd;
+    }
+  </style>
+</head>
+<body>
+  <header style="width: 100%; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(0,0,0,0.95); position: sticky; top: 0; z-index: 1000;">
+    <div style="width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 24px; height: 72px; display: flex; align-items: center; justify-content: space-between;">
+      <a href="dashboard.html" style="display: flex; align-items: center; gap: 12px; font-weight: bold;">
+        <div style="width: 34px; height: 34px; border-radius: 8px; background: #fff; color: #7c3aed; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+          ▶
+        </div>
+        <div style="font-size: 18px;">
+          <span class="blue">Matemática</span><span class="purple">Essencial</span>
+        </div>
+      </a>
+
+      <nav style="display: flex; gap: 12px;">
+        <a
+          href="curso.html"
+          style="display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 20px; border-radius: 12px; background: #0a0a0a; color: #fff; border: 1px solid rgba(255,255,255,0.08); font-weight: 600;"
+        >
+          Cursos
+        </a>
+
+        <a
+          href="perfil.html"
+          style="display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 20px; border-radius: 12px; background: #0a0a0a; color: #fff; border: 1px solid rgba(255,255,255,0.08); font-weight: 600;"
+        >
+          Perfil
+        </a>
+
+        <button
+          id="logoutButton"
+          style="display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 20px; border-radius: 12px; background: #a855f7; color: #fff; font-weight: 600;"
+        >
+          Sair
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main style="width: 100%; max-width: 1280px; margin: 0 auto; padding: 40px 24px 80px;">
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px;">
+      <div>
+        <h1 style="font-size: 42px; margin-bottom: 12px;">Área do Aluno</h1>
+        <p class="text-soft" style="margin-bottom: 30px;">Bem-vindo à plataforma Matemática Essencial.</p>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;">
+      <div style="background: #0b0b0b; border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 24px;">
+        <h3 style="margin-bottom: 12px;">Meu Curso</h3>
+        <p class="text-soft-2" style="font-size: 14px; line-height: 1.6;">
+          Acesse seus módulos, aulas e materiais do curso.
+        </p>
+        <br />
+        <a
+          href="curso.html"
+          style="display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 20px; border-radius: 12px; background: #a855f7; color: #fff; font-weight: 600;"
+        >
+          Abrir curso
+        </a>
+      </div>
+
+      <div style="background: #0b0b0b; border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 24px;">
+        <h3 style="margin-bottom: 12px;">Progresso</h3>
+        <p class="text-soft-2" style="font-size: 14px; line-height: 1.6;">
+          Visualize o andamento da sua jornada dentro da plataforma.
+        </p>
+      </div>
+
+      <div style="background: #0b0b0b; border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 24px;">
+        <h3 style="margin-bottom: 12px;">Sessão</h3>
+        <p class="text-soft-2" style="font-size: 14px; line-height: 1.6;">Token salvo localmente:</p>
+        <br />
+        <p id="tokenPreview" class="text-soft-2" style="font-size: 14px; line-height: 1.6;"></p>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

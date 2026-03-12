@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Matemática Essencial</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    html, body {
+      background: #000;
+      color: #fff;
+      min-height: 100%;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+    }
+
+    .blue {
+      color: #3b82f6;
+    }
+
+    .purple {
+      color: #a855f7;
+    }
+
+    .text-light {
+      color: rgba(186, 230, 253, 0.85);
+    }
+
+    .text-soft {
+      color: #cfcfcf;
+    }
+
+    .text-soft-2 {
+      color: #bdbdbd;
+    }
+  </style>
+</head>
+<body>
+  <header style="width: 100%; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(0,0,0,0.95); position: sticky; top: 0; z-index: 1000;">
+    <div style="width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 24px; height: 72px; display: flex; align-items: center; justify-content: space-between;">
+      <a href="index.html" style="display: flex; align-items: center; gap: 12px; font-weight: bold;">
+        <div style="width: 34px; height: 34px; border-radius: 8px; background: #fff; color: #7c3aed; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+          ▶
+        </div>
+        <div style="font-size: 18px;">
+          <span class="blue">Matemática</span><span class="purple">Essencial</span>
+        </div>
+      </a>
+
+      <nav style="display: flex; gap: 12px;">
+        <a
+          href="login.html"
+          style="display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 20px; border-radius: 12px; background: #0a0a0a; color: #fff; border: 1px solid rgba(255,255,255,0.08); font-weight: 600;"
+        >
+          Entrar
+        </a>
+
+        <a
+          href="cadastro.html"
+          style="display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 20px; border-radius: 12px; background: #a855f7; color: #fff; font-weight: 600;"
+        >
+          Cadastre-se
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <section style="text-align: center; padding: 60px 24px 180px;">
+    <div style="width: 100%; max-width: 1280px; margin: 0 auto;">
+      <h1 style="font-size: 72px; line-height: 1.05; font-weight: 900; max-width: 1100px; margin: 0 auto;">
+        É aqui que sua nova jornada começa!
+      </h1>
+
+      <p class="text-light" style="max-width: 620px; margin: 24px auto 0; font-size: 24px; line-height: 1.5;">
+        Curso prático, comunidade ativa e suporte real. Tudo que você precisa para aprender.
+      </p>
+
+      <div style="margin-top: 36px;">
+        <a
+          href="#modulos"
+          style="display: inline-flex; align-items: center; justify-content: center; height: 48px; padding: 0 24px; border-radius: 12px; background: #0a0a0a; color: #dbeafe; border: 1px solid rgba(255,255,255,0.08); font-weight: 600;"
+        >
+          Estrutura do Curso
+        </a>
+      </div>
+
+      <div style="margin: 56px auto 0; width: 100%; max-width: 760px; border: 1px solid rgba(168,85,247,0.35); border-radius: 18px; overflow: hidden; background: #090909;">
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr);">
+          <div style="min-height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-right: 1px solid rgba(168,85,247,0.18);">
+            <div style="font-size: 28px; font-weight: 800; color: #a855f7;">+12k</div>
+            <div style="margin-top: 10px; color: rgba(186,230,253,0.75); font-size: 14px;">Alunos ativos</div>
+          </div>
+
+          <div style="min-height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-right: 1px solid rgba(168,85,247,0.18);">
+            <div style="font-size: 28px; font-weight: 800; color: #a855f7;">98%</div>
+            <div style="margin-top: 10px; color: rgba(186,230,253,0.75); font-size: 14px;">Satisfação</div>
+          </div>
+
+          <div style="min-height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-right: 1px solid rgba(168,85,247,0.18);">
+            <div style="font-size: 28px; font-weight: 800; color: #a855f7;">+80</div>
+            <div style="margin-top: 10px; color: rgba(186,230,253,0.75); font-size: 14px;">Aulas</div>
+          </div>
+
+          <div style="min-height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <div style="font-size: 28px; font-weight: 800; color: #a855f7;">4</div>
+            <div style="margin-top: 10px; color: rgba(186,230,253,0.75); font-size: 14px;">Anos no mercado</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="modulos" style="padding: 0 24px 80px;">
+    <div style="width: 100%; max-width: 1280px; margin: 0 auto;">
+      <h2 style="font-size: 42px; font-weight: 800; margin-bottom: 24px;">
+        Módulos em Destaque
+      </h2>
+
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
+        <article style="background: #0b0b0b; border-radius: 18px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08);">
+          <div style="height: 180px; display: flex; align-items: center; justify-content: center; font-size: 48px; background: linear-gradient(135deg, #2e064b, #581c87);">
+            📈
+          </div>
+          <div style="padding: 18px;">
+            <div style="color: #a855f7; font-size: 12px; font-weight: 800; letter-spacing: 0.12em;">MÓDULO 1</div>
+            <div style="margin-top: 12px; font-size: 22px; font-weight: 800;">Fundamentos Essenciais</div>
+            <div class="text-soft" style="margin-top: 12px; line-height: 1.6; font-size: 14px;">
+              Construa a base matemática necessária para avançar com segurança.
+            </div>
+          </div>
+        </article>
+
+        <article style="background: #0b0b0b; border-radius: 18px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08);">
+          <div style="height: 180px; display: flex; align-items: center; justify-content: center; font-size: 48px; background: linear-gradient(135deg, #1e1b4b, #3730a3);">
+            📊
+          </div>
+          <div style="padding: 18px;">
+            <div style="color: #a855f7; font-size: 12px; font-weight: 800; letter-spacing: 0.12em;">MÓDULO 2</div>
+            <div style="margin-top: 12px; font-size: 22px; font-weight: 800;">Álgebra Aplicada</div>
+            <div class="text-soft" style="margin-top: 12px; line-height: 1.6; font-size: 14px;">
+              Aprenda a manipular expressões e resolver equações rapidamente.
+            </div>
+          </div>
+        </article>
+
+        <article style="background: #0b0b0b; border-radius: 18px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08);">
+          <div style="height: 180px; display: flex; align-items: center; justify-content: center; font-size: 48px; background: linear-gradient(135deg, #052e16, #166534);">
+            💻
+          </div>
+          <div style="padding: 18px;">
+            <div style="color: #a855f7; font-size: 12px; font-weight: 800; letter-spacing: 0.12em;">MÓDULO 3</div>
+            <div style="margin-top: 12px; font-size: 22px; font-weight: 800;">Geometria Estratégica</div>
+            <div class="text-soft" style="margin-top: 12px; line-height: 1.6; font-size: 14px;">
+              Visualize problemas e desenvolva raciocínio espacial eficiente.
+            </div>
+          </div>
+        </article>
+
+        <article style="background: #0b0b0b; border-radius: 18px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08);">
+          <div style="height: 180px; display: flex; align-items: center; justify-content: center; font-size: 48px; background: linear-gradient(135deg, #4a044e, #be185d);">
+            🧠
+          </div>
+          <div style="padding: 18px;">
+            <div style="color: #a855f7; font-size: 12px; font-weight: 800; letter-spacing: 0.12em;">MÓDULO 4</div>
+            <div style="margin-top: 12px; font-size: 22px; font-weight: 800;">Resolução de Problemas</div>
+            <div class="text-soft" style="margin-top: 12px; line-height: 1.6; font-size: 14px;">
+              Métodos práticos para resolver exercícios com rapidez e precisão.
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
