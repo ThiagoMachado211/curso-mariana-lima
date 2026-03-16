@@ -3,7 +3,7 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 
-from app.core.config import JWT_SECRET, JWT_ALGORITHM
+from app.core.config import settings
 from app.db.deps import get_db
 from app.models.user import User
 
@@ -16,7 +16,7 @@ def get_current_user(
 ) -> User:
     token = creds.credentials
     try:
-        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        payload = jwt.decode(token, settings.JWT_SECRET, algorithms=["HS256"])
         user_id: str | None = payload.get("sub")
         if not user_id:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token inválido")

@@ -7,18 +7,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
+
     errorBox.textContent = "";
     successBox.textContent = "";
 
-    const nome = document.getElementById("nome").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const telefone = document.getElementById("telefone").value.trim();
-    const cpf = document.getElementById("cpf").value.trim();
-    const password = document.getElementById("password").value;
-    const confirmPassword = document.getElementById("confirmPassword").value;
+    const nameInput = document.getElementById("name") || document.getElementById("nome");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const confirmPasswordInput = document.getElementById("confirmPassword");
 
-    if (!nome || !email || !telefone || !cpf || !password || !confirmPassword) {
-      errorBox.textContent = "Preencha todos os campos.";
+    const name = nameInput?.value.trim() || "";
+    const email = emailInput?.value.trim() || "";
+    const password = passwordInput?.value || "";
+    const confirmPassword = confirmPasswordInput?.value || "";
+
+    if (!name || !email || !password || !confirmPassword) {
+      errorBox.textContent = "Preencha todos os campos obrigatórios.";
       return;
     }
 
@@ -28,23 +32,32 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      await apiRequest("/auth/register", {
+      const response = await fetch("http://127.0.0.1:8000/auth/register", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
-          nome,
+          name,
           email,
-          telefone,
-          cpf,
           password,
         }),
       });
 
-      successBox.textContent = "Conta criada com sucesso. Redirecionando...";
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.detail || "Erro ao cadastrar.");
+      }
+
+      successBox.textContent = "Cadastro realizado com sucesso. Redirecionando para o login...";
+
       setTimeout(() => {
         window.location.href = "login.html";
       }, 1500);
     } catch (error) {
-      errorBox.textContent = error.message;
+      errorBox.textContent = error.message || "Falha na comunicação com o servidor.";
+      console.error("Erro no cadastro:", error);
     }
   });
 });

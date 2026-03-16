@@ -1,8 +1,8 @@
-"""create core tables
+"""initial_schema
 
-Revision ID: fd08d339558c
+Revision ID: 4dc5c3383bd9
 Revises: 
-Create Date: 2026-02-21 20:34:25.664961
+Create Date: 2026-03-14 17:52:15.371648
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'fd08d339558c'
+revision: str = '4dc5c3383bd9'
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -25,6 +25,8 @@ def upgrade() -> None:
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('slug', sa.String(length=50), nullable=False),
     sa.Column('name', sa.String(length=120), nullable=False),
+    sa.Column('mp_access_token', sa.String(length=255), nullable=True),
+    sa.Column('mp_env', sa.String(length=20), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_tenants_slug'), 'tenants', ['slug'], unique=True)
@@ -36,6 +38,8 @@ def upgrade() -> None:
     sa.Column('description', sa.Text(), nullable=True),
     sa.Column('price_cents', sa.Integer(), nullable=False),
     sa.Column('is_active', sa.Boolean(), nullable=False),
+    sa.Column('is_published', sa.Boolean(), nullable=False),
+    sa.Column('currency', sa.String(length=3), nullable=False),
     sa.ForeignKeyConstraint(['tenant_id'], ['tenants.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -60,10 +64,12 @@ def upgrade() -> None:
     sa.Column('user_id', sa.UUID(), nullable=False),
     sa.Column('course_id', sa.UUID(), nullable=False),
     sa.Column('status', sa.String(length=20), nullable=False),
+    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
     sa.ForeignKeyConstraint(['course_id'], ['courses.id'], ),
     sa.ForeignKeyConstraint(['tenant_id'], ['tenants.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('user_id', 'course_id', name='uq_enrollment_user_course')
     )
     op.create_index(op.f('ix_enrollments_course_id'), 'enrollments', ['course_id'], unique=False)
     op.create_index(op.f('ix_enrollments_tenant_id'), 'enrollments', ['tenant_id'], unique=False)
@@ -83,21 +89,27 @@ def upgrade() -> None:
     op.create_table('payments',
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('tenant_id', sa.UUID(), nullable=False),
+    sa.Column('user_id', sa.UUID(), nullable=False),
     sa.Column('course_id', sa.UUID(), nullable=False),
-    sa.Column('buyer_name', sa.String(length=120), nullable=False),
-    sa.Column('buyer_email', sa.String(length=255), nullable=False),
-    sa.Column('amount_cents', sa.Integer(), nullable=False),
-    sa.Column('status', sa.String(length=20), nullable=False),
+    sa.Column('provider', sa.String(length=30), nullable=False),
+    sa.Column('external_reference', sa.String(length=80), nullable=False),
     sa.Column('mp_preference_id', sa.String(length=120), nullable=True),
     sa.Column('mp_payment_id', sa.String(length=120), nullable=True),
-    sa.Column('external_reference', sa.String(length=120), nullable=True),
+    sa.Column('status', sa.String(length=20), nullable=False),
+    sa.Column('amount_cents', sa.Integer(), nullable=False),
+    sa.Column('currency', sa.String(length=3), nullable=False),
+    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
     sa.ForeignKeyConstraint(['course_id'], ['courses.id'], ),
     sa.ForeignKeyConstraint(['tenant_id'], ['tenants.id'], ),
-    sa.PrimaryKeyConstraint('id')
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('external_reference', name='uq_payment_external_reference'),
+    sa.UniqueConstraint('mp_payment_id', name='uq_payment_mp_payment_id')
     )
-    op.create_index(op.f('ix_payments_buyer_email'), 'payments', ['buyer_email'], unique=False)
     op.create_index(op.f('ix_payments_course_id'), 'payments', ['course_id'], unique=False)
     op.create_index(op.f('ix_payments_tenant_id'), 'payments', ['tenant_id'], unique=False)
+    op.create_index(op.f('ix_payments_user_id'), 'payments', ['user_id'], unique=False)
     op.create_table('lessons',
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('tenant_id', sa.UUID(), nullable=False),
@@ -121,9 +133,9 @@ def downgrade() -> None:
     op.drop_index(op.f('ix_lessons_tenant_id'), table_name='lessons')
     op.drop_index(op.f('ix_lessons_module_id'), table_name='lessons')
     op.drop_table('lessons')
+    op.drop_index(op.f('ix_payments_user_id'), table_name='payments')
     op.drop_index(op.f('ix_payments_tenant_id'), table_name='payments')
     op.drop_index(op.f('ix_payments_course_id'), table_name='payments')
-    op.drop_index(op.f('ix_payments_buyer_email'), table_name='payments')
     op.drop_table('payments')
     op.drop_index(op.f('ix_modules_tenant_id'), table_name='modules')
     op.drop_index(op.f('ix_modules_course_id'), table_name='modules')

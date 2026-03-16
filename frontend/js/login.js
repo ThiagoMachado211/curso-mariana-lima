@@ -4,12 +4,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!form) return;
 
+  if (isAuthenticated()) {
+    window.location.href = "dashboard.html";
+    return;
+  }
+
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
+
     errorBox.textContent = "";
 
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
+    const email = document.getElementById("email")?.value.trim() || "";
+    const password = document.getElementById("password")?.value || "";
+
+    if (!email || !password) {
+      errorBox.textContent = "Preencha email e senha.";
+      return;
+    }
 
     try {
       const data = await apiRequest("/auth/login", {
@@ -20,17 +31,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }),
       });
 
-      const token =
-        data.access_token || data.token || data.jwt || data.accessToken;
-
-      if (!token) {
-        throw new Error("Token não retornado pelo backend.");
-      }
-
-      saveToken(token);
+      saveToken(data.access_token);
       window.location.href = "dashboard.html";
     } catch (error) {
-      errorBox.textContent = error.message;
+      errorBox.textContent = error.message || "Falha ao fazer login.";
+      console.error("Erro no login:", error);
     }
   });
 });

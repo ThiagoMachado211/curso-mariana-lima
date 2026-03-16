@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Curso - Matemática Essencial</title>
+  <title>Admin Dashboard - Matemática Essencial</title>
 
   <style>
     * {
@@ -13,7 +13,8 @@
       font-family: Arial, Helvetica, sans-serif;
     }
 
-    html, body {
+    html,
+    body {
       min-height: 100%;
       background: #000;
       color: #fff;
@@ -22,12 +23,6 @@
     a {
       text-decoration: none;
       color: inherit;
-    }
-
-    button {
-      cursor: pointer;
-      border: none;
-      font: inherit;
     }
 
     .page-container {
@@ -61,21 +56,19 @@
     }
 
     .site-logo__icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      background: #f2f2f2;
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: #fff;
       color: #7c3aed;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 700;
-      font-size: 20px;
     }
 
     .site-logo__text {
       font-size: 18px;
-      font-weight: 800;
     }
 
     .site-logo__text--blue {
@@ -97,10 +90,10 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      height: 48px;
+      height: 44px;
       padding: 0 20px;
-      border-radius: 14px;
-      font-weight: 700;
+      border-radius: 12px;
+      font-weight: 600;
       transition: 0.2s ease;
     }
 
@@ -115,85 +108,69 @@
     }
 
     .btn--purple {
-      background: linear-gradient(90deg, #9d4edd, #c056f0);
+      background: #a855f7;
       color: #fff;
       border: 1px solid transparent;
     }
 
     .btn--purple:hover {
-      opacity: 0.95;
+      background: #9333ea;
     }
 
-    .course-page {
+    .admin-page {
       width: 100%;
       max-width: 1280px;
       margin: 0 auto;
       padding: 40px 24px 80px;
     }
 
-    .course-header {
-      margin-bottom: 26px;
+    .admin-page__top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
     }
 
-    .course-title {
+    .admin-page__title {
       font-size: 42px;
       margin-bottom: 12px;
     }
 
-    .course-description {
+    .admin-page__subtitle {
       color: #cfcfcf;
-      font-size: 16px;
-      line-height: 1.8;
-      max-width: 900px;
+      margin-bottom: 30px;
     }
 
-    .course-meta {
-      margin-top: 16px;
-      color: #9f9f9f;
-      font-size: 14px;
-    }
-
-    .course-feedback {
-      color: #ff6464;
-      min-height: 22px;
-      margin-bottom: 20px;
-    }
-
-    .modules-title {
-      font-size: 28px;
-      margin: 32px 0 18px;
-    }
-
-    .modules-grid {
+    .admin-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 18px;
     }
 
-    .module-card {
+    .admin-card {
       background: #0b0b0b;
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
       padding: 24px;
     }
 
-    .module-card__order {
-      color: #a855f7;
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-
-    .module-card__title {
-      font-size: 22px;
+    .admin-card__title {
       margin-bottom: 12px;
+      font-size: 20px;
     }
 
-    .module-card__text {
-      color: #cfcfcf;
+    .admin-card__text {
+      color: #bdbdbd;
       font-size: 14px;
-      line-height: 1.7;
+      line-height: 1.6;
       margin-bottom: 18px;
+    }
+
+    @media (max-width: 1100px) {
+      .admin-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
 
     @media (max-width: 768px) {
@@ -209,12 +186,12 @@
         justify-content: center;
       }
 
-      .course-title {
-        font-size: 32px;
+      .admin-grid {
+        grid-template-columns: 1fr;
       }
 
-      .modules-grid {
-        grid-template-columns: 1fr;
+      .admin-page__title {
+        font-size: 32px;
       }
     }
   </style>
@@ -222,7 +199,7 @@
 <body>
   <header class="site-header">
     <div class="page-container site-header__inner">
-      <a href="dashboard.html" class="site-logo">
+      <a href="admin-dashboard.html" class="site-logo">
         <div class="site-logo__icon">▶</div>
         <div class="site-logo__text">
           <span class="site-logo__text--blue">Matemática</span><span class="site-logo__text--purple">Essencial</span>
@@ -230,27 +207,57 @@
       </a>
 
       <nav class="site-nav">
-        <a href="dashboard.html" class="btn btn--dark">Dashboard</a>
-        <a href="cursos.html" class="btn btn--dark">Cursos</a>
-        <button id="logoutButton" class="btn btn--purple">Sair</button>
+        <a href="dashboard.html" class="btn btn--dark">Área do Aluno</a>
+        <a href="admin-cursos.html" class="btn btn--dark">Cursos</a>
+        <a href="admin-modulos.html" class="btn btn--dark">Módulos</a>
+        <a href="admin-aulas.html" class="btn btn--dark">Aulas</a>
       </nav>
     </div>
   </header>
 
-  <main class="course-page">
-    <div id="courseFeedback" class="course-feedback"></div>
+  <main class="admin-page">
+    <div class="admin-page__top">
+      <div>
+        <h1 class="admin-page__title">Painel Administrativo</h1>
+        <p class="admin-page__subtitle">
+          Gerencie cursos, módulos, aulas e acompanhe a estrutura da plataforma.
+        </p>
+      </div>
+    </div>
 
-    <section class="course-header">
-      <h1 id="courseTitle" class="course-title">Carregando curso...</h1>
-      <p id="courseDescription" class="course-description"></p>
-      <div id="courseMeta" class="course-meta"></div>
-    </section>
+    <div class="admin-grid">
+      <div class="admin-card">
+        <h3 class="admin-card__title">Gerenciar Cursos</h3>
+        <p class="admin-card__text">
+          Crie, edite e visualize todos os cursos cadastrados na plataforma.
+        </p>
+        <a href="admin-cursos.html" class="btn btn--purple">Abrir</a>
+      </div>
 
-    <h2 class="modules-title">Módulos</h2>
-    <div id="modulesGrid" class="modules-grid"></div>
+      <div class="admin-card">
+        <h3 class="admin-card__title">Gerenciar Módulos</h3>
+        <p class="admin-card__text">
+          Organize os módulos de cada curso e defina a estrutura pedagógica.
+        </p>
+        <a href="admin-modulos.html" class="btn btn--purple">Abrir</a>
+      </div>
+
+      <div class="admin-card">
+        <h3 class="admin-card__title">Gerenciar Aulas</h3>
+        <p class="admin-card__text">
+          Cadastre aulas, títulos, descrições e relacione com os módulos.
+        </p>
+        <a href="admin-aulas.html" class="btn btn--purple">Abrir</a>
+      </div>
+
+      <div class="admin-card">
+        <h3 class="admin-card__title">Visão Geral</h3>
+        <p class="admin-card__text">
+          Área inicial para o futuro acompanhamento de métricas administrativas.
+        </p>
+        <a href="admin-dashboard.html" class="btn btn--purple">Atual</a>
+      </div>
+    </div>
   </main>
-
-  <script src="js/api.js"></script>
-  <script src="js/curso.js"></script>
 </body>
 </html>

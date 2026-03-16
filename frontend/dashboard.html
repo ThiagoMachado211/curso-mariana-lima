@@ -13,10 +13,11 @@
       font-family: Arial, Helvetica, sans-serif;
     }
 
-    html, body {
+    html,
+    body {
+      min-height: 100%;
       background: #000;
       color: #fff;
-      min-height: 100%;
     }
 
     a {
@@ -27,99 +28,233 @@
     button {
       cursor: pointer;
       border: none;
+      font: inherit;
     }
 
-    .blue {
+    .page-container {
+      width: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      width: 100%;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(0, 0, 0, 0.95);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .site-header__inner {
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .site-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+    }
+
+    .site-logo__icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: #fff;
+      color: #7c3aed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+
+    .site-logo__text {
+      font-size: 18px;
+    }
+
+    .site-logo__text--blue {
       color: #3b82f6;
     }
 
-    .purple {
+    .site-logo__text--purple {
       color: #a855f7;
     }
 
-    .text-soft {
-      color: #cfcfcf;
+    .site-nav {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
-    .text-soft-2 {
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 44px;
+      padding: 0 20px;
+      border-radius: 12px;
+      font-weight: 600;
+      transition: 0.2s ease;
+    }
+
+    .btn--dark {
+      background: #0a0a0a;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .btn--dark:hover {
+      background: #151515;
+    }
+
+    .btn--purple {
+      background: #a855f7;
+      color: #fff;
+      border: 1px solid transparent;
+    }
+
+    .btn--purple:hover {
+      background: #9333ea;
+    }
+
+    .dashboard-page {
+      width: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    .dashboard-page__top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .dashboard-page__title {
+      font-size: 42px;
+      margin-bottom: 12px;
+    }
+
+    .dashboard-page__subtitle {
+      color: #cfcfcf;
+      margin-bottom: 30px;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .dashboard-card {
+      background: #0b0b0b;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 24px;
+    }
+
+    .dashboard-card__title {
+      margin-bottom: 12px;
+    }
+
+    .dashboard-card__text {
       color: #bdbdbd;
+      font-size: 14px;
+      line-height: 1.6;
+      word-break: break-word;
+    }
+
+    @media (max-width: 1100px) {
+      .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .site-header__inner {
+        min-height: 72px;
+        height: auto;
+        padding: 16px 0;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .site-nav {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .dashboard-page__title {
+        font-size: 32px;
+      }
     }
   </style>
 </head>
 <body>
-  <header style="width: 100%; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(0,0,0,0.95); position: sticky; top: 0; z-index: 1000;">
-    <div style="width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 24px; height: 72px; display: flex; align-items: center; justify-content: space-between;">
-      <a href="dashboard.html" style="display: flex; align-items: center; gap: 12px; font-weight: bold;">
-        <div style="width: 34px; height: 34px; border-radius: 8px; background: #fff; color: #7c3aed; display: flex; align-items: center; justify-content: center; font-weight: bold;">
-          ▶
-        </div>
-        <div style="font-size: 18px;">
-          <span class="blue">Matemática</span><span class="purple">Essencial</span>
+  <header class="site-header">
+    <div class="page-container site-header__inner">
+      <a href="dashboard.html" class="site-logo">
+        <div class="site-logo__icon">▶</div>
+        <div class="site-logo__text">
+          <span class="site-logo__text--blue">Matemática</span><span class="site-logo__text--purple">Essencial</span>
         </div>
       </a>
 
-      <nav style="display: flex; gap: 12px;">
-        <a
-          href="curso.html"
-          style="display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 20px; border-radius: 12px; background: #0a0a0a; color: #fff; border: 1px solid rgba(255,255,255,0.08); font-weight: 600;"
-        >
-          Cursos
-        </a>
-
-        <a
-          href="perfil.html"
-          style="display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 20px; border-radius: 12px; background: #0a0a0a; color: #fff; border: 1px solid rgba(255,255,255,0.08); font-weight: 600;"
-        >
-          Perfil
-        </a>
-
-        <button
-          id="logoutButton"
-          style="display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 20px; border-radius: 12px; background: #a855f7; color: #fff; font-weight: 600;"
-        >
-          Sair
-        </button>
+      <nav class="site-nav">
+        <a href="cursos.html" class="btn btn--dark">Cursos</a>
+        <a href="perfil.html" class="btn btn--dark">Perfil</a>
+        <button id="logoutButton" class="btn btn--purple">Sair</button>
       </nav>
     </div>
   </header>
 
-  <main style="width: 100%; max-width: 1280px; margin: 0 auto; padding: 40px 24px 80px;">
-    <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px;">
+  <main class="dashboard-page">
+    <div class="dashboard-page__top">
       <div>
-        <h1 style="font-size: 42px; margin-bottom: 12px;">Área do Aluno</h1>
-        <p class="text-soft" style="margin-bottom: 30px;">Bem-vindo à plataforma Matemática Essencial.</p>
+        <h1 class="dashboard-page__title">Área do Aluno</h1>
+        <p class="dashboard-page__subtitle">Bem-vindo à plataforma Matemática Essencial.</p>
       </div>
     </div>
 
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;">
-      <div style="background: #0b0b0b; border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 24px;">
-        <h3 style="margin-bottom: 12px;">Meu Curso</h3>
-        <p class="text-soft-2" style="font-size: 14px; line-height: 1.6;">
-          Acesse seus módulos, aulas e materiais do curso.
-        </p>
+    <div class="dashboard-grid">
+      <div class="dashboard-card">
+        <h3 class="dashboard-card__title">Meu Curso</h3>
+        <p class="dashboard-card__text">Acesse seus módulos, aulas e materiais do curso.</p>
         <br />
-        <a
-          href="curso.html"
-          style="display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 20px; border-radius: 12px; background: #a855f7; color: #fff; font-weight: 600;"
-        >
-          Abrir curso
-        </a>
+        <a href="curso.html" class="btn btn--purple">Abrir curso</a>
       </div>
 
-      <div style="background: #0b0b0b; border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 24px;">
-        <h3 style="margin-bottom: 12px;">Progresso</h3>
-        <p class="text-soft-2" style="font-size: 14px; line-height: 1.6;">
-          Visualize o andamento da sua jornada dentro da plataforma.
-        </p>
+      <div class="dashboard-card">
+        <h3 class="dashboard-card__title">Progresso</h3>
+        <p class="dashboard-card__text">Visualize o andamento da sua jornada dentro da plataforma.</p>
       </div>
 
-      <div style="background: #0b0b0b; border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 24px;">
-        <h3 style="margin-bottom: 12px;">Sessão</h3>
-        <p class="text-soft-2" style="font-size: 14px; line-height: 1.6;">Token salvo localmente:</p>
+      <div class="dashboard-card">
+        <h3 class="dashboard-card__title">Usuário</h3>
+        <p class="dashboard-card__text"><strong>Nome:</strong> <span id="userName">Carregando...</span></p>
+        <p class="dashboard-card__text"><strong>Email:</strong> <span id="userEmail">Carregando...</span></p>
+        <p class="dashboard-card__text"><strong>Perfil:</strong> <span id="userRole">Carregando...</span></p>
+      </div>      
+
+      <div class="dashboard-card">
+        <h3 class="dashboard-card__title">Sessão</h3>
+        <p class="dashboard-card__text">Token salvo localmente:</p>
         <br />
-        <p id="tokenPreview" class="text-soft-2" style="font-size: 14px; line-height: 1.6;"></p>
+        <p id="tokenPreview" class="dashboard-card__text"></p>
       </div>
     </div>
+    
   </main>
 
   <script src="js/api.js"></script>

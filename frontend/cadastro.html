@@ -13,10 +13,11 @@
       font-family: Arial, Helvetica, sans-serif;
     }
 
-    html, body {
+    html,
+    body {
+      min-height: 100%;
       background: #000;
       color: #fff;
-      min-height: 100%;
     }
 
     a {
@@ -24,143 +25,256 @@
       color: inherit;
     }
 
+    button,
+    input {
+      font: inherit;
+    }
+
     button {
       cursor: pointer;
       border: none;
     }
 
-    input {
-      font-size: 16px;
+    .page-container {
+      width: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
     }
 
-    .blue {
+    .site-header {
+      width: 100%;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(0, 0, 0, 0.95);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .site-header__inner {
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .site-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+    }
+
+    .site-logo__icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: #fff;
+      color: #7c3aed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+
+    .site-logo__text {
+      font-size: 18px;
+    }
+
+    .site-logo__text--blue {
       color: #3b82f6;
     }
 
-    .purple {
+    .site-logo__text--purple {
       color: #a855f7;
     }
 
-    .text-soft {
-      color: #cfcfcf;
+    .site-nav {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
-    .text-soft-2 {
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 44px;
+      padding: 0 20px;
+      border-radius: 12px;
+      font-weight: 600;
+      transition: 0.2s ease;
+    }
+
+    .btn--dark {
+      background: #0a0a0a;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .btn--dark:hover {
+      background: #151515;
+    }
+
+    .btn--purple {
+      background: #a855f7;
+      color: #fff;
+      border: 1px solid transparent;
+    }
+
+    .btn--purple:hover {
+      background: #9333ea;
+    }
+
+    .btn--full {
+      width: 100%;
+    }
+
+    .register-page {
+      min-height: calc(100vh - 72px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+    }
+
+    .form-card {
+      width: 100%;
+      max-width: 500px;
+      background: #0b0b0b;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 22px;
+      padding: 32px;
+    }
+
+    .form-card__title {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    .form-card__subtitle {
       color: #bdbdbd;
+      margin-bottom: 24px;
     }
 
-    .error-text {
+    .form-field {
+      margin-bottom: 16px;
+    }
+
+    .form-field__label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 8px;
+      color: #e5e5e5;
+    }
+
+    .form-field__input {
+      width: 100%;
+      height: 48px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: #111;
+      color: #fff;
+      padding: 0 14px;
+    }
+
+    .form-field__input:focus {
+      outline: none;
+      border-color: #a855f7;
+    }
+
+    .form-feedback--error {
+      margin-top: 14px;
       color: #f87171;
       font-size: 14px;
     }
 
-    .success-text {
+    .form-feedback--success {
+      margin-top: 14px;
       color: #4ade80;
       font-size: 14px;
+    }
+
+    .form-footer {
+      margin-top: 18px;
+      color: #cfcfcf;
+      font-size: 14px;
+    }
+
+    .form-footer a {
+      color: #a855f7;
+      font-weight: 700;
+    }
+
+    @media (max-width: 768px) {
+      .site-header__inner {
+        min-height: 72px;
+        height: auto;
+        padding: 16px 0;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .site-nav {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .form-card {
+        padding: 24px;
+      }
     }
   </style>
 </head>
 <body>
-  <header style="width: 100%; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(0,0,0,0.95); position: sticky; top: 0; z-index: 1000;">
-    <div style="width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 24px; height: 72px; display: flex; align-items: center; justify-content: space-between;">
-      <a href="index.html" style="display: flex; align-items: center; gap: 12px; font-weight: bold;">
-        <div style="width: 34px; height: 34px; border-radius: 8px; background: #fff; color: #7c3aed; display: flex; align-items: center; justify-content: center; font-weight: bold;">
-          ▶
-        </div>
-        <div style="font-size: 18px;">
-          <span class="blue">Matemática</span><span class="purple">Essencial</span>
+  <header class="site-header">
+    <div class="page-container site-header__inner">
+      <a href="index.html" class="site-logo">
+        <div class="site-logo__icon">▶</div>
+        <div class="site-logo__text">
+          <span class="site-logo__text--blue">Matemática</span><span class="site-logo__text--purple">Essencial</span>
         </div>
       </a>
 
-      <nav style="display: flex; gap: 12px;">
-        <a
-          href="login.html"
-          style="display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 20px; border-radius: 12px; background: #0a0a0a; color: #fff; border: 1px solid rgba(255,255,255,0.08); font-weight: 600;"
-        >
-          Entrar
-        </a>
+      <nav class="site-nav">
+        <a href="login.html" class="btn btn--dark">Entrar</a>
       </nav>
     </div>
   </header>
 
-  <main style="min-height: calc(100vh - 72px); display: flex; align-items: center; justify-content: center; padding: 40px 24px;">
-    <div style="width: 100%; max-width: 500px; background: #0b0b0b; border: 1px solid rgba(255,255,255,0.08); border-radius: 22px; padding: 32px;">
-      <h1 style="font-size: 32px; margin-bottom: 10px;">Criar conta</h1>
-      <p class="text-soft-2" style="margin-bottom: 24px;">Preencha seus dados para acessar a plataforma.</p>
+  <main class="register-page">
+    <div class="form-card">
+      <h1 class="form-card__title">Criar conta</h1>
+      <p class="form-card__subtitle">Preencha seus dados para acessar a plataforma.</p>
 
       <form id="registerForm">
-        <div style="margin-bottom: 16px;">
-          <label for="nome" style="display: block; font-size: 14px; margin-bottom: 8px; color: #e5e5e5;">Nome</label>
-          <input
-            type="text"
-            id="nome"
-            required
-            style="width: 100%; height: 48px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: #111; color: #fff; padding: 0 14px;"
-          />
+        <div class="form-field">
+          <label class="form-field__label" for="nome">Nome</label>
+          <input class="form-field__input" type="text" id="name" required />
         </div>
 
-        <div style="margin-bottom: 16px;">
-          <label for="email" style="display: block; font-size: 14px; margin-bottom: 8px; color: #e5e5e5;">Email</label>
-          <input
-            type="email"
-            id="email"
-            required
-            style="width: 100%; height: 48px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: #111; color: #fff; padding: 0 14px;"
-          />
+        <div class="form-field">
+          <label class="form-field__label" for="email">Email</label>
+          <input class="form-field__input" type="email" id="email" required />
         </div>
 
-        <div style="margin-bottom: 16px;">
-          <label for="telefone" style="display: block; font-size: 14px; margin-bottom: 8px; color: #e5e5e5;">Telefone</label>
-          <input
-            type="text"
-            id="telefone"
-            required
-            style="width: 100%; height: 48px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: #111; color: #fff; padding: 0 14px;"
-          />
+        <div class="form-field">
+          <label class="form-field__label" for="password">Senha</label>
+          <input class="form-field__input" type="password" id="password" required />
         </div>
 
-        <div style="margin-bottom: 16px;">
-          <label for="cpf" style="display: block; font-size: 14px; margin-bottom: 8px; color: #e5e5e5;">CPF</label>
-          <input
-            type="text"
-            id="cpf"
-            required
-            style="width: 100%; height: 48px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: #111; color: #fff; padding: 0 14px;"
-          />
+        <div class="form-field">
+          <label class="form-field__label" for="confirmPassword">Confirmar senha</label>
+          <input class="form-field__input" type="password" id="confirmPassword" required />
         </div>
 
-        <div style="margin-bottom: 16px;">
-          <label for="password" style="display: block; font-size: 14px; margin-bottom: 8px; color: #e5e5e5;">Senha</label>
-          <input
-            type="password"
-            id="password"
-            required
-            style="width: 100%; height: 48px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: #111; color: #fff; padding: 0 14px;"
-          />
-        </div>
+        <button type="submit" class="btn btn--purple btn--full">Criar conta</button>
 
-        <div style="margin-bottom: 16px;">
-          <label for="confirmPassword" style="display: block; font-size: 14px; margin-bottom: 8px; color: #e5e5e5;">Confirmar senha</label>
-          <input
-            type="password"
-            id="confirmPassword"
-            required
-            style="width: 100%; height: 48px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: #111; color: #fff; padding: 0 14px;"
-          />
-        </div>
+        <div id="registerError" class="form-feedback--error"></div>
+        <div id="registerSuccess" class="form-feedback--success"></div>
 
-        <button
-          type="submit"
-          style="width: 100%; margin-top: 8px; height: 48px; border-radius: 12px; background: #a855f7; color: #fff; font-weight: 600;"
-        >
-          Criar conta
-        </button>
-
-        <div id="registerError" class="error-text" style="margin-top: 14px;"></div>
-        <div id="registerSuccess" class="success-text" style="margin-top: 14px;"></div>
-
-        <div class="text-soft" style="margin-top: 18px; font-size: 14px;">
-          Já tem conta? <a href="login.html" class="purple" style="font-weight: 700;">Entrar</a>
+        <div class="form-footer">
+          Já tem conta? <a href="login.html">Entrar</a>
         </div>
       </form>
     </div>

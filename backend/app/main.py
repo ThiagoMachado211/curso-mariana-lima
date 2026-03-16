@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 from app.db.session import engine
 
@@ -14,6 +15,17 @@ from app.routes.admin_courses import router as admin_courses_router
 
 app = FastAPI(title="Curso Mariana Lima API")
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://127.0.0.1:5500",
+        "http://localhost:5500",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.include_router(auth_router)
 app.include_router(admin_modules_router)
 app.include_router(admin_lessons_router)
@@ -27,6 +39,7 @@ app.include_router(student.router)
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
 
 @app.get("/db-check")
 def db_check():

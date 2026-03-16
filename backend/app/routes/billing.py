@@ -5,7 +5,7 @@ import httpx
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.db.session import get_db
+from app.db.deps import get_db
 from app.models.course import Course
 from app.models.payment import Payment
 from app.models.user import User
