@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin - Matrículas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: #0f172a;
+      color: white;
+      padding: 20px;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 30px auto;
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+    }
+
+    h2 {
+      margin-top: 0;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 12px;
+      margin-bottom: 20px;
+      align-items: end;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+
+    select, button {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+    }
+
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      border-bottom: 1px solid #e5e7eb;
+      padding: 12px;
+      text-align: left;
+    }
+
+    .danger {
+      background: #dc2626;
+    }
+
+    .danger:hover {
+      background: #b91c1c;
+    }
+
+    .message {
+      margin-bottom: 16px;
+      padding: 12px;
+      border-radius: 8px;
+    }
+
+    .success {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .error {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Administração de Matrículas</h1>
+  </header>
+
+  <main>
+    <div id="message-container"></div>
+
+    <h2>Nova matrícula</h2>
+
+    <div class="row">
+      <div>
+        <label for="student-select">Aluno</label>
+        <select id="student-select">
+          <option value="">Selecione um aluno</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="course-select">Curso</label>
+        <select id="course-select">
+          <option value="">Selecione um curso</option>
+        </select>
+      </div>
+
+      <div>
+        <button id="create-enrollment-btn">Matricular</button>
+      </div>
+    </div>
+
+    <h2>Matrículas existentes</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Aluno</th>
+          <th>Curso</th>
+          <th>Status</th>
+          <th>Criada em</th>
+          <th>Ação</th>
+        </tr>
+      </thead>
+      <tbody id="enrollments-table-body"></tbody>
+    </table>
+  </main>
+
+  <script src="js/admin-matriculas.js"></script>
+</body>
+</html>

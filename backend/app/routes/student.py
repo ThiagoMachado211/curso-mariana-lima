@@ -17,8 +17,12 @@ from app.schemas.module import ModuleOut
 router = APIRouter(prefix="/student", tags=["student"])
 
 
-def ensure_student(current_user: User):
-    if current_user.role != "student":
+# =========================
+# HELPERS
+# =========================
+
+def ensure_student(user: User):
+    if user.role != "student":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Apenas alunos podem acessar esta área.",
@@ -35,6 +39,8 @@ def ensure_enrollment(
         .filter(
             Enrollment.user_id == current_user.id,
             Enrollment.course_id == course_id,
+            Enrollment.tenant_id == current_user.tenant_id,
+            Enrollment.status == "active",
         )
         .first()
     )
@@ -45,6 +51,10 @@ def ensure_enrollment(
             detail="Você não está matriculado neste curso.",
         )
 
+
+# =========================
+# COURSES
+# =========================
 
 @router.get("/courses", response_model=list[CourseOut])
 def list_student_courses(
@@ -61,10 +71,13 @@ def list_student_courses(
             Course.is_active == True,
             Course.is_published == True,
             Enrollment.user_id == current_user.id,
+            Enrollment.tenant_id == current_user.tenant_id,
+            Enrollment.status == "active",
         )
         .order_by(Course.title.asc())
         .all()
     )
+
     return courses
 
 
@@ -97,6 +110,10 @@ def get_student_course(
 
     return course
 
+
+# =========================
+# MODULES
+# =========================
 
 @router.get("/courses/{course_id}/modules", response_model=list[ModuleOut])
 def list_student_course_modules(
@@ -138,6 +155,10 @@ def list_student_course_modules(
     return modules
 
 
+# =========================
+# LESSONS (LIST)
+# =========================
+
 @router.get("/modules/{module_id}/lessons", response_model=list[LessonOut])
 def list_student_module_lessons(
     module_id: uuid.UUID,
@@ -148,12 +169,9 @@ def list_student_module_lessons(
 
     module = (
         db.query(Module)
-        .join(Course, Course.id == Module.course_id)
         .filter(
             Module.id == module_id,
             Module.tenant_id == current_user.tenant_id,
-            Course.is_active == True,
-            Course.is_published == True,
         )
         .first()
     )
@@ -164,7 +182,24 @@ def list_student_module_lessons(
             detail="Módulo não encontrado.",
         )
 
-    ensure_enrollment(db, current_user, module.course_id)
+    course = (
+        db.query(Course)
+        .filter(
+            Course.id == module.course_id,
+            Course.tenant_id == current_user.tenant_id,
+            Course.is_active == True,
+            Course.is_published == True,
+        )
+        .first()
+    )
+
+    if not course:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Curso não encontrado.",
+        )
+
+    ensure_enrollment(db, current_user, course.id)
 
     lessons = (
         db.query(Lesson)
@@ -179,6 +214,10 @@ def list_student_module_lessons(
     return lessons
 
 
+# =========================
+# LESSON (DETAIL)
+# =========================
+
 @router.get("/lessons/{lesson_id}", response_model=LessonOut)
 def get_student_lesson(
     lesson_id: uuid.UUID,
@@ -189,13 +228,9 @@ def get_student_lesson(
 
     lesson = (
         db.query(Lesson)
-        .join(Module, Module.id == Lesson.module_id)
-        .join(Course, Course.id == Module.course_id)
         .filter(
             Lesson.id == lesson_id,
             Lesson.tenant_id == current_user.tenant_id,
-            Course.is_active == True,
-            Course.is_published == True,
         )
         .first()
     )
@@ -206,6 +241,38 @@ def get_student_lesson(
             detail="Aula não encontrada.",
         )
 
-    ensure_enrollment(db, current_user, lesson.module.course_id)
+    module = (
+        db.query(Module)
+        .filter(
+            Module.id == lesson.module_id,
+            Module.tenant_id == current_user.tenant_id,
+        )
+        .first()
+    )
+
+    if not module:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Módulo não encontrado.",
+        )
+
+    course = (
+        db.query(Course)
+        .filter(
+            Course.id == module.course_id,
+            Course.tenant_id == current_user.tenant_id,
+            Course.is_active == True,
+            Course.is_published == True,
+        )
+        .first()
+    )
+
+    if not course:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Curso não encontrado.",
+        )
+
+    ensure_enrollment(db, current_user, course.id)
 
     return lesson
