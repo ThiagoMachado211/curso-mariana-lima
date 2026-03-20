@@ -1,4 +1,4 @@
-const API_BASE = "http://127.0.0.1:8000";
+const API_BASE = "http://localhost:8000";
 
 function getToken() {
   return localStorage.getItem("access_token");
@@ -10,16 +10,13 @@ function getQueryParam(param) {
 }
 
 function authHeaders() {
-  const token = getToken();
   return {
-    "Content-Type": "application/json",
-    "Authorization": `Bearer ${token}`
+    "Authorization": `Bearer ${getToken()}`
   };
 }
 
-function showMessage(message) {
-  const container = document.getElementById("message-container");
-  container.innerHTML = `<div class="message">${message}</div>`;
+function showMessage(msg) {
+  document.getElementById("message-container").innerHTML = `<p>${msg}</p>`;
 }
 
 function redirectToLogin() {
@@ -31,85 +28,69 @@ async function loadLesson() {
   const lessonId = getQueryParam("id");
 
   if (!lessonId) {
-    showMessage("ID da aula não informado na URL.");
+    showMessage("ID da aula não informado.");
     return;
   }
 
-  const token = getToken();
-  if (!token) {
+  if (!getToken()) {
     redirectToLogin();
     return;
   }
 
   try {
-    const response = await fetch(`${API_BASE}/student/lessons/${lessonId}`, {
-      method: "GET",
-      headers: authHeaders(),
+    const res = await fetch(`${API_BASE}/student/lessons/${lessonId}`, {
+      headers: authHeaders()
     });
 
-    if (response.status === 401) {
+    if (res.status === 401) {
       redirectToLogin();
       return;
     }
 
-    const data = await response.json();
+    const data = await res.json();
 
-    if (!response.ok) {
+    if (!res.ok) {
       showMessage(data.detail || "Erro ao carregar aula.");
       return;
     }
 
     renderLesson(data);
-  } catch (error) {
-    console.error(error);
+
+  } catch (err) {
+    console.error(err);
     showMessage("Erro de conexão com o servidor.");
   }
 }
 
 function renderLesson(lesson) {
-  document.getElementById("lesson-title").textContent = lesson.title;
-  document.getElementById("lesson-meta").textContent =
-    `Curso: ${lesson.course.title} | Módulo: ${lesson.module.title} | Aula ${lesson.order}`;
+  document.getElementById("lesson-title").innerText = lesson.title;
 
-  document.getElementById("btn-back-module").addEventListener("click", () => {
-    window.location.href = `aulas.html?module_id=${lesson.module.id}`;
-  });
+  const videoContainer = document.getElementById("video-container");
+  const pdfContainer = document.getElementById("pdf-container");
 
-  renderVideo(lesson.video_embed_url);
-  renderPdf(lesson.pdf_url);
-}
-
-function renderVideo(videoUrl) {
-  const container = document.getElementById("video-container");
-
-  if (!videoUrl) {
-    container.innerHTML = "<p style='color:white; padding:20px;'>Nenhum vídeo disponível para esta aula.</p>";
-    return;
+  if (lesson.video_embed_url) {
+    videoContainer.innerHTML = `
+      <iframe 
+        src="${lesson.video_embed_url}" 
+        width="800" 
+        height="450" 
+        frameborder="0" 
+        allowfullscreen>
+      </iframe>
+    `;
   }
 
-  container.innerHTML = `
-    <iframe
-      src="${videoUrl}"
-      allow="autoplay; fullscreen; picture-in-picture"
-      allowfullscreen
-      title="Vídeo da aula">
-    </iframe>
-  `;
+  if (lesson.pdf_url) {
+    pdfContainer.innerHTML = `
+      <a href="${lesson.pdf_url}" target="_blank">
+        📄 Baixar material da aula
+      </a>
+    `;
+  }
 }
 
-function renderPdf(pdfUrl) {
-  const container = document.getElementById("pdf-container");
-
-  if (!pdfUrl) {
-    container.innerHTML = "<p>Nenhum PDF disponível para esta aula.</p>";
-    return;
-  }
-
-  container.innerHTML = `
-    <a href="${pdfUrl}" target="_blank" rel="noopener noreferrer">
-      Baixar PDF
-    </a>
-  `;
+function goBack() {
+  window.history.back();
 }
 
 document.addEventListener("DOMContentLoaded", loadLesson);

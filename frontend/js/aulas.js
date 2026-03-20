@@ -1,4 +1,6 @@
-const API_BASE = "http://127.0.0.1:8000";
+const API_BASE = "http://localhost:8000";
+console.log("AULAS JS NOVO CARREGADO");
+
 
 function getToken() {
   return localStorage.getItem("access_token");
@@ -29,6 +31,7 @@ function redirectToLogin() {
 
 async function loadLessons() {
   const moduleId = getQueryParam("module_id");
+  const courseId = getQueryParam("course_id");
 
   if (!moduleId) {
     showMessage("module_id não informado na URL.");
@@ -59,21 +62,25 @@ async function loadLessons() {
       return;
     }
 
-    renderModule(data.module);
-    renderLessons(data.lessons);
+    renderPageInfo(moduleId, courseId);
+    renderLessons(data);
   } catch (error) {
     console.error(error);
     showMessage("Erro de conexão com o servidor.");
   }
 }
 
-function renderModule(module) {
-  document.getElementById("module-title").textContent = module.title;
-  document.getElementById("module-meta").textContent =
-    `Curso: ${module.course_title} | Ordem do módulo: ${module.order}`;
+function renderPageInfo(moduleId, courseId) {
+  document.getElementById("module-title").textContent = "Aulas do módulo";
+  document.getElementById("module-meta").textContent = `Módulo: ${moduleId}`;
 
-  document.getElementById("btn-voltar-curso").addEventListener("click", () => {
-    window.location.href = `curso.html?id=${module.course_id}`;
+  const btnVoltarCurso = document.getElementById("btn-voltar-curso");
+  btnVoltarCurso.addEventListener("click", () => {
+    if (courseId) {
+      window.location.href = `curso.html?id=${courseId}`;
+    } else {
+      window.location.href = "cursos.html";
+    }
   });
 }
 
