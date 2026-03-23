@@ -1,200 +1,278 @@
-document.addEventListener("DOMContentLoaded", () => {
-  if (!isAuthenticated()) {
-    window.location.href = "login.html";
+const API_BASE = "http://localhost:8000";
+
+let editingCourseId = null;
+let coursesCache = [];
+
+function getToken() {
+  return localStorage.getItem("access_token");
+}
+
+function authHeaders() {
+  const token = getToken();
+  return {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${token}`
+  };
+}
+
+function redirectToLogin() {
+  localStorage.removeItem("access_token");
+  window.location.href = "login.html";
+}
+
+function showMessage(message, type = "success") {
+  const container = document.getElementById("message-container");
+  container.innerHTML = `<div class="message ${type}">${message}</div>`;
+
+  setTimeout(() => {
+    container.innerHTML = "";
+  }, 4000);
+}
+
+async function fetchJson(url, options = {}) {
+  const response = await fetch(url, {
+    ...options,
+    headers: authHeaders(),
+  });
+
+  if (response.status === 401) {
+    redirectToLogin();
+    return null;
+  }
+
+  if (response.status === 204) {
+    return { ok: true, data: null };
+  }
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.detail || "Erro na requisição.");
+  }
+
+  return { ok: true, data };
+}
+
+function getFormData() {
+  return {
+    title: document.getElementById("title").value.trim(),
+    slug: document.getElementById("slug").value.trim(),
+    description: document.getElementById("description").value.trim(),
+    price_cents: Number(document.getElementById("price_cents").value || 0),
+    currency: document.getElementById("currency").value.trim() || "BRL",
+    is_active: document.getElementById("is_active").checked,
+    is_published: document.getElementById("is_published").checked,
+  };
+}
+
+function resetForm() {
+  editingCourseId = null;
+
+  document.getElementById("form-title").textContent = "Novo curso";
+  document.getElementById("title").value = "";
+  document.getElementById("slug").value = "";
+  document.getElementById("description").value = "";
+  document.getElementById("price_cents").value = "";
+  document.getElementById("currency").value = "BRL";
+  document.getElementById("is_active").checked = true;
+  document.getElementById("is_published").checked = false;
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function fillForm(course) {
+  editingCourseId = course.id;
+
+  document.getElementById("form-title").textContent = "Editar curso";
+  document.getElementById("title").value = course.title || "";
+  document.getElementById("slug").value = course.slug || "";
+  document.getElementById("description").value = course.description || "";
+  document.getElementById("price_cents").value = course.price_cents ?? 0;
+  document.getElementById("currency").value = course.currency || "BRL";
+  document.getElementById("is_active").checked = !!course.is_active;
+  document.getElementById("is_published").checked = !!course.is_published;
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function formatPrice(priceCents, currency = "BRL") {
+  const value = (priceCents || 0) / 100;
+  return new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: currency || "BRL",
+  }).format(value);
+}
+
+async function loadCourses() {
+  const result = await fetchJson(`${API_BASE}/admin/courses`);
+  coursesCache = result.data;
+  renderCourses(coursesCache);
+}
+
+function renderCourses(courses) {
+  const container = document.getElementById("courses-container");
+  const emptyState = document.getElementById("empty-state");
+
+  container.innerHTML = "";
+
+  if (!courses || courses.length === 0) {
+    emptyState.style.display = "block";
     return;
   }
 
-  const form = document.getElementById("courseForm");
-  const feedback = document.getElementById("adminFeedback");
-  const tbody = document.getElementById("coursesTableBody");
+  emptyState.style.display = "none";
 
-  const titleInput = document.getElementById("courseTitle");
-  const slugInput = document.getElementById("courseSlug");
-  const descriptionInput = document.getElementById("courseDescription");
-  const priceCentsInput = document.getElementById("coursePriceCents");
-  const currencyInput = document.getElementById("courseCurrency");
-  const isActiveInput = document.getElementById("courseIsActive");
-  const isPublishedInput = document.getElementById("courseIsPublished");
+  courses.forEach(course => {
+    const activeBadge = course.is_active
+      ? `<span class="badge badge-active">Ativo</span>`
+      : `<span class="badge badge-inactive">Inativo</span>`;
 
-  const submitButton = document.getElementById("courseSubmitButton");
-  const cancelButton = document.getElementById("courseCancelButton");
+    const publishedBadge = course.is_published
+      ? `<span class="badge badge-published">Publicado</span>`
+      : `<span class="badge badge-draft">Rascunho</span>`;
 
-  let editingCourseId = null;
+    const div = document.createElement("div");
+    div.className = "course-card";
 
-  function setError(message) {
-    feedback.textContent = message;
-    feedback.classList.remove("admin-success");
-  }
+    div.innerHTML = `
+      <div class="course-card-top">
+        <div>
+          <div class="course-title">${course.title}</div>
+          <div class="course-description">${course.description || "Sem descrição."}</div>
+          <div><strong>Slug:</strong> ${course.slug}</div>
+          <div><strong>Preço:</strong> ${formatPrice(course.price_cents, course.currency)}</div>
+          <div class="course-meta">
+            ${activeBadge}
+            ${publishedBadge}
+          </div>
+        </div>
 
-  function setSuccess(message) {
-    feedback.textContent = message;
-    feedback.classList.add("admin-success");
-  }
+        <div class="course-actions">
+          <button class="secondary edit-btn" data-id="${course.id}">Editar</button>
+          <button class="danger delete-btn" data-id="${course.id}">Excluir</button>
+        </div>
+      </div>
+    `;
 
-  function clearFeedback() {
-    feedback.textContent = "";
-    feedback.classList.remove("admin-success");
-  }
+    container.appendChild(div);
+  });
 
-  function slugify(value) {
-    return value
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "");
-  }
+  document.querySelectorAll(".edit-btn").forEach(button => {
+    button.addEventListener("click", (event) => {
+      const courseId = event.target.dataset.id;
+      const course = coursesCache.find(item => item.id === courseId);
+      if (course) fillForm(course);
+    });
+  });
 
-  function resetForm() {
-    form.reset();
-    currencyInput.value = "BRL";
-    isActiveInput.checked = true;
-    isPublishedInput.checked = false;
-    editingCourseId = null;
-    submitButton.textContent = "Salvar Curso";
-    cancelButton.style.display = "none";
-  }
+  document.querySelectorAll(".delete-btn").forEach(button => {
+    button.addEventListener("click", async (event) => {
+      const courseId = event.target.dataset.id;
 
-  function fillForm(course) {
-    titleInput.value = course.title || "";
-    slugInput.value = course.slug || "";
-    descriptionInput.value = course.description || "";
-    priceCentsInput.value = course.price_cents ?? 0;
-    currencyInput.value = course.currency || "BRL";
-    isActiveInput.checked = !!course.is_active;
-    isPublishedInput.checked = !!course.is_published;
-
-    editingCourseId = course.id;
-    submitButton.textContent = "Atualizar Curso";
-    cancelButton.style.display = "inline-flex";
-
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
-  function formatPrice(cents, currency) {
-    const value = (Number(cents || 0) / 100).toFixed(2);
-    return `${value} ${currency || "BRL"}`;
-  }
-
-  async function loadCourses() {
-    clearFeedback();
-
-    try {
-      const courses = await apiRequest("/admin/courses", {
-        method: "GET",
-      });
-
-      tbody.innerHTML = "";
-
-      if (!courses.length) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="8">Nenhum curso cadastrado.</td>
-          </tr>
-        `;
+      if (!confirm("Deseja excluir este curso?")) {
         return;
       }
 
-      courses.forEach((course) => {
-        const row = document.createElement("tr");
-
-        row.innerHTML = `
-          <td>${course.id}</td>
-          <td>${course.title}</td>
-          <td>${course.slug}</td>
-          <td>${formatPrice(course.price_cents, course.currency)}</td>
-          <td>${course.currency}</td>
-          <td>${course.is_active ? "Sim" : "Não"}</td>
-          <td>${course.is_published ? "Sim" : "Não"}</td>
-          <td>
-            <div class="admin-actions">
-              <button type="button" class="btn btn--green edit-course" data-id="${course.id}">Editar</button>
-              <button type="button" class="btn btn--red delete-course" data-id="${course.id}">Excluir</button>
-            </div>
-          </td>
-        `;
-
-        row.querySelector(".edit-course").addEventListener("click", () => {
-          fillForm(course);
+      try {
+        await fetchJson(`${API_BASE}/admin/courses/${courseId}`, {
+          method: "DELETE",
         });
 
-        row.querySelector(".delete-course").addEventListener("click", async () => {
-          const confirmed = window.confirm(`Deseja excluir o curso "${course.title}"?`);
-          if (!confirmed) return;
+        showMessage("Curso excluído com sucesso.");
+        if (editingCourseId === courseId) {
+          resetForm();
+        }
+        await loadCourses();
+      } catch (error) {
+        showMessage(error.message, "error");
+      }
+    });
+  });
+}
 
-          try {
-            await apiRequest(`/admin/courses/${course.id}`, {
-              method: "DELETE",
-            });
 
-            setSuccess("Curso excluído com sucesso.");
-            if (editingCourseId === course.id) {
-              resetForm();
-            }
-            await loadCourses();
-          } catch (error) {
-            setError(error.message || "Erro ao excluir curso.");
-          }
-        });
+function slugify(text) {
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
+}
 
-        tbody.appendChild(row);
-      });
-    } catch (error) {
-      setError(error.message || "Erro ao carregar cursos.");
-    }
+
+async function saveCourse() {
+  const payload = getFormData();
+
+  if (!payload.title) {
+    showMessage("Informe o título do curso.", "error");
+    return;
   }
 
-  titleInput.addEventListener("blur", () => {
-    if (!slugInput.value.trim()) {
-      slugInput.value = slugify(titleInput.value);
-    }
-  });
+  if (!payload.slug) {
+    showMessage("Informe o slug do curso.", "error");
+    return;
+  }
 
-  cancelButton.addEventListener("click", () => {
+  if (payload.price_cents < 0) {
+    showMessage("O preço não pode ser negativo.", "error");
+    return;
+  }
+
+  if (!payload.currency) {
+    showMessage("Informe a moeda do curso.", "error");
+    return;
+  }
+
+  try {
+    if (editingCourseId) {
+      await fetchJson(`${API_BASE}/admin/courses/${editingCourseId}`, {
+        method: "PUT",
+        body: JSON.stringify(payload),
+      });
+
+      showMessage("Curso atualizado com sucesso.");
+    } else {
+      await fetchJson(`${API_BASE}/admin/courses`, {
+        method: "POST",
+        body: JSON.stringify(payload),
+      });
+
+      showMessage("Curso criado com sucesso.");
+    }
+
     resetForm();
-    clearFeedback();
-  });
+    await loadCourses();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  } catch (error) {
+    showMessage(error.message, "error");
+  }
+}
 
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    clearFeedback();
+async function init() {
 
-    const payload = {
-      title: titleInput.value.trim(),
-      slug: slugInput.value.trim().toLowerCase(),
-      description: descriptionInput.value.trim() || null,
-      price_cents: Number(priceCentsInput.value || 0),
-      is_active: isActiveInput.checked,
-      is_published: isPublishedInput.checked,
-      currency: currencyInput.value.trim().toUpperCase() || "BRL",
-    };
-
-    if (!payload.title || !payload.slug) {
-      setError("Preencha pelo menos título e slug.");
-      return;
-    }
-
-    try {
-      if (editingCourseId) {
-        await apiRequest(`/admin/courses/${editingCourseId}`, {
-          method: "PUT",
-          body: JSON.stringify(payload),
-        });
-        setSuccess("Curso atualizado com sucesso.");
-      } else {
-        await apiRequest("/admin/courses", {
-          method: "POST",
-          body: JSON.stringify(payload),
-        });
-        setSuccess("Curso criado com sucesso.");
-      }
-
-      resetForm();
-      await loadCourses();
-    } catch (error) {
-      setError(error.message || "Erro ao salvar curso.");
+  document.getElementById("title").addEventListener("input", () => {
+    if (!editingCourseId) {
+      document.getElementById("slug").value = slugify(
+        document.getElementById("title").value
+      );
     }
   });
 
-  loadCourses();
-});
+  const user = await requireAdmin();
+  if (!user) return;
+
+  try {
+    document.getElementById("save-btn").addEventListener("click", saveCourse);
+    document.getElementById("cancel-edit-btn").addEventListener("click", resetForm);
+
+    await loadCourses();
+    resetForm();
+  } catch (error) {
+    showMessage(error.message, "error");
+  }
+}
+
+document.addEventListener("DOMContentLoaded", init);

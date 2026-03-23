@@ -1,241 +1,275 @@
-document.addEventListener("DOMContentLoaded", () => {
-  if (!isAuthenticated()) {
-    window.location.href = "login.html";
+const API_BASE = "http://localhost:8000";
+
+let editingLessonId = null;
+let lessonsCache = [];
+let modulesCache = [];
+
+function getToken() {
+  return localStorage.getItem("access_token");
+}
+
+function authHeaders() {
+  const token = getToken();
+  return {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${token}`
+  };
+}
+
+function redirectToLogin() {
+  localStorage.removeItem("access_token");
+  window.location.href = "login.html";
+}
+
+function showMessage(message, type = "success") {
+  const container = document.getElementById("message-container");
+  container.innerHTML = `<div class="message ${type}">${message}</div>`;
+
+  setTimeout(() => {
+    container.innerHTML = "";
+  }, 4000);
+}
+
+async function fetchJson(url, options = {}) {
+  const response = await fetch(url, {
+    ...options,
+    headers: authHeaders(),
+  });
+
+  if (response.status === 401) {
+    redirectToLogin();
+    return null;
+  }
+
+  if (response.status === 204) {
+    return { ok: true, data: null };
+  }
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.detail || "Erro na requisição.");
+  }
+
+  return { ok: true, data };
+}
+
+async function loadModules() {
+  const result = await fetchJson(`${API_BASE}/admin/modules`);
+  modulesCache = result.data;
+
+  const select = document.getElementById("module_id");
+  select.innerHTML = `<option value="">Selecione um módulo</option>`;
+
+  modulesCache.forEach(module => {
+    const option = document.createElement("option");
+    option.value = module.id;
+    option.textContent = `${module.title} (ordem ${module.order})`;
+    select.appendChild(option);
+  });
+}
+
+function findModuleTitle(moduleId) {
+  const module = modulesCache.find(item => item.id === moduleId);
+  return module ? module.title : moduleId;
+}
+
+function getFormData() {
+  return {
+    module_id: document.getElementById("module_id").value,
+    title: document.getElementById("title").value.trim(),
+    order: Number(document.getElementById("order").value || 0),
+    video_embed_url: document.getElementById("video_embed_url").value.trim() || null,
+    pdf_url: document.getElementById("pdf_url").value.trim() || null,
+  };
+}
+
+function resetForm() {
+  editingLessonId = null;
+
+  document.getElementById("form-title").textContent = "Nova aula";
+  document.getElementById("module_id").value = "";
+  document.getElementById("title").value = "";
+  document.getElementById("order").value = "";
+  document.getElementById("video_embed_url").value = "";
+  document.getElementById("pdf_url").value = "";
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function fillForm(lesson) {
+  editingLessonId = lesson.id;
+
+  document.getElementById("form-title").textContent = "Editar aula";
+  document.getElementById("module_id").value = lesson.module_id || "";
+  document.getElementById("title").value = lesson.title || "";
+  document.getElementById("order").value = lesson.order ?? 0;
+  document.getElementById("video_embed_url").value = lesson.video_embed_url || "";
+  document.getElementById("pdf_url").value = lesson.pdf_url || "";
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+async function loadLessons() {
+  const result = await fetchJson(`${API_BASE}/admin/lessons`);
+  lessonsCache = result.data;
+  renderLessons(lessonsCache);
+}
+
+function renderLessons(lessons) {
+  const container = document.getElementById("lessons-container");
+  const emptyState = document.getElementById("empty-state");
+
+  container.innerHTML = "";
+
+  if (!lessons || lessons.length === 0) {
+    emptyState.style.display = "block";
     return;
   }
 
-  const form = document.getElementById("lessonForm");
-  const feedback = document.getElementById("adminFeedback");
-  const tbody = document.getElementById("lessonsTableBody");
+  emptyState.style.display = "none";
 
-  const courseSelect = document.getElementById("lessonCourse");
-  const moduleSelect = document.getElementById("lessonModule");
-  const orderInput = document.getElementById("lessonOrder");
-  const titleInput = document.getElementById("lessonTitle");
-  const videoUrlInput = document.getElementById("lessonVideoUrl");
-  const pdfUrlInput = document.getElementById("lessonPdfUrl");
+  lessons.forEach(lesson => {
+    const hasVideo = lesson.video_embed_url
+      ? `<span class="badge">Vídeo</span>`
+      : "";
 
-  const submitButton = document.getElementById("lessonSubmitButton");
-  const cancelButton = document.getElementById("lessonCancelButton");
+    const hasPdf = lesson.pdf_url
+      ? `<span class="badge">PDF</span>`
+      : "";
 
-  let editingLessonId = null;
-  let courses = [];
-  let modules = [];
+    const videoLink = lesson.video_embed_url
+      ? `<a href="${lesson.video_embed_url}" target="_blank" rel="noopener noreferrer">Abrir vídeo</a>`
+      : "";
 
-  function setError(message) {
-    feedback.textContent = message;
-    feedback.classList.remove("admin-success");
-  }
+    const pdfLink = lesson.pdf_url
+      ? `<a href="${lesson.pdf_url}" target="_blank" rel="noopener noreferrer">Abrir PDF</a>`
+      : "";
 
-  function setSuccess(message) {
-    feedback.textContent = message;
-    feedback.classList.add("admin-success");
-  }
+    const div = document.createElement("div");
+    div.className = "lesson-card";
 
-  function clearFeedback() {
-    feedback.textContent = "";
-    feedback.classList.remove("admin-success");
-  }
+    div.innerHTML = `
+      <div class="lesson-card-top">
+        <div>
+          <div class="lesson-title">${lesson.title}</div>
+          <div class="lesson-meta">
+            <div><strong>Módulo:</strong> ${findModuleTitle(lesson.module_id)}</div>
+            <div><strong>Ordem:</strong> ${lesson.order}</div>
+          </div>
 
-  function resetForm() {
-    form.reset();
-    editingLessonId = null;
-    submitButton.textContent = "Salvar Aula";
-    cancelButton.style.display = "none";
-    renderModuleOptions();
-  }
+          <div>
+            ${hasVideo}
+            ${hasPdf}
+          </div>
 
-  function renderCourseOptions() {
-    courseSelect.innerHTML = "";
+          <div class="links-block" style="margin-top:10px;">
+            ${videoLink}
+            ${pdfLink}
+          </div>
+        </div>
 
-    if (!courses.length) {
-      courseSelect.innerHTML = `<option value="">Nenhum curso cadastrado</option>`;
-      return;
-    }
+        <div class="lesson-actions">
+          <button class="secondary edit-btn" data-id="${lesson.id}">Editar</button>
+          <button class="danger delete-btn" data-id="${lesson.id}">Excluir</button>
+        </div>
+      </div>
+    `;
 
-    courses.forEach((course) => {
-      const option = document.createElement("option");
-      option.value = course.id;
-      option.textContent = course.title;
-      courseSelect.appendChild(option);
+    container.appendChild(div);
+  });
+
+  document.querySelectorAll(".edit-btn").forEach(button => {
+    button.addEventListener("click", (event) => {
+      const lessonId = event.target.dataset.id;
+      const lesson = lessonsCache.find(item => item.id === lessonId);
+      if (lesson) fillForm(lesson);
     });
-  }
+  });
 
-  function renderModuleOptions(selectedModuleId = null) {
-    const selectedCourseId = courseSelect.value;
-    const filteredModules = modules.filter((module) => module.course_id === selectedCourseId);
+  document.querySelectorAll(".delete-btn").forEach(button => {
+    button.addEventListener("click", async (event) => {
+      const lessonId = event.target.dataset.id;
 
-    moduleSelect.innerHTML = "";
-
-    if (!filteredModules.length) {
-      moduleSelect.innerHTML = `<option value="">Nenhum módulo disponível</option>`;
-      return;
-    }
-
-    filteredModules.forEach((module) => {
-      const option = document.createElement("option");
-      option.value = module.id;
-      option.textContent = `${module.order} - ${module.title}`;
-      moduleSelect.appendChild(option);
-    });
-
-    if (selectedModuleId) {
-      moduleSelect.value = selectedModuleId;
-    }
-  }
-
-  function fillForm(lesson) {
-    const module = modules.find((item) => item.id === lesson.module_id);
-    if (module) {
-      courseSelect.value = module.course_id;
-      renderModuleOptions(lesson.module_id);
-    }
-
-    orderInput.value = lesson.order;
-    titleInput.value = lesson.title;
-    videoUrlInput.value = lesson.video_embed_url || "";
-    pdfUrlInput.value = lesson.pdf_url || "";
-
-    editingLessonId = lesson.id;
-    submitButton.textContent = "Atualizar Aula";
-    cancelButton.style.display = "inline-flex";
-
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
-  async function loadCoursesAndModules() {
-    courses = await apiRequest("/admin/courses", { method: "GET" });
-    modules = await apiRequest("/admin/modules", { method: "GET" });
-
-    renderCourseOptions();
-    renderModuleOptions();
-  }
-
-  async function loadLessons() {
-    clearFeedback();
-
-    try {
-      const lessons = await apiRequest("/admin/lessons", {
-        method: "GET",
-      });
-
-      tbody.innerHTML = "";
-
-      if (!lessons.length) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="8">Nenhuma aula cadastrada.</td>
-          </tr>
-        `;
+      if (!confirm("Deseja excluir esta aula?")) {
         return;
       }
 
-      lessons.forEach((lesson) => {
-        const module = modules.find((item) => item.id === lesson.module_id);
-        const course = module ? courses.find((item) => item.id === module.course_id) : null;
-
-        const row = document.createElement("tr");
-
-        row.innerHTML = `
-          <td>${lesson.id}</td>
-          <td>${course ? course.title : "-"}</td>
-          <td>${module ? module.title : lesson.module_id}</td>
-          <td>${lesson.order}</td>
-          <td>${lesson.title}</td>
-          <td>${lesson.video_embed_url ? "Sim" : "Não"}</td>
-          <td>${lesson.pdf_url ? "Sim" : "Não"}</td>
-          <td>
-            <div class="admin-actions">
-              <button type="button" class="btn btn--green edit-lesson">Editar</button>
-              <button type="button" class="btn btn--red delete-lesson">Excluir</button>
-            </div>
-          </td>
-        `;
-
-        row.querySelector(".edit-lesson").addEventListener("click", () => {
-          fillForm(lesson);
+      try {
+        await fetchJson(`${API_BASE}/admin/lessons/${lessonId}`, {
+          method: "DELETE",
         });
 
-        row.querySelector(".delete-lesson").addEventListener("click", async () => {
-          const confirmed = window.confirm(`Deseja excluir a aula "${lesson.title}"?`);
-          if (!confirmed) return;
+        showMessage("Aula excluída com sucesso.");
+        if (editingLessonId === lessonId) {
+          resetForm();
+        }
+        await loadLessons();
+      } catch (error) {
+        showMessage(error.message, "error");
+      }
+    });
+  });
+}
 
-          try {
-            await apiRequest(`/admin/lessons/${lesson.id}`, {
-              method: "DELETE",
-            });
+async function saveLesson() {
+  const payload = getFormData();
 
-            setSuccess("Aula excluída com sucesso.");
-            if (editingLessonId === lesson.id) {
-              resetForm();
-            }
-            await loadLessons();
-          } catch (error) {
-            setError(error.message || "Erro ao excluir aula.");
-          }
-        });
-
-        tbody.appendChild(row);
-      });
-    } catch (error) {
-      setError(error.message || "Erro ao carregar aulas.");
-    }
+  if (!payload.module_id) {
+    showMessage("Selecione o módulo da aula.", "error");
+    return;
   }
 
-  courseSelect.addEventListener("change", () => {
-    renderModuleOptions();
-  });
+  if (!payload.title) {
+    showMessage("Informe o título da aula.", "error");
+    return;
+  }
 
-  cancelButton.addEventListener("click", () => {
+  if (payload.order < 0) {
+    showMessage("A ordem da aula não pode ser negativa.", "error");
+    return;
+  }
+
+  try {
+    if (editingLessonId) {
+      await fetchJson(`${API_BASE}/admin/lessons/${editingLessonId}`, {
+        method: "PUT",
+        body: JSON.stringify(payload),
+      });
+
+      showMessage("Aula atualizada com sucesso.");
+    } else {
+      await fetchJson(`${API_BASE}/admin/lessons`, {
+        method: "POST",
+        body: JSON.stringify(payload),
+      });
+
+      showMessage("Aula criada com sucesso.");
+    }
+
     resetForm();
-    clearFeedback();
-  });
+    await loadLessons();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  } catch (error) {
+    showMessage(error.message, "error");
+  }
+}
 
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    clearFeedback();
+async function init() {
 
-    const payload = {
-      module_id: moduleSelect.value,
-      title: titleInput.value.trim(),
-      order: Number(orderInput.value || 0),
-      video_embed_url: videoUrlInput.value.trim() || null,
-      pdf_url: pdfUrlInput.value.trim() || null,
-    };
+  const user = await requireAdmin();
+  if (!user) return;
 
-    if (!payload.module_id || !payload.title || !payload.order) {
-      setError("Preencha módulo, título e ordem.");
-      return;
-    }
+  try {
+    document.getElementById("save-btn").addEventListener("click", saveLesson);
+    document.getElementById("cancel-edit-btn").addEventListener("click", resetForm);
 
-    try {
-      if (editingLessonId) {
-        await apiRequest(`/admin/lessons/${editingLessonId}`, {
-          method: "PUT",
-          body: JSON.stringify(payload),
-        });
-        setSuccess("Aula atualizada com sucesso.");
-      } else {
-        await apiRequest("/admin/lessons", {
-          method: "POST",
-          body: JSON.stringify(payload),
-        });
-        setSuccess("Aula criada com sucesso.");
-      }
+    await loadModules();
+    await loadLessons();
+    resetForm();
+  } catch (error) {
+    showMessage(error.message, "error");
+  }
+}
 
-      resetForm();
-      await loadLessons();
-    } catch (error) {
-      setError(error.message || "Erro ao salvar aula.");
-    }
-  });
-
-  (async function init() {
-    try {
-      await loadCoursesAndModules();
-      await loadLessons();
-    } catch (error) {
-      setError(error.message || "Erro ao iniciar a página.");
-    }
-  })();
-});
+document.addEventListener("DOMContentLoaded", init);

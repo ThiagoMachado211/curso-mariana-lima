@@ -1,7 +1,8 @@
-const API_BASE = "http://127.0.0.1:8000";
+const API_BASE = "http://localhost:8000";
 
 let studentsCache = [];
 let coursesCache = [];
+let enrollmentsCache = [];
 
 function getToken() {
   return localStorage.getItem("access_token");
@@ -23,6 +24,10 @@ function redirectToLogin() {
 function showMessage(message, type = "success") {
   const container = document.getElementById("message-container");
   container.innerHTML = `<div class="message ${type}">${message}</div>`;
+
+  setTimeout(() => {
+    container.innerHTML = "";
+  }, 4000);
 }
 
 async function fetchJson(url, options = {}) {
@@ -81,31 +86,57 @@ async function loadCourses() {
   });
 }
 
-function findStudentName(studentId) {
-  const student = studentsCache.find(s => s.id === studentId);
-  return student ? `${student.name} (${student.email})` : studentId;
+function findStudent(studentId) {
+  return studentsCache.find(s => s.id === studentId);
 }
 
-function findCourseTitle(courseId) {
-  const course = coursesCache.find(c => c.id === courseId);
-  return course ? course.title : courseId;
+function findCourse(courseId) {
+  return coursesCache.find(c => c.id === courseId);
+}
+
+function enrichEnrollment(enrollment) {
+  const student = findStudent(enrollment.user_id);
+  const course = findCourse(enrollment.course_id);
+
+  return {
+    ...enrollment,
+    student_name: student ? student.name : enrollment.user_id,
+    student_email: student ? student.email : "",
+    course_title: course ? course.title : enrollment.course_id,
+  };
 }
 
 async function loadEnrollments() {
   const result = await fetchJson(`${API_BASE}/admin/enrollments`);
-  const enrollments = result.data;
+  enrollmentsCache = result.data.map(enrichEnrollment);
+  renderEnrollments(enrollmentsCache);
+}
 
+function renderEnrollments(enrollments) {
   const tbody = document.getElementById("enrollments-table-body");
+  const emptyState = document.getElementById("empty-state");
+
   tbody.innerHTML = "";
+
+  if (!enrollments || enrollments.length === 0) {
+    emptyState.style.display = "block";
+    return;
+  }
+
+  emptyState.style.display = "none";
 
   enrollments.forEach(enrollment => {
     const tr = document.createElement("tr");
 
     tr.innerHTML = `
-      <td>${enrollment.id}</td>
-      <td>${findStudentName(enrollment.user_id)}</td>
-      <td>${findCourseTitle(enrollment.course_id)}</td>
-      <td>${enrollment.status}</td>
+      <td>
+        <div><strong>${enrollment.student_name}</strong></div>
+        <div style="color:#64748b; font-size:12px;">${enrollment.student_email || ""}</div>
+      </td>
+      <td>${enrollment.course_title}</td>
+      <td>
+        <span class="status-badge status-active">${enrollment.status}</span>
+      </td>
       <td>${new Date(enrollment.created_at).toLocaleString("pt-BR")}</td>
       <td>
         <button class="danger" data-id="${enrollment.id}">Remover</button>
@@ -127,13 +158,35 @@ async function loadEnrollments() {
         await fetchJson(`${API_BASE}/admin/enrollments/${enrollmentId}`, {
           method: "DELETE",
         });
+
         showMessage("Matrícula removida com sucesso.");
         await loadEnrollments();
+        applyFilters();
       } catch (error) {
         showMessage(error.message, "error");
       }
     });
   });
+}
+
+function applyFilters() {
+  const studentFilter = document.getElementById("filter-student").value.toLowerCase().trim();
+  const courseFilter = document.getElementById("filter-course").value.toLowerCase().trim();
+
+  const filtered = enrollmentsCache.filter(item => {
+    const matchesStudent =
+      !studentFilter ||
+      item.student_name.toLowerCase().includes(studentFilter) ||
+      item.student_email.toLowerCase().includes(studentFilter);
+
+    const matchesCourse =
+      !courseFilter ||
+      item.course_title.toLowerCase().includes(courseFilter);
+
+    return matchesStudent && matchesCourse;
+  });
+
+  renderEnrollments(filtered);
 }
 
 async function createEnrollment() {
@@ -155,17 +208,21 @@ async function createEnrollment() {
     });
 
     showMessage("Matrícula criada com sucesso.");
+
+    document.getElementById("student-select").value = "";
+    document.getElementById("course-select").value = "";
+
     await loadEnrollments();
+    applyFilters();
   } catch (error) {
     showMessage(error.message, "error");
   }
 }
 
 async function init() {
-  if (!getToken()) {
-    redirectToLogin();
-    return;
-  }
+
+  const user = await requireAdmin();
+  if (!user) return;
 
   try {
     await loadStudents();
@@ -175,6 +232,14 @@ async function init() {
     document
       .getElementById("create-enrollment-btn")
       .addEventListener("click", createEnrollment);
+
+    document
+      .getElementById("filter-student")
+      .addEventListener("input", applyFilters);
+
+    document
+      .getElementById("filter-course")
+      .addEventListener("input", applyFilters);
 
   } catch (error) {
     showMessage(error.message, "error");

@@ -111,6 +111,52 @@ def get_student_course(
     return course
 
 
+
+@router.get("/modules/{module_id}", response_model=ModuleOut)
+def get_student_module(
+    module_id: uuid.UUID,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    ensure_student(current_user)
+
+    module = (
+        db.query(Module)
+        .filter(
+            Module.id == module_id,
+            Module.tenant_id == current_user.tenant_id,
+        )
+        .first()
+    )
+
+    if not module:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Módulo não encontrado.",
+        )
+
+    course = (
+        db.query(Course)
+        .filter(
+            Course.id == module.course_id,
+            Course.tenant_id == current_user.tenant_id,
+            Course.is_active == True,
+            Course.is_published == True,
+        )
+        .first()
+    )
+
+    if not course:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Curso não encontrado.",
+        )
+
+    ensure_enrollment(db, current_user, course.id)
+
+    return module
+
+
 # =========================
 # MODULES
 # =========================

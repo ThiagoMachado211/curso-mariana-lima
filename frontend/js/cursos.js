@@ -1,8 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  if (!isAuthenticated()) {
-    window.location.href = "login.html";
-    return;
-  }
+  const user = await requireStudent();
+  if (!user) return;
 
   const logoutButton = document.getElementById("logoutButton");
   const feedback = document.getElementById("coursesFeedback");
@@ -26,14 +24,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       removeToken();
       window.location.href = "login.html";
     });
-  }
-
-  try {
-    await apiRequest("/auth/me", { method: "GET" });
-  } catch (error) {
-    removeToken();
-    window.location.href = "login.html";
-    return;
   }
 
   try {

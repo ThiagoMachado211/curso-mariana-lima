@@ -1,7 +1,6 @@
 const API_BASE = "http://localhost:8000";
 console.log("AULAS JS NOVO CARREGADO");
 
-
 function getToken() {
   return localStorage.getItem("access_token");
 }
@@ -35,12 +34,6 @@ async function loadLessons() {
 
   if (!moduleId) {
     showMessage("module_id não informado na URL.");
-    return;
-  }
-
-  const token = getToken();
-  if (!token) {
-    redirectToLogin();
     return;
   }
 
@@ -86,6 +79,8 @@ function renderPageInfo(moduleId, courseId) {
 
 function renderLessons(lessons) {
   const container = document.getElementById("lessons-container");
+  const moduleId = getQueryParam("module_id");
+  const courseId = getQueryParam("course_id") || "";
 
   if (!lessons || lessons.length === 0) {
     container.innerHTML = "<p>Nenhuma aula cadastrada neste módulo.</p>";
@@ -98,9 +93,14 @@ function renderLessons(lessons) {
         <div class="lesson-order">Aula ${lesson.order}</div>
         <div class="lesson-title">${lesson.title}</div>
       </div>
-      <a class="btn" href="aula.html?id=${lesson.id}">Abrir aula</a>
+      <a class="btn" href="aula.html?id=${lesson.id}&module_id=${moduleId}&course_id=${courseId}">Abrir aula</a>
     </div>
   `).join("");
 }
 
-document.addEventListener("DOMContentLoaded", loadLessons);
+document.addEventListener("DOMContentLoaded", async () => {
+  const user = await requireStudent();
+  if (!user) return;
+
+  loadLessons();
+});

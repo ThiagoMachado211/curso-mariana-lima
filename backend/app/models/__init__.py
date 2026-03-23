@@ -5,3 +5,4 @@ from .module import Module
 from .lesson import Lesson
 from .enrollment import Enrollment
 from .payment import Payment
+from app.models.lesson_progress import LessonProgress

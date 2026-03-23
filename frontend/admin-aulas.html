@@ -3,372 +3,258 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Aulas - Matemática Essencial</title>
-
+  <title>Admin - Aulas</title>
   <style>
-    * {
+    body {
+      font-family: Arial, sans-serif;
+      background: #f1f5f9;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, Helvetica, sans-serif;
+      color: #0f172a;
     }
 
-    html, body {
-      min-height: 100%;
-      background: #000;
-      color: #fff;
+    header {
+      background: #0f172a;
+      color: white;
+      padding: 20px 24px;
     }
 
-    a {
-      text-decoration: none;
-      color: inherit;
+    header h1 {
+      margin: 0;
+      font-size: 24px;
     }
 
-    button, input, textarea, select {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-      border: none;
-    }
-
-    .page-container {
-      width: 100%;
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
-
-    .site-header {
-      width: 100%;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(0, 0, 0, 0.95);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-
-    .site-header__inner {
-      height: 72px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .site-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-weight: 700;
-    }
-
-    .site-logo__icon {
-      width: 34px;
-      height: 34px;
-      border-radius: 8px;
-      background: #fff;
-      color: #7c3aed;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-    }
-
-    .site-logo__text {
-      font-size: 18px;
-    }
-
-    .site-logo__text--blue {
-      color: #3b82f6;
-    }
-
-    .site-logo__text--purple {
-      color: #a855f7;
-    }
-
-    .site-nav {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      height: 44px;
+    main {
+      max-width: 1200px;
+      margin: 28px auto;
       padding: 0 20px;
-      border-radius: 12px;
-      font-weight: 600;
-      transition: 0.2s ease;
     }
 
-    .btn--dark {
-      background: #0a0a0a;
-      color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .btn--dark:hover {
-      background: #151515;
-    }
-
-    .btn--purple {
-      background: #a855f7;
-      color: #fff;
-      border: 1px solid transparent;
-    }
-
-    .btn--purple:hover {
-      background: #9333ea;
-    }
-
-    .btn--green {
-      background: #16a34a;
-      color: #fff;
-    }
-
-    .btn--red {
-      background: #dc2626;
-      color: #fff;
-    }
-
-    .admin-page {
-      width: 100%;
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 40px 24px 80px;
-    }
-
-    .admin-page__title {
-      font-size: 42px;
-      margin-bottom: 12px;
-    }
-
-    .admin-page__subtitle {
-      color: #cfcfcf;
-      margin-bottom: 30px;
-    }
-
-    .admin-feedback {
-      min-height: 22px;
-      margin-bottom: 18px;
-      color: #ff6464;
-      font-size: 14px;
-    }
-
-    .admin-success {
-      color: #52d273;
-    }
-
-    .admin-form {
-      width: 100%;
-      max-width: 860px;
-      background: #0b0b0b;
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 18px;
-      padding: 24px;
-      margin-bottom: 28px;
-    }
-
-    .admin-form__grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    .form-field {
+    .top-actions {
       margin-bottom: 16px;
     }
 
-    .form-field--full {
+    .back-link {
+      display: inline-block;
+      text-decoration: none;
+      color: #2563eb;
+      font-weight: bold;
+    }
+
+    .card {
+      background: white;
+      border-radius: 14px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+      padding: 20px;
+      margin-bottom: 22px;
+    }
+
+    .card h2 {
+      margin-top: 0;
+      margin-bottom: 16px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .full-width {
       grid-column: 1 / -1;
     }
 
-    .form-field__label {
+    label {
       display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
       font-size: 14px;
-      margin-bottom: 8px;
-      color: #e5e5e5;
     }
 
-    .form-field__input,
-    .form-field__textarea,
-    .form-field__select {
+    input, select, button {
       width: 100%;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: #111;
-      color: #fff;
-      padding: 0 14px;
-    }
-
-    .form-field__input,
-    .form-field__select {
-      height: 48px;
-    }
-
-    .form-field__textarea {
-      min-height: 120px;
-      resize: vertical;
-      padding-top: 14px;
-    }
-
-    .admin-table-wrapper {
-      overflow-x: auto;
-      background: #0b0b0b;
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 18px;
-    }
-
-    .admin-table {
-      width: 100%;
-      min-width: 1200px;
-      border-collapse: collapse;
-    }
-
-    .admin-table th,
-    .admin-table td {
-      padding: 16px;
-      text-align: left;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .admin-table th {
-      background: #111;
-      color: #fff;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
       font-size: 14px;
+      box-sizing: border-box;
     }
 
-    .admin-table td {
-      color: #cfcfcf;
-      font-size: 14px;
-      vertical-align: top;
-      word-break: break-word;
-    }
-
-    .admin-actions {
+    .actions {
       display: flex;
       gap: 10px;
+      margin-top: 16px;
       flex-wrap: wrap;
     }
 
-    @media (max-width: 768px) {
-      .site-header__inner {
-        min-height: 72px;
-        height: auto;
-        padding: 16px 0;
-        flex-direction: column;
-        gap: 16px;
-      }
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
 
-      .site-nav {
-        justify-content: center;
-      }
+    button:hover {
+      background: #1d4ed8;
+    }
 
-      .admin-page__title {
-        font-size: 32px;
-      }
+    .secondary {
+      background: #475569;
+    }
 
-      .admin-form__grid {
-        grid-template-columns: 1fr;
-      }
+    .secondary:hover {
+      background: #334155;
+    }
+
+    .danger {
+      background: #dc2626;
+    }
+
+    .danger:hover {
+      background: #b91c1c;
+    }
+
+    .message {
+      margin-bottom: 16px;
+      padding: 12px;
+      border-radius: 8px;
+    }
+
+    .success {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .error {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .lessons-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .lesson-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+      background: #fff;
+    }
+
+    .lesson-card-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: start;
+      flex-wrap: wrap;
+    }
+
+    .lesson-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .lesson-meta {
+      color: #475569;
+      margin-bottom: 10px;
+      line-height: 1.6;
+      word-break: break-word;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: bold;
+      background: #ede9fe;
+      color: #6d28d9;
+      margin-right: 8px;
+    }
+
+    .lesson-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .links-block a {
+      display: inline-block;
+      margin-right: 10px;
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .links-block a:hover {
+      text-decoration: underline;
+    }
+
+    .empty-state {
+      color: #64748b;
+      padding: 8px 0;
     }
   </style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="page-container site-header__inner">
-      <a href="admin-dashboard.html" class="site-logo">
-        <div class="site-logo__icon">▶</div>
-        <div class="site-logo__text">
-          <span class="site-logo__text--blue">Matemática</span><span class="site-logo__text--purple">Essencial</span>
-        </div>
-      </a>
-
-      <nav class="site-nav">
-        <a href="admin-dashboard.html" class="btn btn--dark">Painel</a>
-        <a href="admin-cursos.html" class="btn btn--dark">Cursos</a>
-        <a href="admin-modulos.html" class="btn btn--dark">Módulos</a>
-        <a href="dashboard.html" class="btn btn--dark">Aluno</a>
-      </nav>
-    </div>
+  <header>
+    <h1>Gerenciamento de Aulas</h1>
   </header>
 
-  <main class="admin-page">
-    <h1 class="admin-page__title">Gerenciar Aulas</h1>
-    <p class="admin-page__subtitle">
-      Cadastre aulas, vincule a módulos e organize o conteúdo.
-    </p>
+  <main>
+    <div class="top-actions">
+      <a class="back-link" href="dashboard.html">← Voltar para o dashboard</a>
+    </div>
 
-    <div id="adminFeedback" class="admin-feedback"></div>
+    <div id="message-container"></div>
 
-    <section class="admin-form">
-      <form id="lessonForm">
-        <div class="admin-form__grid">
-          <div class="form-field">
-            <label class="form-field__label" for="lessonCourse">Curso</label>
-            <select class="form-field__select" id="lessonCourse"></select>
-          </div>
+    <section class="card">
+      <h2 id="form-title">Nova aula</h2>
 
-          <div class="form-field">
-            <label class="form-field__label" for="lessonModule">Módulo</label>
-            <select class="form-field__select" id="lessonModule"></select>
-          </div>
-
-          <div class="form-field">
-            <label class="form-field__label" for="lessonOrder">Ordem</label>
-            <input class="form-field__input" type="number" id="lessonOrder" placeholder="Ex.: 1" />
-          </div>
-
-          <div class="form-field form-field--full">
-            <label class="form-field__label" for="lessonTitle">Título da aula</label>
-            <input class="form-field__input" type="text" id="lessonTitle" placeholder="Ex.: Introdução aos fundamentos" />
-          </div>
-
-          <div class="form-field form-field--full">
-            <label class="form-field__label" for="lessonVideoUrl">URL/embed do Vimeo</label>
-            <input class="form-field__input" type="text" id="lessonVideoUrl" placeholder="https://player.vimeo.com/video/76979871" />
-          </div>
-
-          <div class="form-field form-field--full">
-            <label class="form-field__label" for="lessonPdfUrl">URL do PDF</label>
-            <input class="form-field__input" type="text" id="lessonPdfUrl" placeholder="Ex.: https://..." />
-          </div>
+      <div class="row">
+        <div>
+          <label for="module_id">Módulo</label>
+          <select id="module_id">
+            <option value="">Selecione um módulo</option>
+          </select>
         </div>
 
-        <div class="admin-actions">
-          <button id="lessonSubmitButton" type="submit" class="btn btn--purple">Salvar Aula</button>
-          <button
-            id="lessonCancelButton"
-            type="button"
-            class="btn btn--dark"
-            style="display: none;"
-          >
-            Cancelar edição
-          </button>
+        <div>
+          <label for="order">Ordem</label>
+          <input type="number" id="order" />
         </div>
-      </form>
+
+        <div class="full-width">
+          <label for="title">Título da aula</label>
+          <input type="text" id="title" />
+        </div>
+
+        <div class="full-width">
+          <label for="video_embed_url">URL do vídeo (embed)</label>
+          <input type="text" id="video_embed_url" />
+        </div>
+
+        <div class="full-width">
+          <label for="pdf_url">URL do PDF</label>
+          <input type="text" id="pdf_url" />
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="save-btn">Salvar aula</button>
+        <button id="cancel-edit-btn" class="secondary" type="button">Cancelar edição</button>
+      </div>
     </section>
 
-    <section class="admin-table-wrapper">
-      <table class="admin-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Curso</th>
-            <th>Módulo</th>
-            <th>Ordem</th>
-            <th>Título</th>
-            <th>Vídeo</th>
-            <th>PDF</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody id="lessonsTableBody"></tbody>
-      </table>
+    <section class="card">
+      <h2>Lista de aulas</h2>
+      <div id="lessons-container" class="lessons-grid"></div>
+      <div id="empty-state" class="empty-state" style="display:none;">
+        Nenhuma aula cadastrada até o momento.
+      </div>
     </section>
   </main>
 

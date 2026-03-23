@@ -3,258 +3,156 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard - Matemática Essencial</title>
-
+  <title>Dashboard</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, Helvetica, sans-serif;
-    }
-
-    html,
     body {
-      min-height: 100%;
-      background: #000;
-      color: #fff;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f1f5f9;
+      color: #0f172a;
     }
 
-    a {
-      text-decoration: none;
-      color: inherit;
+    header {
+      background: #0f172a;
+      color: white;
+      padding: 20px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    button {
-      cursor: pointer;
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .logout-btn {
+      background: #dc2626;
+      color: white;
       border: none;
-      font: inherit;
-    }
-
-    .page-container {
-      width: 100%;
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
-
-    .site-header {
-      width: 100%;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(0, 0, 0, 0.95);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-
-    .site-header__inner {
-      height: 72px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .site-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-weight: 700;
-    }
-
-    .site-logo__icon {
-      width: 34px;
-      height: 34px;
+      padding: 10px 14px;
       border-radius: 8px;
-      background: #fff;
-      color: #7c3aed;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
+      cursor: pointer;
     }
 
-    .site-logo__text {
-      font-size: 18px;
+    .logout-btn:hover {
+      background: #b91c1c;
     }
 
-    .site-logo__text--blue {
-      color: #3b82f6;
-    }
-
-    .site-logo__text--purple {
-      color: #a855f7;
-    }
-
-    .site-nav {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      height: 44px;
+    main {
+      max-width: 1200px;
+      margin: 28px auto;
       padding: 0 20px;
-      border-radius: 12px;
-      font-weight: 600;
-      transition: 0.2s ease;
     }
 
-    .btn--dark {
-      background: #0a0a0a;
-      color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .btn--dark:hover {
-      background: #151515;
-    }
-
-    .btn--purple {
-      background: #a855f7;
-      color: #fff;
-      border: 1px solid transparent;
-    }
-
-    .btn--purple:hover {
-      background: #9333ea;
-    }
-
-    .dashboard-page {
-      width: 100%;
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 40px 24px 80px;
-    }
-
-    .dashboard-page__top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
+    .welcome-card {
+      background: white;
+      border-radius: 14px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+      padding: 24px;
       margin-bottom: 24px;
     }
 
-    .dashboard-page__title {
-      font-size: 42px;
-      margin-bottom: 12px;
+    .welcome-title {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 8px;
     }
 
-    .dashboard-page__subtitle {
-      color: #cfcfcf;
-      margin-bottom: 30px;
+    .welcome-subtitle {
+      color: #64748b;
+      font-size: 16px;
     }
 
-    .dashboard-grid {
+    .section-title {
+      margin: 0 0 16px 0;
+      font-size: 22px;
+    }
+
+    .cards-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 18px;
     }
 
-    .dashboard-card {
-      background: #0b0b0b;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 18px;
-      padding: 24px;
+    .nav-card {
+      background: white;
+      border-radius: 14px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+      padding: 20px;
+      text-decoration: none;
+      color: #0f172a;
+      border: 1px solid #e2e8f0;
+      transition: 0.2s;
     }
 
-    .dashboard-card__title {
-      margin-bottom: 12px;
+    .nav-card:hover {
+      transform: translateY(-2px);
+      border-color: #93c5fd;
+      background: #f8fbff;
     }
 
-    .dashboard-card__text {
-      color: #bdbdbd;
+    .nav-card-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .nav-card-text {
+      color: #64748b;
       font-size: 14px;
-      line-height: 1.6;
-      word-break: break-word;
+      line-height: 1.5;
     }
 
-    @media (max-width: 1100px) {
-      .dashboard-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 768px) {
-      .site-header__inner {
-        min-height: 72px;
-        height: auto;
-        padding: 16px 0;
-        flex-direction: column;
-        gap: 16px;
-      }
-
-      .site-nav {
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-
-      .dashboard-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .dashboard-page__title {
-        font-size: 32px;
-      }
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="page-container site-header__inner">
-      <a href="dashboard.html" class="site-logo">
-        <div class="site-logo__icon">▶</div>
-        <div class="site-logo__text">
-          <span class="site-logo__text--blue">Matemática</span><span class="site-logo__text--purple">Essencial</span>
-        </div>
-      </a>
-
-      <nav class="site-nav">
-        <a href="cursos.html" class="btn btn--dark">Cursos</a>
-        <a href="perfil.html" class="btn btn--dark">Perfil</a>
-        <button id="logoutButton" class="btn btn--purple">Sair</button>
-      </nav>
-    </div>
+  <header>
+    <h1>Painel da Plataforma</h1>
+    <button id="logout-btn" class="logout-btn">Sair</button>
   </header>
 
-  <main class="dashboard-page">
-    <div class="dashboard-page__top">
-      <div>
-        <h1 class="dashboard-page__title">Área do Aluno</h1>
-        <p class="dashboard-page__subtitle">Bem-vindo à plataforma Matemática Essencial.</p>
+  <main>
+    <section class="welcome-card">
+      <div id="welcome-title" class="welcome-title">Bem-vindo(a)!</div>
+      <div id="welcome-subtitle" class="welcome-subtitle">
+        Carregando informações do seu perfil...
       </div>
-    </div>
+    </section>
 
-    <div class="dashboard-grid">
-      <div class="dashboard-card">
-        <h3 class="dashboard-card__title">Meu Curso</h3>
-        <p class="dashboard-card__text">Acesse seus módulos, aulas e materiais do curso.</p>
-        <br />
-        <a href="curso.html" class="btn btn--purple">Abrir curso</a>
+    <section>
+      <h2 class="section-title">Acessos rápidos</h2>
+
+      <div id="cards-grid" class="cards-grid">
+        <a href="cursos.html" class="nav-card" id="card-student-courses">
+          <div class="nav-card-title">Meus cursos</div>
+          <div class="nav-card-text">Acesse seus cursos, módulos, aulas e conteúdos.</div>
+        </a>
+
+        <a href="admin-cursos.html" class="nav-card hidden" id="card-admin-courses">
+          <div class="nav-card-title">Gerenciar cursos</div>
+          <div class="nav-card-text">Crie, edite e publique cursos.</div>
+        </a>
+
+        <a href="admin-modulos.html" class="nav-card hidden" id="card-admin-modules">
+          <div class="nav-card-title">Gerenciar módulos</div>
+          <div class="nav-card-text">Organize os módulos de cada curso.</div>
+        </a>
+
+        <a href="admin-aulas.html" class="nav-card hidden" id="card-admin-lessons">
+          <div class="nav-card-title">Gerenciar aulas</div>
+          <div class="nav-card-text">Cadastre vídeos, PDFs e ordem das aulas.</div>
+        </a>
+
+        <a href="admin-matriculas.html" class="nav-card hidden" id="card-admin-enrollments">
+          <div class="nav-card-title">Gerenciar matrículas</div>
+          <div class="nav-card-text">Associe alunos aos cursos manualmente.</div>
+        </a>
       </div>
-
-      <div class="dashboard-card">
-        <h3 class="dashboard-card__title">Progresso</h3>
-        <p class="dashboard-card__text">Visualize o andamento da sua jornada dentro da plataforma.</p>
-      </div>
-
-      <div class="dashboard-card">
-        <h3 class="dashboard-card__title">Usuário</h3>
-        <p class="dashboard-card__text"><strong>Nome:</strong> <span id="userName">Carregando...</span></p>
-        <p class="dashboard-card__text"><strong>Email:</strong> <span id="userEmail">Carregando...</span></p>
-        <p class="dashboard-card__text"><strong>Perfil:</strong> <span id="userRole">Carregando...</span></p>
-      </div>      
-
-      <div class="dashboard-card">
-        <h3 class="dashboard-card__title">Sessão</h3>
-        <p class="dashboard-card__text">Token salvo localmente:</p>
-        <br />
-        <p id="tokenPreview" class="dashboard-card__text"></p>
-      </div>
-    </div>
-    
+    </section>
   </main>
 
   <script src="js/api.js"></script>

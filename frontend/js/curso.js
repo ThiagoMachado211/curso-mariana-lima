@@ -1,8 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  if (!isAuthenticated()) {
-    window.location.href = `aulas.html?module_id=${module.id}`;
-    return;
-  }
+  const user = await requireStudent();
+  if (!user) return;
 
   const logoutButton = document.getElementById("logoutButton");
   const feedback = document.getElementById("courseFeedback");
@@ -32,16 +30,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (logoutButton) {
     logoutButton.addEventListener("click", () => {
       removeToken();
-      window.location.href = `aulas.html?module_id=${module.id}`;
+      window.location.href = "login.html";
     });
-  }
-
-  try {
-    await apiRequest("/auth/me", { method: "GET" });
-  } catch (error) {
-    removeToken();
-    window.location.href = `aulas.html?module_id=${module.id}`;
-    return;
   }
 
   const courseId = getCourseIdFromUrl();
