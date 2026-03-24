@@ -1,81 +1,60 @@
-const API_BASE = "http://localhost:8000";
-
 let editingCourseId = null;
 let coursesCache = [];
 
-function getToken() {
-  return localStorage.getItem("access_token");
-}
-
-function authHeaders() {
-  const token = getToken();
-  return {
-    "Content-Type": "application/json",
-    "Authorization": `Bearer ${token}`
-  };
-}
-
-function redirectToLogin() {
-  localStorage.removeItem("access_token");
-  window.location.href = "login.html";
-}
-
 function showMessage(message, type = "success") {
   const container = document.getElementById("message-container");
-  container.innerHTML = `<div class="message ${type}">${message}</div>`;
+  if (container) {
+    container.innerHTML = `<div class="message ${type}">${message}</div>`;
 
-  setTimeout(() => {
-    container.innerHTML = "";
-  }, 4000);
+    setTimeout(() => {
+      container.innerHTML = "";
+    }, 4000);
+  }
 }
 
-async function fetchJson(url, options = {}) {
-  const response = await fetch(url, {
-    ...options,
-    headers: authHeaders(),
-  });
-
-  if (response.status === 401) {
-    redirectToLogin();
-    return null;
-  }
-
-  if (response.status === 204) {
-    return { ok: true, data: null };
-  }
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.detail || "Erro na requisição.");
-  }
-
-  return { ok: true, data };
+function slugify(text) {
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
 }
 
 function getFormData() {
   return {
-    title: document.getElementById("title").value.trim(),
-    slug: document.getElementById("slug").value.trim(),
-    description: document.getElementById("description").value.trim(),
-    price_cents: Number(document.getElementById("price_cents").value || 0),
-    currency: document.getElementById("currency").value.trim() || "BRL",
-    is_active: document.getElementById("is_active").checked,
-    is_published: document.getElementById("is_published").checked,
+    title: document.getElementById("title")?.value.trim() || "",
+    slug: document.getElementById("slug")?.value.trim() || "",
+    description: document.getElementById("description")?.value.trim() || "",
+    price_cents: Number(document.getElementById("price_cents")?.value || 0),
+    currency: document.getElementById("currency")?.value.trim() || "BRL",
+    is_active: !!document.getElementById("is_active")?.checked,
+    is_published: !!document.getElementById("is_published")?.checked,
   };
 }
 
 function resetForm() {
   editingCourseId = null;
 
-  document.getElementById("form-title").textContent = "Novo curso";
-  document.getElementById("title").value = "";
-  document.getElementById("slug").value = "";
-  document.getElementById("description").value = "";
-  document.getElementById("price_cents").value = "";
-  document.getElementById("currency").value = "BRL";
-  document.getElementById("is_active").checked = true;
-  document.getElementById("is_published").checked = false;
+  const formTitle = document.getElementById("form-title");
+  const title = document.getElementById("title");
+  const slug = document.getElementById("slug");
+  const description = document.getElementById("description");
+  const priceCents = document.getElementById("price_cents");
+  const currency = document.getElementById("currency");
+  const isActive = document.getElementById("is_active");
+  const isPublished = document.getElementById("is_published");
+
+  if (formTitle) formTitle.textContent = "Novo curso";
+  if (title) title.value = "";
+  if (slug) slug.value = "";
+  if (description) description.value = "";
+  if (priceCents) priceCents.value = "";
+  if (currency) currency.value = "BRL";
+  if (isActive) isActive.checked = true;
+  if (isPublished) isPublished.checked = false;
 
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
@@ -83,14 +62,23 @@ function resetForm() {
 function fillForm(course) {
   editingCourseId = course.id;
 
-  document.getElementById("form-title").textContent = "Editar curso";
-  document.getElementById("title").value = course.title || "";
-  document.getElementById("slug").value = course.slug || "";
-  document.getElementById("description").value = course.description || "";
-  document.getElementById("price_cents").value = course.price_cents ?? 0;
-  document.getElementById("currency").value = course.currency || "BRL";
-  document.getElementById("is_active").checked = !!course.is_active;
-  document.getElementById("is_published").checked = !!course.is_published;
+  const formTitle = document.getElementById("form-title");
+  const title = document.getElementById("title");
+  const slug = document.getElementById("slug");
+  const description = document.getElementById("description");
+  const priceCents = document.getElementById("price_cents");
+  const currency = document.getElementById("currency");
+  const isActive = document.getElementById("is_active");
+  const isPublished = document.getElementById("is_published");
+
+  if (formTitle) formTitle.textContent = "Editar curso";
+  if (title) title.value = course.title || "";
+  if (slug) slug.value = course.slug || "";
+  if (description) description.value = course.description || "";
+  if (priceCents) priceCents.value = course.price_cents ?? 0;
+  if (currency) currency.value = course.currency || "BRL";
+  if (isActive) isActive.checked = !!course.is_active;
+  if (isPublished) isPublished.checked = !!course.is_published;
 
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
@@ -104,8 +92,8 @@ function formatPrice(priceCents, currency = "BRL") {
 }
 
 async function loadCourses() {
-  const result = await fetchJson(`${API_BASE}/admin/courses`);
-  coursesCache = result.data;
+  const courses = await apiRequest("/admin/courses");
+  coursesCache = courses;
   renderCourses(coursesCache);
 }
 
@@ -113,16 +101,18 @@ function renderCourses(courses) {
   const container = document.getElementById("courses-container");
   const emptyState = document.getElementById("empty-state");
 
+  if (!container) return;
+
   container.innerHTML = "";
 
   if (!courses || courses.length === 0) {
-    emptyState.style.display = "block";
+    if (emptyState) emptyState.style.display = "block";
     return;
   }
 
-  emptyState.style.display = "none";
+  if (emptyState) emptyState.style.display = "none";
 
-  courses.forEach(course => {
+  courses.forEach((course) => {
     const activeBadge = course.is_active
       ? `<span class="badge badge-active">Ativo</span>`
       : `<span class="badge badge-inactive">Inativo</span>`;
@@ -157,15 +147,15 @@ function renderCourses(courses) {
     container.appendChild(div);
   });
 
-  document.querySelectorAll(".edit-btn").forEach(button => {
+  document.querySelectorAll(".edit-btn").forEach((button) => {
     button.addEventListener("click", (event) => {
       const courseId = event.target.dataset.id;
-      const course = coursesCache.find(item => item.id === courseId);
+      const course = coursesCache.find((item) => item.id === courseId);
       if (course) fillForm(course);
     });
   });
 
-  document.querySelectorAll(".delete-btn").forEach(button => {
+  document.querySelectorAll(".delete-btn").forEach((button) => {
     button.addEventListener("click", async (event) => {
       const courseId = event.target.dataset.id;
 
@@ -174,34 +164,23 @@ function renderCourses(courses) {
       }
 
       try {
-        await fetchJson(`${API_BASE}/admin/courses/${courseId}`, {
+        await apiRequest(`/admin/courses/${courseId}`, {
           method: "DELETE",
         });
 
         showMessage("Curso excluído com sucesso.");
+
         if (editingCourseId === courseId) {
           resetForm();
         }
+
         await loadCourses();
       } catch (error) {
-        showMessage(error.message, "error");
+        showMessage(error.message || "Erro ao excluir curso.", "error");
       }
     });
   });
 }
-
-
-function slugify(text) {
-  return text
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9\s-]/g, "")
-    .trim()
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-");
-}
-
 
 async function saveCourse() {
   const payload = getFormData();
@@ -228,14 +207,14 @@ async function saveCourse() {
 
   try {
     if (editingCourseId) {
-      await fetchJson(`${API_BASE}/admin/courses/${editingCourseId}`, {
+      await apiRequest(`/admin/courses/${editingCourseId}`, {
         method: "PUT",
         body: JSON.stringify(payload),
       });
 
       showMessage("Curso atualizado com sucesso.");
     } else {
-      await fetchJson(`${API_BASE}/admin/courses`, {
+      await apiRequest("/admin/courses", {
         method: "POST",
         body: JSON.stringify(payload),
       });
@@ -247,32 +226,46 @@ async function saveCourse() {
     await loadCourses();
     window.scrollTo({ top: 0, behavior: "smooth" });
   } catch (error) {
-    showMessage(error.message, "error");
+    showMessage(error.message || "Erro ao salvar curso.", "error");
   }
 }
 
-async function init() {
-
-  document.getElementById("title").addEventListener("input", () => {
-    if (!editingCourseId) {
-      document.getElementById("slug").value = slugify(
-        document.getElementById("title").value
-      );
-    }
-  });
-
+document.addEventListener("DOMContentLoaded", async () => {
   const user = await requireAdmin();
   if (!user) return;
 
-  try {
-    document.getElementById("save-btn").addEventListener("click", saveCourse);
-    document.getElementById("cancel-edit-btn").addEventListener("click", resetForm);
+  const saveBtn = document.getElementById("save-btn");
+  const cancelEditBtn = document.getElementById("cancel-edit-btn");
+  const titleInput = document.getElementById("title");
+  const slugInput = document.getElementById("slug");
+  const logoutButton = document.getElementById("logoutButton");
 
+  if (logoutButton) {
+    logoutButton.addEventListener("click", () => {
+      logout();
+    });
+  }
+
+  if (saveBtn) {
+    saveBtn.addEventListener("click", saveCourse);
+  }
+
+  if (cancelEditBtn) {
+    cancelEditBtn.addEventListener("click", resetForm);
+  }
+
+  if (titleInput && slugInput) {
+    titleInput.addEventListener("input", () => {
+      if (!editingCourseId) {
+        slugInput.value = slugify(titleInput.value);
+      }
+    });
+  }
+
+  try {
     await loadCourses();
     resetForm();
   } catch (error) {
-    showMessage(error.message, "error");
+    showMessage(error.message || "Erro ao carregar dados da página.", "error");
   }
-}
-
-document.addEventListener("DOMContentLoaded", init);
+});

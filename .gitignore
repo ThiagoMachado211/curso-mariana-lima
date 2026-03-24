@@ -2,9 +2,12 @@
 __pycache__/
 *.pyc
 .env
+.env.*
 .env.local
 venv/
 backend/.env
+*.db
+
 
 # Node
 node_modules/

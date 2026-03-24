@@ -1,67 +1,28 @@
-const API_BASE = "http://localhost:8000";
-
 let studentsCache = [];
 let coursesCache = [];
 let enrollmentsCache = [];
 
-function getToken() {
-  return localStorage.getItem("access_token");
-}
-
-function authHeaders() {
-  const token = getToken();
-  return {
-    "Content-Type": "application/json",
-    "Authorization": `Bearer ${token}`
-  };
-}
-
-function redirectToLogin() {
-  localStorage.removeItem("access_token");
-  window.location.href = "login.html";
-}
-
 function showMessage(message, type = "success") {
   const container = document.getElementById("message-container");
-  container.innerHTML = `<div class="message ${type}">${message}</div>`;
+  if (container) {
+    container.innerHTML = `<div class="message ${type}">${message}</div>`;
 
-  setTimeout(() => {
-    container.innerHTML = "";
-  }, 4000);
-}
-
-async function fetchJson(url, options = {}) {
-  const response = await fetch(url, {
-    ...options,
-    headers: authHeaders(),
-  });
-
-  if (response.status === 401) {
-    redirectToLogin();
-    return null;
+    setTimeout(() => {
+      container.innerHTML = "";
+    }, 4000);
   }
-
-  if (response.status === 204) {
-    return { ok: true, data: null };
-  }
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.detail || "Erro na requisição.");
-  }
-
-  return { ok: true, data };
 }
 
 async function loadStudents() {
-  const result = await fetchJson(`${API_BASE}/admin/directory/students`);
-  studentsCache = result.data;
+  const students = await apiRequest("/admin/directory/students");
+  studentsCache = students;
 
   const select = document.getElementById("student-select");
+  if (!select) return;
+
   select.innerHTML = `<option value="">Selecione um aluno</option>`;
 
-  studentsCache.forEach(student => {
+  studentsCache.forEach((student) => {
     const option = document.createElement("option");
     option.value = student.id;
     option.textContent = `${student.name} (${student.email})`;
@@ -70,13 +31,15 @@ async function loadStudents() {
 }
 
 async function loadCourses() {
-  const result = await fetchJson(`${API_BASE}/admin/directory/courses`);
-  coursesCache = result.data;
+  const courses = await apiRequest("/admin/directory/courses");
+  coursesCache = courses;
 
   const select = document.getElementById("course-select");
+  if (!select) return;
+
   select.innerHTML = `<option value="">Selecione um curso</option>`;
 
-  coursesCache.forEach(course => {
+  coursesCache.forEach((course) => {
     const option = document.createElement("option");
     option.value = course.id;
     option.textContent = course.is_published
@@ -87,11 +50,11 @@ async function loadCourses() {
 }
 
 function findStudent(studentId) {
-  return studentsCache.find(s => s.id === studentId);
+  return studentsCache.find((student) => student.id === studentId);
 }
 
 function findCourse(courseId) {
-  return coursesCache.find(c => c.id === courseId);
+  return coursesCache.find((course) => course.id === courseId);
 }
 
 function enrichEnrollment(enrollment) {
@@ -107,8 +70,8 @@ function enrichEnrollment(enrollment) {
 }
 
 async function loadEnrollments() {
-  const result = await fetchJson(`${API_BASE}/admin/enrollments`);
-  enrollmentsCache = result.data.map(enrichEnrollment);
+  const enrollments = await apiRequest("/admin/enrollments");
+  enrollmentsCache = enrollments.map(enrichEnrollment);
   renderEnrollments(enrollmentsCache);
 }
 
@@ -116,16 +79,18 @@ function renderEnrollments(enrollments) {
   const tbody = document.getElementById("enrollments-table-body");
   const emptyState = document.getElementById("empty-state");
 
+  if (!tbody) return;
+
   tbody.innerHTML = "";
 
   if (!enrollments || enrollments.length === 0) {
-    emptyState.style.display = "block";
+    if (emptyState) emptyState.style.display = "block";
     return;
   }
 
-  emptyState.style.display = "none";
+  if (emptyState) emptyState.style.display = "none";
 
-  enrollments.forEach(enrollment => {
+  enrollments.forEach((enrollment) => {
     const tr = document.createElement("tr");
 
     tr.innerHTML = `
@@ -146,7 +111,7 @@ function renderEnrollments(enrollments) {
     tbody.appendChild(tr);
   });
 
-  document.querySelectorAll(".danger").forEach(button => {
+  document.querySelectorAll(".danger").forEach((button) => {
     button.addEventListener("click", async (event) => {
       const enrollmentId = event.target.dataset.id;
 
@@ -155,7 +120,7 @@ function renderEnrollments(enrollments) {
       }
 
       try {
-        await fetchJson(`${API_BASE}/admin/enrollments/${enrollmentId}`, {
+        await apiRequest(`/admin/enrollments/${enrollmentId}`, {
           method: "DELETE",
         });
 
@@ -163,17 +128,17 @@ function renderEnrollments(enrollments) {
         await loadEnrollments();
         applyFilters();
       } catch (error) {
-        showMessage(error.message, "error");
+        showMessage(error.message || "Erro ao remover matrícula.", "error");
       }
     });
   });
 }
 
 function applyFilters() {
-  const studentFilter = document.getElementById("filter-student").value.toLowerCase().trim();
-  const courseFilter = document.getElementById("filter-course").value.toLowerCase().trim();
+  const studentFilter = document.getElementById("filter-student")?.value.toLowerCase().trim() || "";
+  const courseFilter = document.getElementById("filter-course")?.value.toLowerCase().trim() || "";
 
-  const filtered = enrollmentsCache.filter(item => {
+  const filtered = enrollmentsCache.filter((item) => {
     const matchesStudent =
       !studentFilter ||
       item.student_name.toLowerCase().includes(studentFilter) ||
@@ -190,8 +155,8 @@ function applyFilters() {
 }
 
 async function createEnrollment() {
-  const studentId = document.getElementById("student-select").value;
-  const courseId = document.getElementById("course-select").value;
+  const studentId = document.getElementById("student-select")?.value || "";
+  const courseId = document.getElementById("course-select")?.value || "";
 
   if (!studentId || !courseId) {
     showMessage("Selecione um aluno e um curso.", "error");
@@ -199,51 +164,62 @@ async function createEnrollment() {
   }
 
   try {
-    await fetchJson(`${API_BASE}/admin/enrollments`, {
+    await apiRequest("/admin/enrollments", {
       method: "POST",
       body: JSON.stringify({
         user_id: studentId,
-        course_id: courseId
+        course_id: courseId,
       }),
     });
 
     showMessage("Matrícula criada com sucesso.");
 
-    document.getElementById("student-select").value = "";
-    document.getElementById("course-select").value = "";
+    const studentSelect = document.getElementById("student-select");
+    const courseSelect = document.getElementById("course-select");
+
+    if (studentSelect) studentSelect.value = "";
+    if (courseSelect) courseSelect.value = "";
 
     await loadEnrollments();
     applyFilters();
   } catch (error) {
-    showMessage(error.message, "error");
+    showMessage(error.message || "Erro ao criar matrícula.", "error");
   }
 }
 
-async function init() {
-
+document.addEventListener("DOMContentLoaded", async () => {
   const user = await requireAdmin();
   if (!user) return;
+
+  const createBtn = document.getElementById("create-enrollment-btn");
+  const filterStudent = document.getElementById("filter-student");
+  const filterCourse = document.getElementById("filter-course");
+  const logoutButton = document.getElementById("logoutButton");
+
+  if (logoutButton) {
+    logoutButton.addEventListener("click", () => {
+      logout();
+    });
+  }
+
+  if (createBtn) {
+    createBtn.addEventListener("click", createEnrollment);
+  }
+
+  if (filterStudent) {
+    filterStudent.addEventListener("input", applyFilters);
+  }
+
+  if (filterCourse) {
+    filterCourse.addEventListener("input", applyFilters);
+  }
 
   try {
     await loadStudents();
     await loadCourses();
     await loadEnrollments();
-
-    document
-      .getElementById("create-enrollment-btn")
-      .addEventListener("click", createEnrollment);
-
-    document
-      .getElementById("filter-student")
-      .addEventListener("input", applyFilters);
-
-    document
-      .getElementById("filter-course")
-      .addEventListener("input", applyFilters);
-
   } catch (error) {
-    showMessage(error.message, "error");
+    showMessage(error.message || "Erro ao carregar dados da página.", "error");
   }
-}
 
-document.addEventListener("DOMContentLoaded", init);
+});

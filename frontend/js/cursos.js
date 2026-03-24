@@ -7,11 +7,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   const grid = document.getElementById("coursesGrid");
 
   function setError(message) {
-    feedback.textContent = message;
+    if (feedback) {
+      feedback.textContent = message;
+    }
   }
 
   function clearError() {
-    feedback.textContent = "";
+    if (feedback) {
+      feedback.textContent = "";
+    }
   }
 
   function formatPrice(cents, currency) {
@@ -21,17 +25,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (logoutButton) {
     logoutButton.addEventListener("click", () => {
-      removeToken();
-      window.location.href = "login.html";
+      logout();
     });
   }
 
   try {
     clearError();
 
-    const courses = await apiRequest("/student/courses", {
-      method: "GET",
-    });
+    const courses = await apiRequest("/student/courses");
+
+    if (!grid) return;
 
     grid.innerHTML = "";
 
@@ -63,6 +66,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       grid.appendChild(card);
     });
   } catch (error) {
+    console.error(error);
     setError(error.message || "Erro ao carregar cursos.");
   }
 });

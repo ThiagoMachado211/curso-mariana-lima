@@ -29,4 +29,4 @@ def create_access_token(subject: str, expires_minutes: int = ACCESS_TOKEN_EXPIRE
         "exp": expire,
     }
 
-    return jwt.encode(to_encode, settings.JWT_SECRET, algorithm=ALGORITHM)
+    return jwt.encode(to_encode, settings.secret_key, algorithm=ALGORITHM)

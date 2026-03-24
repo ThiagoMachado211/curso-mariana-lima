@@ -2,12 +2,18 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    DATABASE_URL: str
-    JWT_SECRET: str = "super-secret-key"
+    app_name: str = "Curso Mariana Lima API"
+    database_url: str
+    secret_key: str
+    algorithm: str = "HS256"
+    access_token_expire_minutes: int = 60
+
+    frontend_url: str = "http://localhost:5500"
 
     model_config = SettingsConfigDict(
         env_file=".env",
-        extra="ignore"
+        env_file_encoding="utf-8",
+        extra="ignore",
     )
 
 

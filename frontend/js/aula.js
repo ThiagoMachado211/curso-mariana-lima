@@ -1,5 +1,3 @@
-const API_BASE = "http://localhost:8000";
-
 let currentCourse = null;
 let currentModule = null;
 let currentModuleName = "Módulo";
@@ -7,19 +5,9 @@ let currentModuleName = "Módulo";
 let currentLesson = null;
 let moduleLessons = [];
 
-function getToken() {
-  return localStorage.getItem("access_token");
-}
-
 function getQueryParam(param) {
   const params = new URLSearchParams(window.location.search);
   return params.get(param);
-}
-
-function authHeaders() {
-  return {
-    "Authorization": `Bearer ${getToken()}`
-  };
 }
 
 function showMessage(message) {
@@ -27,11 +15,6 @@ function showMessage(message) {
   if (container) {
     container.innerHTML = `<div class="message">${message}</div>`;
   }
-}
-
-function redirectToLogin() {
-  localStorage.removeItem("access_token");
-  window.location.href = "login.html";
 }
 
 function normalizeVideoUrl(url) {
@@ -54,30 +37,11 @@ function normalizeVideoUrl(url) {
   return url;
 }
 
-async function fetchJson(url) {
-  const response = await fetch(url, {
-    headers: authHeaders()
-  });
-
-  if (response.status === 401) {
-    redirectToLogin();
-    return null;
-  }
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.detail || "Erro na requisição.");
-  }
-
-  return data;
-}
-
 async function loadCourseContext(courseId) {
   if (!courseId) return null;
 
   try {
-    const course = await fetchJson(`${API_BASE}/student/courses/${courseId}`);
+    const course = await apiRequest(`/student/courses/${courseId}`);
     currentCourse = course;
     return course;
   } catch (error) {
@@ -90,7 +54,7 @@ async function loadModuleContext(moduleId) {
   if (!moduleId) return null;
 
   try {
-    const module = await fetchJson(`${API_BASE}/student/modules/${moduleId}`);
+    const module = await apiRequest(`/student/modules/${moduleId}`);
     currentModule = module;
     currentModuleName = module?.title || "Módulo";
     return module;
@@ -119,14 +83,14 @@ async function loadLessonPage() {
       await loadModuleContext(moduleId);
     }
 
-    currentLesson = await fetchJson(`${API_BASE}/student/lessons/${lessonId}`);
+    currentLesson = await apiRequest(`/student/lessons/${lessonId}`);
     if (!currentLesson) return;
 
     renderLesson(currentLesson);
     bindTopButtons(moduleId, courseId);
 
     if (moduleId) {
-      moduleLessons = await fetchJson(`${API_BASE}/student/modules/${moduleId}/lessons`);
+      moduleLessons = await apiRequest(`/student/modules/${moduleId}/lessons`);
 
       if (moduleLessons) {
         renderSidebarLessons(moduleLessons, lessonId, moduleId, courseId);
@@ -138,7 +102,6 @@ async function loadLessonPage() {
 
     renderLessonHeader(currentLesson);
     renderBreadcrumb(courseId, moduleId, currentLesson);
-
   } catch (error) {
     console.error(error);
     showMessage(error.message || "Erro ao carregar aula.");

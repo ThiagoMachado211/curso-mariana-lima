@@ -10,11 +10,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   const modulesGrid = document.getElementById("modulesGrid");
 
   function setError(message) {
-    feedback.textContent = message;
+    if (feedback) {
+      feedback.textContent = message;
+    }
   }
 
   function clearError() {
-    feedback.textContent = "";
+    if (feedback) {
+      feedback.textContent = "";
+    }
   }
 
   function formatPrice(cents, currency) {
@@ -29,8 +33,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (logoutButton) {
     logoutButton.addEventListener("click", () => {
-      removeToken();
-      window.location.href = "login.html";
+      logout();
     });
   }
 
@@ -38,7 +41,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (!courseId) {
     setError("Curso não informado.");
-    courseTitle.textContent = "Curso não encontrado";
+    if (courseTitle) {
+      courseTitle.textContent = "Curso não encontrado";
+    }
     return;
   }
 
@@ -46,13 +51,23 @@ document.addEventListener("DOMContentLoaded", async () => {
     clearError();
 
     const [course, modules] = await Promise.all([
-      apiRequest(`/student/courses/${courseId}`, { method: "GET" }),
-      apiRequest(`/student/courses/${courseId}/modules`, { method: "GET" }),
+      apiRequest(`/student/courses/${courseId}`),
+      apiRequest(`/student/courses/${courseId}/modules`)
     ]);
 
-    courseTitle.textContent = course.title;
-    courseDescription.textContent = course.description || "Sem descrição cadastrada.";
-    courseMeta.textContent = `Preço: ${formatPrice(course.price_cents, course.currency)}`;
+    if (courseTitle) {
+      courseTitle.textContent = course.title;
+    }
+
+    if (courseDescription) {
+      courseDescription.textContent = course.description || "Sem descrição cadastrada.";
+    }
+
+    if (courseMeta) {
+      courseMeta.textContent = `Preço: ${formatPrice(course.price_cents, course.currency)}`;
+    }
+
+    if (!modulesGrid) return;
 
     modulesGrid.innerHTML = "";
 
@@ -86,7 +101,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       modulesGrid.appendChild(card);
     });
   } catch (error) {
+    console.error(error);
     setError(error.message || "Erro ao carregar curso.");
-    courseTitle.textContent = "Erro ao carregar curso";
+
+    if (courseTitle) {
+      courseTitle.textContent = "Erro ao carregar curso";
+    }
   }
 });

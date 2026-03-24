@@ -1,25 +1,27 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  const logoutBtn = document.getElementById("logout-btn");
+  console.log("dashboard.js carregado");
 
-  if (!isAuthenticated()) {
-    window.location.href = "login.html";
-    return;
+  const user = await requireAuth();
+  console.log("user:", user);
+
+  if (!user) return;
+
+  const logoutButton = document.getElementById("logoutButton");
+  console.log("logoutButton:", logoutButton);
+
+  if (logoutButton) {
+    logoutButton.addEventListener("click", () => {
+      console.log("CLIQUE NO LOGOUT");
+      logout();
+    });
   }
 
-  logoutBtn?.addEventListener("click", () => {
-    removeToken();
-    window.location.href = "login.html";
-  });
-
   try {
-    const user = await apiRequest("/auth/me");
-
     renderWelcome(user);
     renderDashboardByRole(user.role);
   } catch (error) {
     console.error("Erro ao carregar dashboard:", error);
-    removeToken();
-    window.location.href = "login.html";
+    logout();
   }
 });
 
@@ -27,12 +29,18 @@ function renderWelcome(user) {
   const welcomeTitle = document.getElementById("welcome-title");
   const welcomeSubtitle = document.getElementById("welcome-subtitle");
 
-  welcomeTitle.textContent = `Olá, ${user.name}!`;
+  if (welcomeTitle) {
+    welcomeTitle.textContent = `Olá, ${user.name}!`;
+  }
 
-  if (user.role === "admin") {
-    welcomeSubtitle.textContent = "Você está acessando a área administrativa da plataforma.";
-  } else {
-    welcomeSubtitle.textContent = "Continue seus estudos acessando seus cursos disponíveis.";
+  if (welcomeSubtitle) {
+    if (user.role === "admin") {
+      welcomeSubtitle.textContent =
+        "Você está acessando a área administrativa da plataforma.";
+    } else {
+      welcomeSubtitle.textContent =
+        "Continue seus estudos acessando seus cursos disponíveis.";
+    }
   }
 }
 
@@ -47,7 +55,7 @@ function renderDashboardByRole(role) {
   const studentCard = document.getElementById("card-student-courses");
 
   if (role === "admin") {
-    adminCards.forEach(id => {
+    adminCards.forEach((id) => {
       document.getElementById(id)?.classList.remove("hidden");
     });
   }
