@@ -1,76 +1,96 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Dashboard - Matemática Essencial</title>
-    <link rel="stylesheet" href="css/style.css" />
-  </head>
-
-
-
-  <body class="admin-page admin-dashboard-page">
-    <header class="site-header">
-      <div class="page-container site-header__inner">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel do Administrador</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="admin-page admin-dashboard-page">
+  <header class="site-header">
+    <div class="page-container">
+      <div class="site-header__inner">
         <a href="index.html" class="site-logo">
-          <img src="assets/Logo_Mariana.jpg" alt="Logo Mariana Lima" class="site-logo__img" />
+          <img
+            src="assets/Logo_Mariana.jpg"
+            alt="Logo Mariana Lima"
+            class="site-logo__img"
+          />
           <span class="site-logo__text">
             <span class="site-logo__text--blue">Matemática</span><span class="site-logo__text--purple">Essencial</span>
           </span>
         </a>
 
         <nav class="site-nav">
-          <a href="dashboard.html" class="btn btn--dark">Área do Aluno</a>
-          <a href="admin-cursos.html" class="btn btn--dark">Cursos</a>
-          <a href="admin-modulos.html" class="btn btn--dark">Módulos</a>
-          <a href="admin-aulas.html" class="btn btn--dark">Aulas</a>
+          <button id="logoutButton" class="btn btn--dark">Sair</button>
         </nav>
       </div>
-    </header>
+    </div>
+  </header>
 
-    <main class="admin-page">
-      <div class="admin-page__top">
-        <div>
-          <h1 class="admin-page__title">Painel Administrativo</h1>
-          <p class="admin-page__subtitle">
-            Gerencie cursos, módulos, aulas e acompanhe a estrutura da plataforma.
-          </p>
-        </div>
-      </div>
+  <main class="admin-dashboard-main">
+    <div class="admin-dashboard-container">
+      <section class="admin-dashboard-hero">
+        <h1 class="admin-dashboard-title">Área do Administrador: Gerenciamento</h1>
+        <p class="admin-dashboard-subtitle">
+          Gerencie cursos, módulos, aulas, matrículas e acompanhe os cadastros realizados.
+        </p>
+      </section>
 
-      <div class="admin-grid">
-        <div class="admin-card">
-          <h3 class="admin-card__title">Gerenciar Cursos</h3>
-          <p class="admin-card__text">
-            Crie, edite e visualize todos os cursos cadastrados na plataforma.
-          </p>
-          <a href="admin-cursos.html" class="btn btn--purple">Abrir</a>
+      <section class="admin-metrics-grid">
+        <div class="admin-metric-card">
+          <span class="admin-metric-label">Cursos</span>
+          <strong id="countCourses" class="admin-metric-value">0</strong>
         </div>
 
-        <div class="admin-card">
-          <h3 class="admin-card__title">Gerenciar Módulos</h3>
-          <p class="admin-card__text">
-            Organize os módulos de cada curso e defina a estrutura pedagógica.
-          </p>
-          <a href="admin-modulos.html" class="btn btn--purple">Abrir</a>
+        <div class="admin-metric-card">
+          <span class="admin-metric-label">Módulos</span>
+          <strong id="countModules" class="admin-metric-value">0</strong>
         </div>
 
-        <div class="admin-card">
-          <h3 class="admin-card__title">Gerenciar Aulas</h3>
-          <p class="admin-card__text">
-            Cadastre aulas, títulos, descrições e relacione com os módulos.
-          </p>
-          <a href="admin-aulas.html" class="btn btn--purple">Abrir</a>
+        <div class="admin-metric-card">
+          <span class="admin-metric-label">Aulas</span>
+          <strong id="countLessons" class="admin-metric-value">0</strong>
         </div>
 
-        <div class="admin-card">
-          <h3 class="admin-card__title">Visão Geral</h3>
-          <p class="admin-card__text">
-            Área inicial para o futuro acompanhamento de métricas administrativas.
-          </p>
-          <a href="admin-dashboard.html" class="btn btn--purple">Atual</a>
+        <div class="admin-metric-card">
+          <span class="admin-metric-label">Cadastros</span>
+          <strong id="countUsers" class="admin-metric-value">0</strong>
         </div>
-      </div>
-    </main>
-  </body>
+      </section>
+
+      <section class="admin-management-section">
+        <div class="admin-management-grid">
+          <a href="admin-cursos.html" class="admin-management-card">
+            <h3>Gerenciar cursos</h3>
+            <p>Crie, edite e publique cursos.</p>
+          </a>
+
+          <a href="admin-modulos.html" class="admin-management-card">
+            <h3>Gerenciar módulos</h3>
+            <p>Organize os módulos de cada curso.</p>
+          </a>
+
+          <a href="admin-aulas.html" class="admin-management-card">
+            <h3>Gerenciar aulas</h3>
+            <p>Cadastre vídeos, PDFs e ordem das aulas.</p>
+          </a>
+
+          <a href="admin-matriculas.html" class="admin-management-card">
+            <h3>Gerenciar matrículas</h3>
+            <p>Associe alunos aos cursos manualmente.</p>
+          </a>
+
+          <a href="admin-cadastros.html" class="admin-management-card">
+            <h3>Visualizar cadastros</h3>
+            <p>Consulte os usuários cadastrados na plataforma.</p>
+          </a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/admin-dashboard.js"></script>
+</body>
 </html>

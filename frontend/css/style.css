@@ -901,6 +901,7 @@ img {
 /* =========================================================
    10) ADMIN DASHBOARD
 ========================================================= */
+
 .admin-dashboard-page {
   background: var(--bg-dark);
   color: var(--text-light);
@@ -959,6 +960,139 @@ img {
   line-height: 1.6;
   margin-bottom: 18px;
 }
+
+/* =========================================================
+  10.1) ADMIN DASHBOARD - NOVO LAYOUT
+========================================================= */
+
+.admin-dashboard-page {
+  background: #000;
+  color: #fff;
+  min-height: 100vh;
+}
+
+.admin-dashboard-main {
+  padding: 40px 24px 80px;
+}
+
+.admin-dashboard-container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.admin-dashboard-hero {
+  margin-bottom: 28px;
+}
+
+.admin-dashboard-title {
+  font-size: 46px;
+  line-height: 1.08;
+  margin-bottom: 14px;
+}
+
+.admin-dashboard-subtitle {
+  color: #cfcfcf;
+  font-size: 18px;
+  line-height: 1.7;
+  max-width: 850px;
+}
+
+.admin-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 32px;
+}
+
+.admin-metric-card {
+  background: #0b0b0b;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 24px;
+  min-height: 130px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.admin-metric-label {
+  font-size: 14px;
+  color: #bdbdbd;
+  margin-bottom: 10px;
+}
+
+.admin-metric-value {
+  font-size: 42px;
+  line-height: 1;
+  color: #a855f7;
+  font-weight: 800;
+}
+
+.admin-management-section {
+  margin-top: 10px;
+}
+
+.admin-management-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 18px;
+}
+
+.admin-management-card {
+  display: block;
+  background: #0b0b0b;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 24px;
+  transition: 0.2s ease;
+  min-height: 180px;
+}
+
+.admin-management-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(168, 85, 247, 0.45);
+  background: #111;
+}
+
+.admin-management-card h3 {
+  font-size: 20px;
+  margin-bottom: 12px;
+  color: #fff;
+}
+
+.admin-management-card p {
+  color: #cfcfcf;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+@media (max-width: 1200px) {
+  .admin-management-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .admin-metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-dashboard-title {
+    font-size: 34px;
+  }
+
+  .admin-dashboard-subtitle {
+    font-size: 16px;
+  }
+
+  .admin-metrics-grid,
+  .admin-management-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
 
 /* =========================================================
    11) ADMIN CURSOS
