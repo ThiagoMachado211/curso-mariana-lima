@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     togglePasswordButton.addEventListener("click", () => {
       const isHidden = passwordInput.type === "password";
+
       passwordInput.type = isHidden ? "text" : "password";
       togglePasswordButton.innerHTML = isHidden ? eyeOffIcon : eyeIcon;
       togglePasswordButton.setAttribute(
@@ -41,7 +42,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   try {
     if (typeof isAuthenticated === "function" && isAuthenticated()) {
-      window.location.href = "dashboard.html";
+      apiRequest("/auth/me")
+        .then((user) => {
+          if (user?.role === "admin") {
+            window.location.href = "admin-dashboard.html";
+          } else {
+            window.location.href = "dashboard.html";
+          }
+        })
+        .catch(() => {
+          localStorage.removeItem("access_token");
+        });
       return;
     }
   } catch (error) {
@@ -80,7 +91,14 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       localStorage.setItem("access_token", data.access_token);
-      window.location.href = "dashboard.html";
+
+      const user = await apiRequest("/auth/me");
+
+      if (user?.role === "admin") {
+        window.location.href = "admin-dashboard.html";
+      } else {
+        window.location.href = "dashboard.html";
+      }
     } catch (error) {
       console.error("Erro no login:", error);
       errorBox.textContent = error.message || "Erro ao fazer login.";

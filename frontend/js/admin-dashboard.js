@@ -1,4 +1,18 @@
 document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    const user = await apiRequest("/auth/me");
+
+    if (user.role !== "admin") {
+      window.location.href = "dashboard.html";
+      return;
+    }
+
+  } catch (error) {
+    localStorage.removeItem("access_token");
+    window.location.href = "login.html";
+    return;
+  }
+
   const logoutButton = document.getElementById("logoutButton");
   const countCourses = document.getElementById("countCourses");
   const countModules = document.getElementById("countModules");

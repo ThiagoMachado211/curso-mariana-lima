@@ -1,4 +1,18 @@
 document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    const user = await apiRequest("/auth/me");
+
+    if (user.role !== "student") {
+      window.location.href = "admin-dashboard.html";
+      return;
+    }
+
+  } catch (error) {
+    localStorage.removeItem("access_token");
+    window.location.href = "login.html";
+    return;
+  }
+
   console.log("dashboard.js carregado");
 
   const user = await requireAuth();
