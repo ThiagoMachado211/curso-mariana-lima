@@ -424,7 +424,7 @@ img {
 
   display: grid;
   grid-template-columns: 1.05fr 0.95fr;
-  gap: 24px;
+  gap: 50px;
   align-items: start;
 }
 
@@ -443,18 +443,17 @@ img {
 }
 
 .home-hero-split__content-wrap {
-  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .home-hero-split__content-box {
-  position: sticky;
-  top: calc(50vh - 180px);
-
   background: #0b0b0b;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 22px;
   padding: 32px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+  width: 100%;
 }
 
 .home-hero-split__content-box h1 {
