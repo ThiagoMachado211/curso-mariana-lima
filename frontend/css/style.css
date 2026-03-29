@@ -425,7 +425,7 @@ img {
   padding: 40px 24px;
 
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 2fr 1fr;
   gap: 40px;
   align-items: center;
 }
