@@ -646,6 +646,59 @@ img {
   cursor: not-allowed;
 }
 
+
+/* =========================================================
+  7.1) AUTH SPLIT (Cadastro / Login)
+========================================================= */
+
+.auth-split {
+  background: #000;
+  min-height: calc(100vh - 72px);
+  display: flex;
+  align-items: center;
+}
+
+.auth-split__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 60px;
+}
+
+.auth-split__image {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.auth-split__image img {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 20px;
+}
+
+.auth-split__form {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .auth-split__container {
+    flex-direction: column;
+    gap: 32px;
+  }
+  .auth-split__image img {
+    max-width: 320px;
+  }
+}
+
+
+
 /* =========================================================
    8) CURSOS / CURSO / PERFIL PÚBLICOS
 ========================================================= */
