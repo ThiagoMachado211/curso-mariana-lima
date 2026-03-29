@@ -39,7 +39,7 @@ def get_or_create_default_tenant(db: Session, data: RegisterRequest) -> Tenant:
 
     tenant = Tenant(
         slug=slug,
-        name=f"Tenant de {data.name}",
+        name=f"Tenant de {data.name} {data.last_name}",
     )
     db.add(tenant)
     db.commit()

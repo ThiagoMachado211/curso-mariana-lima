@@ -3,7 +3,41 @@ document.addEventListener("DOMContentLoaded", () => {
   const errorBox = document.getElementById("registerError");
   const successBox = document.getElementById("registerSuccess");
 
-  if (!form) return;
+  const nameInput = document.getElementById("name");
+  const lastNameInput = document.getElementById("last_name");
+  const emailInput = document.getElementById("email");
+  const passwordInput = document.getElementById("password");
+  const confirmPasswordInput = document.getElementById("confirm_password");
+
+  const submitButton = form?.querySelector('button[type="submit"]');
+
+  if (
+    !form ||
+    !errorBox ||
+    !successBox ||
+    !nameInput ||
+    !lastNameInput ||
+    !emailInput ||
+    !passwordInput ||
+    !confirmPasswordInput ||
+    !submitButton
+  ) {
+    console.error("Elementos do formulário de cadastro não encontrados.");
+    return;
+  }
+
+  try {
+    if (typeof isAuthenticated === "function" && isAuthenticated()) {
+      window.location.href = "dashboard.html";
+      return;
+    }
+  } catch (error) {
+    console.warn("Falha ao verificar autenticação existente:", error);
+  }
+
+  fetch("https://curso-mariana-lima.onrender.com/health")
+    .then(() => console.log("Backend prewarmed com sucesso."))
+    .catch(() => console.log("Backend ainda não respondeu ao prewarm."));
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -11,18 +45,14 @@ document.addEventListener("DOMContentLoaded", () => {
     errorBox.textContent = "";
     successBox.textContent = "";
 
-    const nameInput = document.getElementById("name") || document.getElementById("nome");
-    const emailInput = document.getElementById("email");
-    const passwordInput = document.getElementById("password");
-    const confirmPasswordInput = document.getElementById("confirmPassword");
+    const name = nameInput.value.trim();
+    const lastName = lastNameInput.value.trim();
+    const email = emailInput.value.trim().toLowerCase();
+    const password = passwordInput.value.trim();
+    const confirmPassword = confirmPasswordInput.value.trim();
 
-    const name = nameInput?.value.trim() || "";
-    const email = emailInput?.value.trim() || "";
-    const password = passwordInput?.value || "";
-    const confirmPassword = confirmPasswordInput?.value || "";
-
-    if (!name || !email || !password || !confirmPassword) {
-      errorBox.textContent = "Preencha todos os campos obrigatórios.";
+    if (!name || !lastName || !email || !password || !confirmPassword) {
+      errorBox.textContent = "Preencha todos os campos.";
       return;
     }
 
@@ -31,33 +61,35 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    if (password.length < 6) {
+      errorBox.textContent = "A senha deve ter pelo menos 6 caracteres.";
+      return;
+    }
+
+    submitButton.disabled = true;
+    submitButton.textContent = "Criando conta...";
+
     try {
-      const response = await fetch("http://127.0.0.1:8000/auth/register", {
+      await apiRequest("/auth/register", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({
           name,
+          last_name: lastName,
           email,
           password,
         }),
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.detail || "Erro ao cadastrar.");
-      }
-
-      successBox.textContent = "Cadastro realizado com sucesso. Redirecionando para o login...";
+      successBox.textContent = "Conta criada com sucesso! Redirecionando para o login...";
 
       setTimeout(() => {
         window.location.href = "login.html";
-      }, 1500);
+      }, 1200);
     } catch (error) {
-      errorBox.textContent = error.message || "Falha na comunicação com o servidor.";
       console.error("Erro no cadastro:", error);
+      errorBox.textContent = error.message || "Erro ao criar conta.";
+      submitButton.disabled = false;
+      submitButton.textContent = "Criar conta";
     }
   });
 });

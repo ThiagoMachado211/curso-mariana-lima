@@ -8,6 +8,7 @@ class UserOut(BaseModel):
     id: uuid.UUID
     tenant_id: uuid.UUID
     name: str
+    last_name: str
     email: EmailStr
     role: str
     is_active: bool
