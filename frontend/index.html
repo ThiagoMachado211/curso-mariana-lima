@@ -1,434 +1,116 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Matemática Essencial</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Matemática Essencial</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, Helvetica, sans-serif;
-    }
 
-    html,
-    body {
-      min-height: 100%;
-      background: #000;
-      color: #fff;
-    }
 
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
+  <body class="public-page home-page">
+    <header class="site-header">
+      <div class="page-container site-header__inner">
+        <a href="index.html" class="site-logo">
+          <img src="assets/Logo_Mariana.jpg" alt="Logo Mariana Lima" class="site-logo__img" />
+          <span class="site-logo__text">
+            <span class="site-logo__text--blue">Matemática</span><span class="site-logo__text--purple">Essencial</span>
+          </span>
+        </a>
 
-    .page-container {
-      width: 100%;
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
-
-    .site-header {
-      width: 100%;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(0, 0, 0, 0.95);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-
-    .site-header__inner {
-      height: 72px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .site-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-weight: 700;
-    }
-
-    .site-logo__icon {
-      width: 34px;
-      height: 34px;
-      border-radius: 8px;
-      background: #fff;
-      color: #7c3aed;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-    }
-
-    .site-logo__text {
-      font-size: 18px;
-    }
-
-    .site-logo__text--blue {
-      color: #3b82f6;
-    }
-
-    .site-logo__text--purple {
-      color: #a855f7;
-    }
-
-    .site-nav {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      height: 44px;
-      padding: 0 20px;
-      border-radius: 12px;
-      font-weight: 600;
-      transition: 0.2s ease;
-    }
-
-    .btn--dark {
-      background: #0a0a0a;
-      color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .btn--dark:hover {
-      background: #151515;
-    }
-
-    .btn--purple {
-      background: #a855f7;
-      color: #fff;
-      border: 1px solid transparent;
-    }
-
-    .btn--purple:hover {
-      background: #9333ea;
-    }
-
-    .home-hero {
-      text-align: center;
-      padding: 60px 24px 180px;
-    }
-
-    .home-hero__container {
-      width: 100%;
-      max-width: 1280px;
-      margin: 0 auto;
-    }
-
-    .home-hero__title {
-      font-size: 72px;
-      line-height: 1.05;
-      font-weight: 900;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .home-hero__subtitle {
-      max-width: 620px;
-      margin: 24px auto 0;
-      color: rgba(186, 230, 253, 0.85);
-      font-size: 24px;
-      line-height: 1.5;
-    }
-
-    .home-hero__actions {
-      margin-top: 36px;
-    }
-
-    .home-stats {
-      margin: 56px auto 0;
-      width: 100%;
-      max-width: 760px;
-      border: 1px solid rgba(168, 85, 247, 0.35);
-      border-radius: 18px;
-      overflow: hidden;
-      background: #090909;
-    }
-
-    .home-stats__grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-    }
-
-    .home-stats__item {
-      min-height: 110px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .home-stats__item:not(:last-child) {
-      border-right: 1px solid rgba(168, 85, 247, 0.18);
-    }
-
-    .home-stats__value {
-      font-size: 28px;
-      font-weight: 800;
-      color: #a855f7;
-    }
-
-    .home-stats__label {
-      margin-top: 10px;
-      color: rgba(186, 230, 253, 0.75);
-      font-size: 14px;
-    }
-
-    .home-modules {
-      padding: 0 24px 80px;
-    }
-
-    .home-modules__container {
-      width: 100%;
-      max-width: 1280px;
-      margin: 0 auto;
-    }
-
-    .home-modules__title {
-      font-size: 42px;
-      font-weight: 800;
-      margin-bottom: 24px;
-    }
-
-    .home-modules__grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 20px;
-    }
-
-    .home-module-card {
-      background: #0b0b0b;
-      border-radius: 18px;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .home-module-card__top {
-      height: 180px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 48px;
-    }
-
-    .home-module-card__top--purple {
-      background: linear-gradient(135deg, #2e064b, #581c87);
-    }
-
-    .home-module-card__top--indigo {
-      background: linear-gradient(135deg, #1e1b4b, #3730a3);
-    }
-
-    .home-module-card__top--green {
-      background: linear-gradient(135deg, #052e16, #166534);
-    }
-
-    .home-module-card__top--pink {
-      background: linear-gradient(135deg, #4a044e, #be185d);
-    }
-
-    .home-module-card__content {
-      padding: 18px;
-    }
-
-    .home-module-card__tag {
-      color: #a855f7;
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 0.12em;
-    }
-
-    .home-module-card__title {
-      margin-top: 12px;
-      font-size: 22px;
-      font-weight: 800;
-    }
-
-    .home-module-card__text {
-      margin-top: 12px;
-      color: #cfcfcf;
-      line-height: 1.6;
-      font-size: 14px;
-    }
-
-    @media (max-width: 1100px) {
-      .home-modules__grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .home-hero__title {
-        font-size: 54px;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .site-header__inner {
-        min-height: 72px;
-        height: auto;
-        padding: 16px 0;
-        flex-direction: column;
-        gap: 16px;
-      }
-
-      .site-nav {
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-
-      .home-hero {
-        padding: 48px 24px 100px;
-      }
-
-      .home-hero__title {
-        font-size: 38px;
-      }
-
-      .home-hero__subtitle {
-        font-size: 18px;
-      }
-
-      .home-stats__grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .home-stats__item {
-        border-right: 1px solid rgba(168, 85, 247, 0.18);
-        border-bottom: 1px solid rgba(168, 85, 247, 0.18);
-      }
-
-      .home-stats__item:nth-child(2n) {
-        border-right: none;
-      }
-
-      .home-stats__item:nth-last-child(-n + 2) {
-        border-bottom: none;
-      }
-
-      .home-modules__grid {
-        grid-template-columns: 1fr;
-      }
-
-      .home-modules__title {
-        font-size: 32px;
-      }
-    }
-  </style>
-</head>
-<body>
-  <header class="site-header">
-    <div class="page-container site-header__inner">
-      <a href="index.html" class="site-logo">
-        <div class="site-logo__icon">▶</div>
-        <div class="site-logo__text">
-          <span class="site-logo__text--blue">Matemática</span><span class="site-logo__text--purple">Essencial</span>
-        </div>
-      </a>
-
-      <nav class="site-nav">
-        <a href="login.html" class="btn btn--dark">Entrar</a>
-        <a href="cadastro.html" class="btn btn--purple">Cadastre-se</a>
-      </nav>
-    </div>
-  </header>
-
-  <section class="home-hero">
-    <div class="home-hero__container">
-      <h1 class="home-hero__title">É aqui que sua nova jornada começa!</h1>
-
-      <p class="home-hero__subtitle">
-        Curso prático, comunidade ativa e suporte real. Tudo que você precisa para aprender.
-      </p>
-
-      <div class="home-hero__actions">
-        <a href="#modulos" class="btn btn--dark">Estrutura do Curso</a>
+        <nav class="site-nav">
+          <a href="login.html" class="btn btn--dark">Entrar</a>
+          <a href="cadastro.html" class="btn btn--purple">Cadastre-se</a>
+        </nav>
       </div>
+    </header>
 
-      <div class="home-stats">
-        <div class="home-stats__grid">
-          <div class="home-stats__item">
-            <div class="home-stats__value">+12k</div>
-            <div class="home-stats__label">Alunos ativos</div>
-          </div>
-          <div class="home-stats__item">
-            <div class="home-stats__value">98%</div>
-            <div class="home-stats__label">Satisfação</div>
-          </div>
-          <div class="home-stats__item">
-            <div class="home-stats__value">+80</div>
-            <div class="home-stats__label">Aulas</div>
-          </div>
-          <div class="home-stats__item">
-            <div class="home-stats__value">4</div>
-            <div class="home-stats__label">Anos no mercado</div>
+    <section class="home-hero">
+      <div class="home-hero__container">
+        <h1 class="home-hero__title">É aqui que sua nova jornada começa!</h1>
+
+        <p class="home-hero__subtitle">
+          Curso prático, comunidade ativa e suporte real. Tudo que você precisa para aprender.
+        </p>
+
+        <div class="home-hero__actions">
+          <a href="#modulos" class="btn btn--dark">Estrutura do Curso</a>
+        </div>
+
+        <div class="home-stats">
+          <div class="home-stats__grid">
+            <div class="home-stats__item">
+              <div class="home-stats__value">+12k</div>
+              <div class="home-stats__label">Alunos ativos</div>
+            </div>
+            <div class="home-stats__item">
+              <div class="home-stats__value">98%</div>
+              <div class="home-stats__label">Satisfação</div>
+            </div>
+            <div class="home-stats__item">
+              <div class="home-stats__value">+80</div>
+              <div class="home-stats__label">Aulas</div>
+            </div>
+            <div class="home-stats__item">
+              <div class="home-stats__value">4</div>
+              <div class="home-stats__label">Anos no mercado</div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section id="modulos" class="home-modules">
-    <div class="home-modules__container">
-      <h2 class="home-modules__title">Módulos em Destaque</h2>
+    <section id="modulos" class="home-modules">
+      <div class="home-modules__container">
+        <h2 class="home-modules__title">Módulos em Destaque</h2>
 
-      <div class="home-modules__grid">
-        <article class="home-module-card">
-          <div class="home-module-card__top home-module-card__top--purple">📈</div>
-          <div class="home-module-card__content">
-            <div class="home-module-card__tag">MÓDULO 1</div>
-            <div class="home-module-card__title">Fundamentos Essenciais</div>
-            <div class="home-module-card__text">
-              Construa a base matemática necessária para avançar com segurança.
+        <div class="home-modules__grid">
+          <article class="home-module-card">
+            <div class="home-module-card__top home-module-card__top--purple">📈</div>
+            <div class="home-module-card__content">
+              <div class="home-module-card__tag">MÓDULO 1</div>
+              <div class="home-module-card__title">Fundamentos Essenciais</div>
+              <div class="home-module-card__text">
+                Construa a base matemática necessária para avançar com segurança.
+              </div>
             </div>
-          </div>
-        </article>
+          </article>
 
-        <article class="home-module-card">
-          <div class="home-module-card__top home-module-card__top--indigo">📊</div>
-          <div class="home-module-card__content">
-            <div class="home-module-card__tag">MÓDULO 2</div>
-            <div class="home-module-card__title">Álgebra Aplicada</div>
-            <div class="home-module-card__text">
-              Aprenda a manipular expressões e resolver equações rapidamente.
+          <article class="home-module-card">
+            <div class="home-module-card__top home-module-card__top--indigo">📊</div>
+            <div class="home-module-card__content">
+              <div class="home-module-card__tag">MÓDULO 2</div>
+              <div class="home-module-card__title">Álgebra Aplicada</div>
+              <div class="home-module-card__text">
+                Aprenda a manipular expressões e resolver equações rapidamente.
+              </div>
             </div>
-          </div>
-        </article>
+          </article>
 
-        <article class="home-module-card">
-          <div class="home-module-card__top home-module-card__top--green">💻</div>
-          <div class="home-module-card__content">
-            <div class="home-module-card__tag">MÓDULO 3</div>
-            <div class="home-module-card__title">Geometria Estratégica</div>
-            <div class="home-module-card__text">
-              Visualize problemas e desenvolva raciocínio espacial eficiente.
+          <article class="home-module-card">
+            <div class="home-module-card__top home-module-card__top--green">💻</div>
+            <div class="home-module-card__content">
+              <div class="home-module-card__tag">MÓDULO 3</div>
+              <div class="home-module-card__title">Geometria Estratégica</div>
+              <div class="home-module-card__text">
+                Visualize problemas e desenvolva raciocínio espacial eficiente.
+              </div>
             </div>
-          </div>
-        </article>
+          </article>
 
-        <article class="home-module-card">
-          <div class="home-module-card__top home-module-card__top--pink">🧠</div>
-          <div class="home-module-card__content">
-            <div class="home-module-card__tag">MÓDULO 4</div>
-            <div class="home-module-card__title">Resolução de Problemas</div>
-            <div class="home-module-card__text">
-              Métodos práticos para resolver exercícios com rapidez e precisão.
+          <article class="home-module-card">
+            <div class="home-module-card__top home-module-card__top--pink">🧠</div>
+            <div class="home-module-card__content">
+              <div class="home-module-card__tag">MÓDULO 4</div>
+              <div class="home-module-card__title">Resolução de Problemas</div>
+              <div class="home-module-card__text">
+                Métodos práticos para resolver exercícios com rapidez e precisão.
+              </div>
             </div>
-          </div>
-        </article>
+          </article>
+        </div>
       </div>
-    </div>
-  </section>
-</body>
+    </section>
+  </body>
 </html>

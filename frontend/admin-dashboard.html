@@ -1,264 +1,76 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Dashboard - Matemática Essencial</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard - Matemática Essencial</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, Helvetica, sans-serif;
-    }
 
-    html,
-    body {
-      min-height: 100%;
-      background: #000;
-      color: #fff;
-    }
 
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
+  <body class="admin-page admin-dashboard-page">
+    <header class="site-header">
+      <div class="page-container site-header__inner">
+        <a href="index.html" class="site-logo">
+          <img src="assets/Logo_Mariana.jpg" alt="Logo Mariana Lima" class="site-logo__img" />
+          <span class="site-logo__text">
+            <span class="site-logo__text--blue">Matemática</span><span class="site-logo__text--purple">Essencial</span>
+          </span>
+        </a>
 
-    .page-container {
-      width: 100%;
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
+        <nav class="site-nav">
+          <a href="dashboard.html" class="btn btn--dark">Área do Aluno</a>
+          <a href="admin-cursos.html" class="btn btn--dark">Cursos</a>
+          <a href="admin-modulos.html" class="btn btn--dark">Módulos</a>
+          <a href="admin-aulas.html" class="btn btn--dark">Aulas</a>
+        </nav>
+      </div>
+    </header>
 
-    .site-header {
-      width: 100%;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(0, 0, 0, 0.95);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-
-    .site-header__inner {
-      height: 72px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .site-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-weight: 700;
-    }
-
-    .site-logo__icon {
-      width: 34px;
-      height: 34px;
-      border-radius: 8px;
-      background: #fff;
-      color: #7c3aed;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-    }
-
-    .site-logo__text {
-      font-size: 18px;
-    }
-
-    .site-logo__text--blue {
-      color: #3b82f6;
-    }
-
-    .site-logo__text--purple {
-      color: #a855f7;
-    }
-
-    .site-nav {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      height: 44px;
-      padding: 0 20px;
-      border-radius: 12px;
-      font-weight: 600;
-      transition: 0.2s ease;
-    }
-
-    .btn--dark {
-      background: #0a0a0a;
-      color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .btn--dark:hover {
-      background: #151515;
-    }
-
-    .btn--purple {
-      background: #a855f7;
-      color: #fff;
-      border: 1px solid transparent;
-    }
-
-    .btn--purple:hover {
-      background: #9333ea;
-    }
-
-    .admin-page {
-      width: 100%;
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 40px 24px 80px;
-    }
-
-    .admin-page__top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    .admin-page__title {
-      font-size: 42px;
-      margin-bottom: 12px;
-    }
-
-    .admin-page__subtitle {
-      color: #cfcfcf;
-      margin-bottom: 30px;
-    }
-
-    .admin-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 18px;
-    }
-
-    .admin-card {
-      background: #0b0b0b;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 18px;
-      padding: 24px;
-    }
-
-    .admin-card__title {
-      margin-bottom: 12px;
-      font-size: 20px;
-    }
-
-    .admin-card__text {
-      color: #bdbdbd;
-      font-size: 14px;
-      line-height: 1.6;
-      margin-bottom: 18px;
-    }
-
-    @media (max-width: 1100px) {
-      .admin-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 768px) {
-      .site-header__inner {
-        min-height: 72px;
-        height: auto;
-        padding: 16px 0;
-        flex-direction: column;
-        gap: 16px;
-      }
-
-      .site-nav {
-        justify-content: center;
-      }
-
-      .admin-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .admin-page__title {
-        font-size: 32px;
-      }
-    }
-  </style>
-</head>
-<body>
-  <header class="site-header">
-    <div class="page-container site-header__inner">
-      <a href="admin-dashboard.html" class="site-logo">
-        <div class="site-logo__icon">▶</div>
-        <div class="site-logo__text">
-          <span class="site-logo__text--blue">Matemática</span><span class="site-logo__text--purple">Essencial</span>
+    <main class="admin-page">
+      <div class="admin-page__top">
+        <div>
+          <h1 class="admin-page__title">Painel Administrativo</h1>
+          <p class="admin-page__subtitle">
+            Gerencie cursos, módulos, aulas e acompanhe a estrutura da plataforma.
+          </p>
         </div>
-      </a>
-
-      <nav class="site-nav">
-        <a href="dashboard.html" class="btn btn--dark">Área do Aluno</a>
-        <a href="admin-cursos.html" class="btn btn--dark">Cursos</a>
-        <a href="admin-modulos.html" class="btn btn--dark">Módulos</a>
-        <a href="admin-aulas.html" class="btn btn--dark">Aulas</a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="admin-page">
-    <div class="admin-page__top">
-      <div>
-        <h1 class="admin-page__title">Painel Administrativo</h1>
-        <p class="admin-page__subtitle">
-          Gerencie cursos, módulos, aulas e acompanhe a estrutura da plataforma.
-        </p>
-      </div>
-    </div>
-
-    <div class="admin-grid">
-      <div class="admin-card">
-        <h3 class="admin-card__title">Gerenciar Cursos</h3>
-        <p class="admin-card__text">
-          Crie, edite e visualize todos os cursos cadastrados na plataforma.
-        </p>
-        <a href="admin-cursos.html" class="btn btn--purple">Abrir</a>
       </div>
 
-      <div class="admin-card">
-        <h3 class="admin-card__title">Gerenciar Módulos</h3>
-        <p class="admin-card__text">
-          Organize os módulos de cada curso e defina a estrutura pedagógica.
-        </p>
-        <a href="admin-modulos.html" class="btn btn--purple">Abrir</a>
-      </div>
+      <div class="admin-grid">
+        <div class="admin-card">
+          <h3 class="admin-card__title">Gerenciar Cursos</h3>
+          <p class="admin-card__text">
+            Crie, edite e visualize todos os cursos cadastrados na plataforma.
+          </p>
+          <a href="admin-cursos.html" class="btn btn--purple">Abrir</a>
+        </div>
 
-      <div class="admin-card">
-        <h3 class="admin-card__title">Gerenciar Aulas</h3>
-        <p class="admin-card__text">
-          Cadastre aulas, títulos, descrições e relacione com os módulos.
-        </p>
-        <a href="admin-aulas.html" class="btn btn--purple">Abrir</a>
-      </div>
+        <div class="admin-card">
+          <h3 class="admin-card__title">Gerenciar Módulos</h3>
+          <p class="admin-card__text">
+            Organize os módulos de cada curso e defina a estrutura pedagógica.
+          </p>
+          <a href="admin-modulos.html" class="btn btn--purple">Abrir</a>
+        </div>
 
-      <div class="admin-card">
-        <h3 class="admin-card__title">Visão Geral</h3>
-        <p class="admin-card__text">
-          Área inicial para o futuro acompanhamento de métricas administrativas.
-        </p>
-        <a href="admin-dashboard.html" class="btn btn--purple">Atual</a>
+        <div class="admin-card">
+          <h3 class="admin-card__title">Gerenciar Aulas</h3>
+          <p class="admin-card__text">
+            Cadastre aulas, títulos, descrições e relacione com os módulos.
+          </p>
+          <a href="admin-aulas.html" class="btn btn--purple">Abrir</a>
+        </div>
+
+        <div class="admin-card">
+          <h3 class="admin-card__title">Visão Geral</h3>
+          <p class="admin-card__text">
+            Área inicial para o futuro acompanhamento de métricas administrativas.
+          </p>
+          <a href="admin-dashboard.html" class="btn btn--purple">Atual</a>
+        </div>
       </div>
-    </div>
-  </main>
-</body>
+    </main>
+  </body>
 </html>

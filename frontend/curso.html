@@ -1,257 +1,46 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Curso - Matemática Essencial</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Curso - Matemática Essencial</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, Helvetica, sans-serif;
-    }
 
-    html, body {
-      min-height: 100%;
-      background: #000;
-      color: #fff;
-    }
 
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
+  <body class="public-page course-page">
+    <header class="site-header">
+      <div class="page-container site-header__inner">
+        <a href="index.html" class="site-logo">
+          <img src="assets/Logo_Mariana.jpg" alt="Logo Mariana Lima" class="site-logo__img" />
+          <span class="site-logo__text">
+            <span class="site-logo__text--blue">Matemática</span><span class="site-logo__text--purple">Essencial</span>
+          </span>
+        </a>
 
-    button {
-      cursor: pointer;
-      border: none;
-      font: inherit;
-    }
+        <nav class="site-nav">
+          <a href="dashboard.html" class="btn btn--dark">Dashboard</a>
+          <a href="cursos.html" class="btn btn--dark">Cursos</a>
+          <button id="logoutButton" class="btn btn--purple">Sair</button>
+        </nav>
+      </div>
+    </header>
 
-    .page-container {
-      width: 100%;
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
+    <main class="course-page">
+      <div id="courseFeedback" class="course-feedback"></div>
 
-    .site-header {
-      width: 100%;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(0, 0, 0, 0.95);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
+      <section class="course-header">
+        <h1 id="courseTitle" class="course-title">Carregando curso...</h1>
+        <p id="courseDescription" class="course-description"></p>
+        <div id="courseMeta" class="course-meta"></div>
+      </section>
 
-    .site-header__inner {
-      height: 72px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+      <h2 class="modules-title">Módulos</h2>
+      <div id="modulesGrid" class="modules-grid"></div>
+    </main>
 
-    .site-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-weight: 700;
-    }
-
-    .site-logo__icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      background: #f2f2f2;
-      color: #7c3aed;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 20px;
-    }
-
-    .site-logo__text {
-      font-size: 18px;
-      font-weight: 800;
-    }
-
-    .site-logo__text--blue {
-      color: #3b82f6;
-    }
-
-    .site-logo__text--purple {
-      color: #a855f7;
-    }
-
-    .site-nav {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      height: 48px;
-      padding: 0 20px;
-      border-radius: 14px;
-      font-weight: 700;
-      transition: 0.2s ease;
-    }
-
-    .btn--dark {
-      background: #0a0a0a;
-      color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .btn--dark:hover {
-      background: #151515;
-    }
-
-    .btn--purple {
-      background: linear-gradient(90deg, #9d4edd, #c056f0);
-      color: #fff;
-      border: 1px solid transparent;
-    }
-
-    .btn--purple:hover {
-      opacity: 0.95;
-    }
-
-    .course-page {
-      width: 100%;
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 40px 24px 80px;
-    }
-
-    .course-header {
-      margin-bottom: 26px;
-    }
-
-    .course-title {
-      font-size: 42px;
-      margin-bottom: 12px;
-    }
-
-    .course-description {
-      color: #cfcfcf;
-      font-size: 16px;
-      line-height: 1.8;
-      max-width: 900px;
-    }
-
-    .course-meta {
-      margin-top: 16px;
-      color: #9f9f9f;
-      font-size: 14px;
-    }
-
-    .course-feedback {
-      color: #ff6464;
-      min-height: 22px;
-      margin-bottom: 20px;
-    }
-
-    .modules-title {
-      font-size: 28px;
-      margin: 32px 0 18px;
-    }
-
-    .modules-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 18px;
-    }
-
-    .module-card {
-      background: #0b0b0b;
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 20px;
-      padding: 24px;
-    }
-
-    .module-card__order {
-      color: #a855f7;
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-
-    .module-card__title {
-      font-size: 22px;
-      margin-bottom: 12px;
-    }
-
-    .module-card__text {
-      color: #cfcfcf;
-      font-size: 14px;
-      line-height: 1.7;
-      margin-bottom: 18px;
-    }
-
-    @media (max-width: 768px) {
-      .site-header__inner {
-        min-height: 72px;
-        height: auto;
-        padding: 16px 0;
-        flex-direction: column;
-        gap: 16px;
-      }
-
-      .site-nav {
-        justify-content: center;
-      }
-
-      .course-title {
-        font-size: 32px;
-      }
-
-      .modules-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
-</head>
-<body>
-  <header class="site-header">
-    <div class="page-container site-header__inner">
-      <a href="dashboard.html" class="site-logo">
-        <div class="site-logo__icon">▶</div>
-        <div class="site-logo__text">
-          <span class="site-logo__text--blue">Matemática</span><span class="site-logo__text--purple">Essencial</span>
-        </div>
-      </a>
-
-      <nav class="site-nav">
-        <a href="dashboard.html" class="btn btn--dark">Dashboard</a>
-        <a href="cursos.html" class="btn btn--dark">Cursos</a>
-        <button id="logoutButton" class="btn btn--purple">Sair</button>
-      </nav>
-    </div>
-  </header>
-
-  <main class="course-page">
-    <div id="courseFeedback" class="course-feedback"></div>
-
-    <section class="course-header">
-      <h1 id="courseTitle" class="course-title">Carregando curso...</h1>
-      <p id="courseDescription" class="course-description"></p>
-      <div id="courseMeta" class="course-meta"></div>
-    </section>
-
-    <h2 class="modules-title">Módulos</h2>
-    <div id="modulesGrid" class="modules-grid"></div>
-  </main>
-
-  <script src="js/api.js"></script>
-  <script src="js/curso.js"></script>
-</body>
+    <script src="js/api.js"></script>
+    <script src="js/curso.js"></script>
+  </body>
 </html>

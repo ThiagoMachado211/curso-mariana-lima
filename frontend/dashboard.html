@@ -1,163 +1,62 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard</title>
-  <link rel="stylesheet" href="css/style.css" />
-  
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f1f5f9;
-      color: #0f172a;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="css/style.css" />
 
-    header {
-      background: #0f172a;
-      color: white;
-      padding: 20px 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+  </head>
 
-    header h1 {
-      margin: 0;
-      font-size: 24px;
-    }
 
-    .logoutButton {
-      background: #dc2626;
-      color: white;
-      border: none;
-      padding: 10px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
 
-    .logoutButton:hover {
-      background: #b91c1c;
-    }
+  <body class="public-page courses-page">
+    <header>
+      <h1>Painel da Plataforma</h1>
+      <button id="logoutButton" class="logoutButton">Sair</button>
+    </header>
 
-    main {
-      max-width: 1200px;
-      margin: 28px auto;
-      padding: 0 20px;
-    }
+    <main>
+      <section class="welcome-card">
+        <div id="welcome-title" class="welcome-title">Bem-vindo(a)!</div>
+        <div id="welcome-subtitle" class="welcome-subtitle">
+          Carregando informações do seu perfil...
+        </div>
+      </section>
 
-    .welcome-card {
-      background: white;
-      border-radius: 14px;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.08);
-      padding: 24px;
-      margin-bottom: 24px;
-    }
+      <section>
+        <h2 class="section-title">Acessos rápidos</h2>
 
-    .welcome-title {
-      font-size: 28px;
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
+        <div id="cards-grid" class="cards-grid">
+          <a href="cursos.html" class="nav-card" id="card-student-courses">
+            <div class="nav-card-title">Meus cursos</div>
+            <div class="nav-card-text">Acesse seus cursos, módulos, aulas e conteúdos.</div>
+          </a>
 
-    .welcome-subtitle {
-      color: #64748b;
-      font-size: 16px;
-    }
+          <a href="admin-cursos.html" class="nav-card hidden" id="card-admin-courses">
+            <div class="nav-card-title">Gerenciar cursos</div>
+            <div class="nav-card-text">Crie, edite e publique cursos.</div>
+          </a>
 
-    .section-title {
-      margin: 0 0 16px 0;
-      font-size: 22px;
-    }
+          <a href="admin-modulos.html" class="nav-card hidden" id="card-admin-modules">
+            <div class="nav-card-title">Gerenciar módulos</div>
+            <div class="nav-card-text">Organize os módulos de cada curso.</div>
+          </a>
 
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 18px;
-    }
+          <a href="admin-aulas.html" class="nav-card hidden" id="card-admin-lessons">
+            <div class="nav-card-title">Gerenciar aulas</div>
+            <div class="nav-card-text">Cadastre vídeos, PDFs e ordem das aulas.</div>
+          </a>
 
-    .nav-card {
-      background: white;
-      border-radius: 14px;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.08);
-      padding: 20px;
-      text-decoration: none;
-      color: #0f172a;
-      border: 1px solid #e2e8f0;
-      transition: 0.2s;
-    }
+          <a href="admin-matriculas.html" class="nav-card hidden" id="card-admin-enrollments">
+            <div class="nav-card-title">Gerenciar matrículas</div>
+            <div class="nav-card-text">Associe alunos aos cursos manualmente.</div>
+          </a>
+        </div>
+      </section>
+    </main>
 
-    .nav-card:hover {
-      transform: translateY(-2px);
-      border-color: #93c5fd;
-      background: #f8fbff;
-    }
-
-    .nav-card-title {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
-
-    .nav-card-text {
-      color: #64748b;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    .hidden {
-      display: none;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>Painel da Plataforma</h1>
-    <button id="logoutButton" class="logoutButton">Sair</button>
-  </header>
-
-  <main>
-    <section class="welcome-card">
-      <div id="welcome-title" class="welcome-title">Bem-vindo(a)!</div>
-      <div id="welcome-subtitle" class="welcome-subtitle">
-        Carregando informações do seu perfil...
-      </div>
-    </section>
-
-    <section>
-      <h2 class="section-title">Acessos rápidos</h2>
-
-      <div id="cards-grid" class="cards-grid">
-        <a href="cursos.html" class="nav-card" id="card-student-courses">
-          <div class="nav-card-title">Meus cursos</div>
-          <div class="nav-card-text">Acesse seus cursos, módulos, aulas e conteúdos.</div>
-        </a>
-
-        <a href="admin-cursos.html" class="nav-card hidden" id="card-admin-courses">
-          <div class="nav-card-title">Gerenciar cursos</div>
-          <div class="nav-card-text">Crie, edite e publique cursos.</div>
-        </a>
-
-        <a href="admin-modulos.html" class="nav-card hidden" id="card-admin-modules">
-          <div class="nav-card-title">Gerenciar módulos</div>
-          <div class="nav-card-text">Organize os módulos de cada curso.</div>
-        </a>
-
-        <a href="admin-aulas.html" class="nav-card hidden" id="card-admin-lessons">
-          <div class="nav-card-title">Gerenciar aulas</div>
-          <div class="nav-card-text">Cadastre vídeos, PDFs e ordem das aulas.</div>
-        </a>
-
-        <a href="admin-matriculas.html" class="nav-card hidden" id="card-admin-enrollments">
-          <div class="nav-card-title">Gerenciar matrículas</div>
-          <div class="nav-card-text">Associe alunos aos cursos manualmente.</div>
-        </a>
-      </div>
-    </section>
-  </main>
-
-  <script src="js/api.js"></script>
-  <script src="js/dashboard.js"></script>
-</body>
+    <script src="js/api.js"></script>
+    <script src="js/dashboard.js"></script>
+  </body>
 </html>

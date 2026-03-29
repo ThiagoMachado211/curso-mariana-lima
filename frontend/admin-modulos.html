@@ -1,240 +1,64 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin - Módulos</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f1f5f9;
-      margin: 0;
-      padding: 0;
-      color: #0f172a;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Módulos</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
 
-    header {
-      background: #0f172a;
-      color: white;
-      padding: 20px 24px;
-    }
 
-    header h1 {
-      margin: 0;
-      font-size: 24px;
-    }
+  
+  <body class="admin-page admin-modules-page">
+    <header>
+      <h1>Gerenciamento de Módulos</h1>
+    </header>
 
-    main {
-      max-width: 1200px;
-      margin: 28px auto;
-      padding: 0 20px;
-    }
-
-    .top-actions {
-      margin-bottom: 16px;
-    }
-
-    .back-link {
-      display: inline-block;
-      text-decoration: none;
-      color: #2563eb;
-      font-weight: bold;
-    }
-
-    .card {
-      background: white;
-      border-radius: 14px;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.08);
-      padding: 20px;
-      margin-bottom: 22px;
-    }
-
-    .card h2 {
-      margin-top: 0;
-      margin-bottom: 16px;
-    }
-
-    .row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-
-    .full-width {
-      grid-column: 1 / -1;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: bold;
-      font-size: 14px;
-    }
-
-    input, select, button {
-      width: 100%;
-      padding: 10px 12px;
-      border-radius: 8px;
-      border: 1px solid #cbd5e1;
-      font-size: 14px;
-      box-sizing: border-box;
-    }
-
-    .actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 16px;
-      flex-wrap: wrap;
-    }
-
-    button {
-      background: #2563eb;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #1d4ed8;
-    }
-
-    .secondary {
-      background: #475569;
-    }
-
-    .secondary:hover {
-      background: #334155;
-    }
-
-    .danger {
-      background: #dc2626;
-    }
-
-    .danger:hover {
-      background: #b91c1c;
-    }
-
-    .message {
-      margin-bottom: 16px;
-      padding: 12px;
-      border-radius: 8px;
-    }
-
-    .success {
-      background: #dcfce7;
-      color: #166534;
-    }
-
-    .error {
-      background: #fee2e2;
-      color: #991b1b;
-    }
-
-    .modules-grid {
-      display: grid;
-      gap: 16px;
-    }
-
-    .module-card {
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 16px;
-      background: #fff;
-    }
-
-    .module-card-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      align-items: start;
-      flex-wrap: wrap;
-    }
-
-    .module-title {
-      font-size: 20px;
-      font-weight: bold;
-      margin-bottom: 6px;
-    }
-
-    .module-meta {
-      color: #475569;
-      margin-bottom: 10px;
-      line-height: 1.6;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: bold;
-      background: #dbeafe;
-      color: #1d4ed8;
-    }
-
-    .module-actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .empty-state {
-      color: #64748b;
-      padding: 8px 0;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>Gerenciamento de Módulos</h1>
-  </header>
-
-  <main>
-    <div class="top-actions">
-      <a class="back-link" href="dashboard.html">← Voltar para o dashboard</a>
-    </div>
-
-    <div id="message-container"></div>
-
-    <section class="card">
-      <h2 id="form-title">Novo módulo</h2>
-
-      <div class="row">
-        <div>
-          <label for="course_id">Curso</label>
-          <select id="course_id">
-            <option value="">Selecione um curso</option>
-          </select>
-        </div>
-
-        <div>
-          <label for="order">Ordem</label>
-          <input type="number" id="order" />
-        </div>
-
-        <div class="full-width">
-          <label for="title">Título do módulo</label>
-          <input type="text" id="title" />
-        </div>
+    <main>
+      <div class="top-actions">
+        <a class="back-link" href="dashboard.html">← Voltar para o dashboard</a>
       </div>
 
-      <div class="actions">
-        <button id="save-btn">Salvar módulo</button>
-        <button id="cancel-edit-btn" class="secondary" type="button">Cancelar edição</button>
-      </div>
-    </section>
+      <div id="message-container"></div>
 
-    <section class="card">
-      <h2>Lista de módulos</h2>
-      <div id="modules-container" class="modules-grid"></div>
-      <div id="empty-state" class="empty-state" style="display:none;">
-        Nenhum módulo cadastrado até o momento.
-      </div>
-    </section>
-  </main>
+      <section class="card">
+        <h2 id="form-title">Novo módulo</h2>
 
-  <script src="js/api.js"></script>
-  <script src="js/admin-modulos.js"></script>
-</body>
+        <div class="row">
+          <div>
+            <label for="course_id">Curso</label>
+            <select id="course_id">
+              <option value="">Selecione um curso</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="order">Ordem</label>
+            <input type="number" id="order" />
+          </div>
+
+          <div class="full-width">
+            <label for="title">Título do módulo</label>
+            <input type="text" id="title" />
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="save-btn">Salvar módulo</button>
+          <button id="cancel-edit-btn" class="secondary" type="button">Cancelar edição</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Lista de módulos</h2>
+        <div id="modules-container" class="modules-grid"></div>
+        <div id="empty-state" class="empty-state" style="display:none;">
+          Nenhum módulo cadastrado até o momento.
+        </div>
+      </section>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/admin-modulos.js"></script>
+  </body>
 </html>

@@ -1,260 +1,92 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin - Matrículas</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f1f5f9;
-      margin: 0;
-      padding: 0;
-      color: #0f172a;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Matrículas</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
 
-    header {
-      background: #0f172a;
-      color: white;
-      padding: 20px 24px;
-    }
 
-    header h1 {
-      margin: 0;
-      font-size: 24px;
-    }
 
-    main {
-      max-width: 1200px;
-      margin: 28px auto;
-      padding: 0 20px;
-    }
+  <body class="admin-page admin-enrollments-page">
+    <header>
+      <h1>Administração de Matrículas</h1>
+    </header>
 
-    .page-intro {
-      background: white;
-      border-radius: 14px;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.08);
-      padding: 20px;
-      margin-bottom: 22px;
-    }
-
-    .page-intro h2 {
-      margin: 0 0 8px 0;
-    }
-
-    .page-intro p {
-      margin: 0;
-      color: #64748b;
-    }
-
-    .card {
-      background: white;
-      border-radius: 14px;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.08);
-      padding: 20px;
-      margin-bottom: 22px;
-    }
-
-    .card h2 {
-      margin-top: 0;
-      margin-bottom: 16px;
-    }
-
-    .row {
-      display: grid;
-      grid-template-columns: 1fr 1fr auto;
-      gap: 12px;
-      align-items: end;
-    }
-
-    .filter-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: bold;
-      font-size: 14px;
-    }
-
-    select, input, button {
-      width: 100%;
-      padding: 10px 12px;
-      border-radius: 8px;
-      border: 1px solid #cbd5e1;
-      font-size: 14px;
-    }
-
-    button {
-      background: #2563eb;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #1d4ed8;
-    }
-
-    .danger {
-      background: #dc2626;
-    }
-
-    .danger:hover {
-      background: #b91c1c;
-    }
-
-    .message {
-      margin-bottom: 16px;
-      padding: 12px;
-      border-radius: 8px;
-    }
-
-    .success {
-      background: #dcfce7;
-      color: #166534;
-    }
-
-    .error {
-      background: #fee2e2;
-      color: #991b1b;
-    }
-
-    .table-wrapper {
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 850px;
-    }
-
-    th, td {
-      border-bottom: 1px solid #e5e7eb;
-      padding: 12px;
-      text-align: left;
-      vertical-align: middle;
-      font-size: 14px;
-    }
-
-    th {
-      background: #f8fafc;
-    }
-
-    .status-badge {
-      display: inline-block;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: bold;
-    }
-
-    .status-active {
-      background: #dcfce7;
-      color: #166534;
-    }
-
-    .top-actions {
-      margin-bottom: 16px;
-    }
-
-    .back-link {
-      display: inline-block;
-      text-decoration: none;
-      color: #2563eb;
-      font-weight: bold;
-    }
-
-    .empty-state {
-      color: #64748b;
-      padding: 16px 0 4px 0;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>Administração de Matrículas</h1>
-  </header>
-
-  <main>
-    <div class="top-actions">
-      <a class="back-link" href="dashboard.html">← Voltar para o dashboard</a>
-    </div>
-
-    <div class="page-intro">
-      <h2>Gerencie o acesso dos alunos</h2>
-      <p>Associe alunos aos cursos de forma manual enquanto o fluxo de pagamento não é implementado.</p>
-    </div>
-
-    <div id="message-container"></div>
-
-    <section class="card">
-      <h2>Nova matrícula</h2>
-
-      <div class="row">
-        <div>
-          <label for="student-select">Aluno</label>
-          <select id="student-select">
-            <option value="">Selecione um aluno</option>
-          </select>
-        </div>
-
-        <div>
-          <label for="course-select">Curso</label>
-          <select id="course-select">
-            <option value="">Selecione um curso</option>
-          </select>
-        </div>
-
-        <div>
-          <button id="create-enrollment-btn">Matricular</button>
-        </div>
-      </div>
-    </section>
-
-    <section class="card">
-      <h2>Matrículas existentes</h2>
-
-      <div class="filter-row">
-        <div>
-          <label for="filter-student">Filtrar por aluno</label>
-          <input type="text" id="filter-student" placeholder="Digite nome ou email do aluno" />
-        </div>
-
-        <div>
-          <label for="filter-course">Filtrar por curso</label>
-          <input type="text" id="filter-course" placeholder="Digite o nome do curso" />
-        </div>
+    <main>
+      <div class="top-actions">
+        <a class="back-link" href="dashboard.html">← Voltar para o dashboard</a>
       </div>
 
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>Aluno</th>
-              <th>Curso</th>
-              <th>Status</th>
-              <th>Criada em</th>
-              <th>Ação</th>
-            </tr>
-          </thead>
-          <tbody id="enrollments-table-body"></tbody>
-        </table>
+      <div class="page-intro">
+        <h2>Gerencie o acesso dos alunos</h2>
+        <p>Associe alunos aos cursos de forma manual enquanto o fluxo de pagamento não é implementado.</p>
       </div>
 
-      <div id="empty-state" class="empty-state" style="display:none;">
-        Nenhuma matrícula encontrada com os filtros aplicados.
-      </div>
-    </section>
-  </main>
+      <div id="message-container"></div>
 
-  <script src="js/api.js"></script>
-  <script src="js/admin-matriculas.js"></script>
-</body>
+      <section class="card">
+        <h2>Nova matrícula</h2>
+
+        <div class="row">
+          <div>
+            <label for="student-select">Aluno</label>
+            <select id="student-select">
+              <option value="">Selecione um aluno</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="course-select">Curso</label>
+            <select id="course-select">
+              <option value="">Selecione um curso</option>
+            </select>
+          </div>
+
+          <div>
+            <button id="create-enrollment-btn">Matricular</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Matrículas existentes</h2>
+
+        <div class="filter-row">
+          <div>
+            <label for="filter-student">Filtrar por aluno</label>
+            <input type="text" id="filter-student" placeholder="Digite nome ou email do aluno" />
+          </div>
+
+          <div>
+            <label for="filter-course">Filtrar por curso</label>
+            <input type="text" id="filter-course" placeholder="Digite o nome do curso" />
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Aluno</th>
+                <th>Curso</th>
+                <th>Status</th>
+                <th>Criada em</th>
+                <th>Ação</th>
+              </tr>
+            </thead>
+            <tbody id="enrollments-table-body"></tbody>
+          </table>
+        </div>
+
+        <div id="empty-state" class="empty-state" style="display:none;">
+          Nenhuma matrícula encontrada com os filtros aplicados.
+        </div>
+      </section>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/admin-matriculas.js"></script>
+  </body>
 </html>

@@ -1,287 +1,69 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cadastro - Matemática Essencial</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro - Matemática Essencial</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, Helvetica, sans-serif;
-    }
 
-    html,
-    body {
-      min-height: 100%;
-      background: #000;
-      color: #fff;
-    }
 
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
+  <body class="public-page register-page">
+    <header class="site-header">
+      <div class="page-container site-header__inner">
+        <a href="index.html" class="site-logo">
+          <img src="assets/Logo_Mariana.jpg" alt="Logo Mariana Lima" class="site-logo__img" />
+          <span class="site-logo__text">
+            <span class="site-logo__text--blue">Matemática</span><span class="site-logo__text--purple">Essencial</span>
+          </span>
+        </a>
 
-    button,
-    input {
-      font: inherit;
-    }
+        <nav class="site-nav">
+          <a href="login.html" class="btn btn--dark">Entrar</a>
+        </nav>
+      </div>
+    </header>
 
-    button {
-      cursor: pointer;
-      border: none;
-    }
+    <main class="register-page">
+      <div class="form-card">
+        <h1 class="form-card__title">Criar conta</h1>
+        <p class="form-card__subtitle">Preencha seus dados para acessar a plataforma.</p>
 
-    .page-container {
-      width: 100%;
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
+        <form id="registerForm">
+          <div class="form-field">
+            <label class="form-field__label" for="nome">Nome</label>
+            <input class="form-field__input" type="text" id="name" required />
+          </div>
 
-    .site-header {
-      width: 100%;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(0, 0, 0, 0.95);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
+          <div class="form-field">
+            <label class="form-field__label" for="email">Email</label>
+            <input class="form-field__input" type="email" id="email" required />
+          </div>
 
-    .site-header__inner {
-      height: 72px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+          <div class="form-field">
+            <label class="form-field__label" for="password">Senha</label>
+            <input class="form-field__input" type="password" id="password" required />
+          </div>
 
-    .site-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-weight: 700;
-    }
+          <div class="form-field">
+            <label class="form-field__label" for="confirmPassword">Confirmar senha</label>
+            <input class="form-field__input" type="password" id="confirmPassword" required />
+          </div>
 
-    .site-logo__icon {
-      width: 34px;
-      height: 34px;
-      border-radius: 8px;
-      background: #fff;
-      color: #7c3aed;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-    }
+          <button type="submit" class="btn btn--purple btn--full">Criar conta</button>
 
-    .site-logo__text {
-      font-size: 18px;
-    }
+          <div id="registerError" class="form-feedback--error"></div>
+          <div id="registerSuccess" class="form-feedback--success"></div>
 
-    .site-logo__text--blue {
-      color: #3b82f6;
-    }
+          <div class="form-footer">
+            Já tem conta? <a href="login.html">Entrar</a>
+          </div>
+        </form>
+      </div>
+    </main>
 
-    .site-logo__text--purple {
-      color: #a855f7;
-    }
-
-    .site-nav {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      height: 44px;
-      padding: 0 20px;
-      border-radius: 12px;
-      font-weight: 600;
-      transition: 0.2s ease;
-    }
-
-    .btn--dark {
-      background: #0a0a0a;
-      color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .btn--dark:hover {
-      background: #151515;
-    }
-
-    .btn--purple {
-      background: #a855f7;
-      color: #fff;
-      border: 1px solid transparent;
-    }
-
-    .btn--purple:hover {
-      background: #9333ea;
-    }
-
-    .btn--full {
-      width: 100%;
-    }
-
-    .register-page {
-      min-height: calc(100vh - 72px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 40px 24px;
-    }
-
-    .form-card {
-      width: 100%;
-      max-width: 500px;
-      background: #0b0b0b;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 22px;
-      padding: 32px;
-    }
-
-    .form-card__title {
-      font-size: 32px;
-      margin-bottom: 10px;
-    }
-
-    .form-card__subtitle {
-      color: #bdbdbd;
-      margin-bottom: 24px;
-    }
-
-    .form-field {
-      margin-bottom: 16px;
-    }
-
-    .form-field__label {
-      display: block;
-      font-size: 14px;
-      margin-bottom: 8px;
-      color: #e5e5e5;
-    }
-
-    .form-field__input {
-      width: 100%;
-      height: 48px;
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: #111;
-      color: #fff;
-      padding: 0 14px;
-    }
-
-    .form-field__input:focus {
-      outline: none;
-      border-color: #a855f7;
-    }
-
-    .form-feedback--error {
-      margin-top: 14px;
-      color: #f87171;
-      font-size: 14px;
-    }
-
-    .form-feedback--success {
-      margin-top: 14px;
-      color: #4ade80;
-      font-size: 14px;
-    }
-
-    .form-footer {
-      margin-top: 18px;
-      color: #cfcfcf;
-      font-size: 14px;
-    }
-
-    .form-footer a {
-      color: #a855f7;
-      font-weight: 700;
-    }
-
-    @media (max-width: 768px) {
-      .site-header__inner {
-        min-height: 72px;
-        height: auto;
-        padding: 16px 0;
-        flex-direction: column;
-        gap: 16px;
-      }
-
-      .site-nav {
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-
-      .form-card {
-        padding: 24px;
-      }
-    }
-  </style>
-</head>
-<body>
-  <header class="site-header">
-    <div class="page-container site-header__inner">
-      <a href="index.html" class="site-logo">
-        <div class="site-logo__icon">▶</div>
-        <div class="site-logo__text">
-          <span class="site-logo__text--blue">Matemática</span><span class="site-logo__text--purple">Essencial</span>
-        </div>
-      </a>
-
-      <nav class="site-nav">
-        <a href="login.html" class="btn btn--dark">Entrar</a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="register-page">
-    <div class="form-card">
-      <h1 class="form-card__title">Criar conta</h1>
-      <p class="form-card__subtitle">Preencha seus dados para acessar a plataforma.</p>
-
-      <form id="registerForm">
-        <div class="form-field">
-          <label class="form-field__label" for="nome">Nome</label>
-          <input class="form-field__input" type="text" id="name" required />
-        </div>
-
-        <div class="form-field">
-          <label class="form-field__label" for="email">Email</label>
-          <input class="form-field__input" type="email" id="email" required />
-        </div>
-
-        <div class="form-field">
-          <label class="form-field__label" for="password">Senha</label>
-          <input class="form-field__input" type="password" id="password" required />
-        </div>
-
-        <div class="form-field">
-          <label class="form-field__label" for="confirmPassword">Confirmar senha</label>
-          <input class="form-field__input" type="password" id="confirmPassword" required />
-        </div>
-
-        <button type="submit" class="btn btn--purple btn--full">Criar conta</button>
-
-        <div id="registerError" class="form-feedback--error"></div>
-        <div id="registerSuccess" class="form-feedback--success"></div>
-
-        <div class="form-footer">
-          Já tem conta? <a href="login.html">Entrar</a>
-        </div>
-      </form>
-    </div>
-  </main>
-
-  <script src="js/api.js"></script>
-  <script src="js/cadastro.js"></script>
-</body>
+    <script src="js/api.js"></script>
+    <script src="js/cadastro.js"></script>
+  </body>
 </html>

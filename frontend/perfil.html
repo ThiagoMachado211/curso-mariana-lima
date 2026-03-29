@@ -1,219 +1,51 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Perfil - Matemática Essencial</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Perfil - Matemática Essencial</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, Helvetica, sans-serif;
-    }
 
-    html,
-    body {
-      min-height: 100%;
-      background: #000;
-      color: #fff;
-    }
 
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
+  <body class="public-page profile-page">
+    <header class="site-header">
+      <div class="page-container site-header__inner">
+        <a href="index.html" class="site-logo">
+          <img src="assets/Logo_Mariana.jpg" alt="Logo Mariana Lima" class="site-logo__img" />
+          <span class="site-logo__text">
+            <span class="site-logo__text--blue">Matemática</span><span class="site-logo__text--purple">Essencial</span>
+          </span>
+        </a>
 
-    .page-container {
-      width: 100%;
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
+        <nav class="site-nav">
+          <a href="dashboard.html" class="btn btn--dark">Dashboard</a>
+          <a href="curso.html" class="btn btn--dark">Curso</a>
+        </nav>
+      </div>
+    </header>
 
-    .site-header {
-      width: 100%;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(0, 0, 0, 0.95);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
+    <main class="profile-page">
+      <h1 class="profile-page__title">Perfil</h1>
+      <p class="profile-page__subtitle">Área reservada para dados do aluno.</p>
 
-    .site-header__inner {
-      height: 72px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .site-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-weight: 700;
-    }
-
-    .site-logo__icon {
-      width: 34px;
-      height: 34px;
-      border-radius: 8px;
-      background: #fff;
-      color: #7c3aed;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-    }
-
-    .site-logo__text {
-      font-size: 18px;
-    }
-
-    .site-logo__text--blue {
-      color: #3b82f6;
-    }
-
-    .site-logo__text--purple {
-      color: #a855f7;
-    }
-
-    .site-nav {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      height: 44px;
-      padding: 0 20px;
-      border-radius: 12px;
-      font-weight: 600;
-      transition: 0.2s ease;
-    }
-
-    .btn--dark {
-      background: #0a0a0a;
-      color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .btn--dark:hover {
-      background: #151515;
-    }
-
-    .profile-page {
-      width: 100%;
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 40px 24px 80px;
-    }
-
-    .profile-page__title {
-      font-size: 42px;
-      margin-bottom: 12px;
-    }
-
-    .profile-page__subtitle {
-      color: #cfcfcf;
-      margin-bottom: 30px;
-    }
-
-    .profile-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-    }
-
-    .profile-card {
-      background: #0b0b0b;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 18px;
-      padding: 24px;
-    }
-
-    .profile-card__title {
-      margin-bottom: 12px;
-    }
-
-    .profile-card__text {
-      color: #bdbdbd;
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-    @media (max-width: 1100px) {
-      .profile-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 768px) {
-      .site-header__inner {
-        min-height: 72px;
-        height: auto;
-        padding: 16px 0;
-        flex-direction: column;
-        gap: 16px;
-      }
-
-      .site-nav {
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-
-      .profile-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .profile-page__title {
-        font-size: 32px;
-      }
-    }
-  </style>
-</head>
-<body>
-  <header class="site-header">
-    <div class="page-container site-header__inner">
-      <a href="dashboard.html" class="site-logo">
-        <div class="site-logo__icon">▶</div>
-        <div class="site-logo__text">
-          <span class="site-logo__text--blue">Matemática</span><span class="site-logo__text--purple">Essencial</span>
+      <div class="profile-grid">
+        <div class="profile-card">
+          <h3 class="profile-card__title">Nome</h3>
+          <p class="profile-card__text">Aluno da plataforma</p>
         </div>
-      </a>
 
-      <nav class="site-nav">
-        <a href="dashboard.html" class="btn btn--dark">Dashboard</a>
-        <a href="curso.html" class="btn btn--dark">Curso</a>
-      </nav>
-    </div>
-  </header>
+        <div class="profile-card">
+          <h3 class="profile-card__title">Email</h3>
+          <p class="profile-card__text">email@exemplo.com</p>
+        </div>
 
-  <main class="profile-page">
-    <h1 class="profile-page__title">Perfil</h1>
-    <p class="profile-page__subtitle">Área reservada para dados do aluno.</p>
-
-    <div class="profile-grid">
-      <div class="profile-card">
-        <h3 class="profile-card__title">Nome</h3>
-        <p class="profile-card__text">Aluno da plataforma</p>
+        <div class="profile-card">
+          <h3 class="profile-card__title">Status</h3>
+          <p class="profile-card__text">Conta ativa</p>
+        </div>
       </div>
-
-      <div class="profile-card">
-        <h3 class="profile-card__title">Email</h3>
-        <p class="profile-card__text">email@exemplo.com</p>
-      </div>
-
-      <div class="profile-card">
-        <h3 class="profile-card__title">Status</h3>
-        <p class="profile-card__text">Conta ativa</p>
-      </div>
-    </div>
-  </main>
-</body>
+    </main>
+  </body>
 </html>
