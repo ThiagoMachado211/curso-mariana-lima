@@ -423,9 +423,9 @@ img {
   padding: 0 24px;
 
   display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
-  gap: 50px;
-  align-items: start;
+  grid-template-columns: 1 fr 1fr;
+  gap: 60px;
+  align-items: center;
 }
 
 .home-hero-split__image {
@@ -445,6 +445,7 @@ img {
 .home-hero-split__content-wrap {
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .home-hero-split__content-box {
