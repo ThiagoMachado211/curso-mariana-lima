@@ -229,8 +229,6 @@ img {
 .btn-dark {
   background: #0a0a0a;
   color: #fff;
-  width: 50px;
-  font-size: 30px;
   border: 1px solid var(--border-dark);
 }
 
