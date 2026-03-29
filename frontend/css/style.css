@@ -419,7 +419,8 @@ img {
 }
 
 .home-hero-split__container {
-  max-width: 80vw;
+  max-width: 1200 px;
+  max-height: 90 vh;
   margin: 0 auto;
   padding: 40px 24px;
 
