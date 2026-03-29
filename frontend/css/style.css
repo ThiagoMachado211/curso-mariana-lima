@@ -423,8 +423,8 @@ img {
   padding: 0 24px;
 
   display: grid;
-  grid-template-columns: 1 fr 1fr;
-  gap: 60px;
+  grid-template-columns: 1 fr 0.9fr;
+  gap: 50px;
   align-items: center;
 }
 
