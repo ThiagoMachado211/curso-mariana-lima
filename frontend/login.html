@@ -8,25 +8,26 @@
   </head>
 
 
-
   <body class="public-page login-page">
     <header class="site-header">
-      <div class="page-container site-header__inner">
-        <a href="index.html" class="site-logo">
-          <img src="assets/Logo_Mariana.jpg" alt="Logo Mariana Lima" class="site-logo__img" />
-          <span class="site-logo__text">
-            <span class="site-logo__text--blue">Matemática</span><span class="site-logo__text--purple">Essencial</span>
-          </span>
-        </a>
+      <div class="page-container">
+        <div class="site-header__inner">
+          <a href="index.html" class="site-logo">
+            <img src="assets/Logo_Mariana.jpg" alt="Logo Mariana Lima" class="site-logo__img" />
+            <span class="site-logo__text">
+              <span class="site-logo__text--blue">Matemática</span><span class="site-logo__text--purple">Essencial</span>
+            </span>
+          </a>
 
-        <nav class="site-nav">
-          <a href="index.html" class="btn btn--dark">Home</a>
-          <a href="cadastro.html" class="btn btn--dark">Cadastre-se</a>
-        </nav>
+          <nav class="site-nav">
+            <a href="index.html" class="btn btn--dark">Home</a>
+            <a href="cadastro.html" class="btn btn--dark">Cadastre-se</a>
+          </nav>
+        </div>
       </div>
     </header>
 
-    <main class="login-page">
+    <main class="page-center">
       <div class="form-card">
         <h1 class="form-card__title">Entrar</h1>
         <p class="form-card__subtitle">Acesse sua conta para entrar na plataforma.</p>
@@ -41,23 +42,10 @@
             <label class="form-field__label" for="password">Senha</label>
 
             <div class="password-field">
-              <input
-                class="form-field__input"
-                type="password"
-                id="password"
-                required
-              />
-
-              <button
-                type="button"
-                id="togglePassword"
-                class="password-toggle"
-              >
-                <!-- Ícone será inserido via JS -->
-              </button>
+              <input class="form-field__input" type="password" id="password" required />
+              <button type="button" id="togglePassword" class="password-toggle"></button>
             </div>
           </div>
-
 
           <button type="submit" class="btn btn--purple btn--full">Entrar</button>
 
@@ -73,4 +61,5 @@
     <script src="js/api.js"></script>
     <script src="js/login.js"></script>
   </body>
+
 </html>
