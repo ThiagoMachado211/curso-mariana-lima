@@ -32,60 +32,37 @@
     <div class="admin-dashboard-container">
       <section class="admin-dashboard-hero">
         <h1 class="admin-dashboard-title">Área do Administrador: Gerenciamento</h1>
-        <p class="admin-dashboard-subtitle">
+<!---        <p class="admin-dashboard-subtitle">
           Gerencie cursos, módulos, aulas, matrículas e acompanhe os cadastros realizados.
         </p>
-      </section>
-
-      <section class="admin-metrics-grid">
-        <div class="admin-metric-card">
-          <span class="admin-metric-label">Cursos</span>
-          <strong id="countCourses" class="admin-metric-value">0</strong>
-        </div>
-
-        <div class="admin-metric-card">
-          <span class="admin-metric-label">Módulos</span>
-          <strong id="countModules" class="admin-metric-value">0</strong>
-        </div>
-
-        <div class="admin-metric-card">
-          <span class="admin-metric-label">Aulas</span>
-          <strong id="countLessons" class="admin-metric-value">0</strong>
-        </div>
-
-        <div class="admin-metric-card">
-          <span class="admin-metric-label">Cadastros</span>
-          <strong id="countUsers" class="admin-metric-value">0</strong>
-        </div>
+-->
       </section>
 
       <section class="admin-management-section">
         <div class="admin-management-grid">
           <a href="admin-cursos.html" class="admin-management-card">
-            <h3>Gerenciar cursos</h3>
-            <p>Crie, edite e publique cursos.</p>
-          </a>
-
-          <a href="admin-modulos.html" class="admin-management-card">
-            <h3>Gerenciar módulos</h3>
-            <p>Organize os módulos de cada curso.</p>
-          </a>
-
-          <a href="admin-aulas.html" class="admin-management-card">
-            <h3>Gerenciar aulas</h3>
-            <p>Cadastre vídeos, PDFs e ordem das aulas.</p>
-          </a>
-
-          <a href="admin-matriculas.html" class="admin-management-card">
-            <h3>Gerenciar matrículas</h3>
-            <p>Associe alunos aos cursos manualmente.</p>
-          </a>
-
-          <a href="admin-cadastros.html" class="admin-management-card">
-            <h3>Visualizar cadastros</h3>
-            <p>Consulte os usuários cadastrados na plataforma.</p>
+            <h2>Número de Cursos Cadastrados: <strong id="countCourses" class="admin-metric-value">0</strong> </h2>
           </a>
         </div>
+
+        <div class="admin-management-grid">
+          <a href="admin-modulos.html" class="admin-management-card">
+            <h2>Número de Módulos Cadastrados: <strong id="countModules" class="admin-metric-value">0</strong> </h2>
+          </a>
+        </div>
+
+        <div class="admin-management-grid">
+          <a href="admin-aulas.html" class="admin-management-card">
+            <h2>Número de Aulas Cadastradas: <strong id="countLessons" class="admin-metric-value">0</strong> </h2>
+          </a>
+        </div>
+
+        <div class="admin-management-grid">
+          <a href="admin-matriculas.html" class="admin-management-card">
+            <h2>Número de Cadastros Ativos: <strong id="countUsers" class="admin-metric-value">0</strong> </h2>
+          </a>
+        </div>
+
       </section>
     </div>
   </main>

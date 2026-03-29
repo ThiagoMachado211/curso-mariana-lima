@@ -169,7 +169,7 @@ img {
 }
 
 .site-logo__img {
-  height: 40px;
+  height: 60px;
   width: auto;
   border-radius: 8px;
 }
@@ -193,10 +193,12 @@ img {
 
 .site-logo__text--blue {
   color: var(--blue);
+  font-size: 36px;
 }
 
 .site-logo__text--purple {
   color: var(--purple);
+  font-size: 36px;
 }
 
 .site-nav,
@@ -227,6 +229,8 @@ img {
 .btn-dark {
   background: #0a0a0a;
   color: #fff;
+  width: 50px;
+  font-size: 30px;
   border: 1px solid var(--border-dark);
 }
 
@@ -986,6 +990,9 @@ img {
 }
 
 .admin-dashboard-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 46px;
   line-height: 1.08;
   margin-bottom: 14px;
@@ -1023,7 +1030,8 @@ img {
 }
 
 .admin-metric-value {
-  font-size: 42px;
+  margin-left: 40px;
+  font-size: 30px;
   line-height: 1;
   color: #a855f7;
   font-weight: 800;
@@ -1034,19 +1042,26 @@ img {
 }
 
 .admin-management-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-template-columns: auto;
+  /* grid-template-columns: repeat(1, 1fr); */
   gap: 18px;
 }
 
 .admin-management-card {
-  display: block;
+  display:flex;
   background: #0b0b0b;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 18px;
-  padding: 24px;
+  padding: 60px;
   transition: 0.2s ease;
-  min-height: 180px;
+  justify-content: left;
+  align-items: center;
+  height: 100px;
+  width: 800px;
 }
 
 .admin-management-card:hover {
