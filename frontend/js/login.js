@@ -35,7 +35,8 @@ document.addEventListener("DOMContentLoaded", () => {
       passwordInput.type = isHidden ? "text" : "password";
       togglePasswordButton.innerHTML = isHidden ? eyeOffIcon : eyeIcon;
     });
-  }
+  }  
+
 
   // 🔁 Se já estiver logado, redireciona
   try {
