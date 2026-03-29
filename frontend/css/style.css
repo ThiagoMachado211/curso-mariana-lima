@@ -407,50 +407,66 @@ img {
   line-height: 1.5;
 }
 
-/* =========================================================
-   HOME SPLIT (Imagem + Texto)
+/* ========================================================= 
+   HOME SPLIT (Imagem + Texto em caixa)
 ========================================================= */
 
 .home-hero-split {
   background: #000;
   min-height: calc(100vh - 72px);
-  display: flex;
-  align-items: center;
+  padding: 40px 0;
 }
 
 .home-hero-split__container {
-  max-width: 1200 px;
-  max-height: 90 vh;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 24px;
+  padding: 0 24px;
 
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
-  align-items: center;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 24px;
+  align-items: start;
 }
 
 .home-hero-split__image {
   display: flex;
   justify-content: center;
+  align-items: flex-start;
 }
 
 .home-hero-split__image img {
-  max-width: 100%;
+  width: 100%;
+  max-width: 560px;
   height: auto;
-  border-radius: 16px;
+  border-radius: 20px;
+  display: block;
 }
 
-.home-hero-split__content h1 {
-  font-size: 48px;
-  line-height: 1.1;
+.home-hero-split__content-wrap {
+  position: relative;
+}
+
+.home-hero-split__content-box {
+  position: sticky;
+  top: calc(50vh - 180px);
+
+  background: #0b0b0b;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 22px;
+  padding: 32px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+}
+
+.home-hero-split__content-box h1 {
+  font-size: 44px;
+  line-height: 1.08;
   margin-bottom: 20px;
 }
 
-.home-hero-split__content p {
+.home-hero-split__content-box p {
   font-size: 18px;
   color: #cfcfcf;
-  line-height: 1.6;
+  line-height: 1.7;
   margin-bottom: 24px;
 }
 
@@ -459,6 +475,10 @@ img {
   gap: 12px;
   flex-wrap: wrap;
 }
+
+/* ========================================================= */
+
+
 
 .home-hero__actions {
   margin-top: 36px;
