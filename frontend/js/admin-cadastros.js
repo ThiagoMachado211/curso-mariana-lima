@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       await requireAdmin();
     }
 
-    const users = await apiRequest("/admin/directory/users");
+    const users = await apiRequest("/admin/directory/students");
 
     if (!Array.isArray(users) || users.length === 0) {
       usersList.innerHTML = '<p class="empty-state">Nenhum cadastro encontrado.</p>';

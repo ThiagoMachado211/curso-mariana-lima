@@ -45,6 +45,33 @@ def list_students(
     ]
 
 
+@router.get("/users")
+def list_users(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    ensure_admin(current_user)
+
+    users = (
+        db.query(User)
+        .filter(User.tenant_id == current_user.tenant_id)
+        .order_by(User.name.asc())
+        .all()
+    )
+
+    return [
+        {
+            "id": user.id,
+            "name": user.name,
+            "last_name": user.last_name,
+            "email": user.email,
+            "role": user.role,
+            "is_active": user.is_active,
+        }
+        for user in users
+    ]
+
+
 @router.get("/courses")
 def list_courses_for_admin_directory(
     db: Session = Depends(get_db),
