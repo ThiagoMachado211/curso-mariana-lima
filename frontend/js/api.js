@@ -1,7 +1,4 @@
-const API_BASE_URL =
-  window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
-    ? "http://localhost:8000"
-    : "http://localhost:8000";
+const API_BASE_URL = "https://curso-mariana-lima.onrender.com";
 
 /* =========================
    AUTH
@@ -27,6 +24,7 @@ function isAuthenticated() {
    REQUEST PADRÃO
 ========================= */
 
+/*
 async function apiRequest(endpoint, options = {}) {
   const token = getToken();
 
@@ -67,6 +65,54 @@ async function apiRequest(endpoint, options = {}) {
 
   return data;
 }
+*/
+
+async function apiRequest(path, options = {}) {
+  const token = localStorage.getItem("access_token");
+
+  const headers = {
+    ...(options.headers || {}),
+  };
+
+  if (!headers["Content-Type"] && !(options.body instanceof FormData)) {
+    headers["Content-Type"] = "application/json";
+  }
+
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
+  console.log("API URL:", `${API_BASE_URL}${path}`);
+  console.log("API options:", { ...options, headers });
+
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    ...options,
+    headers,
+  });
+
+  console.log("Status:", response.status);
+
+  const contentType = response.headers.get("content-type") || "";
+  console.log("Content-Type:", contentType);
+
+  let data = null;
+
+  if (contentType.includes("application/json")) {
+    data = await response.json();
+  } else {
+    const text = await response.text();
+    data = { detail: text };
+  }
+
+  console.log("Resposta da API:", data);
+
+  if (!response.ok) {
+    throw new Error(data?.detail || `Erro ${response.status}`);
+  }
+
+  return data;
+}
+
 
 /* =========================
    USER / ROLE

@@ -7,6 +7,8 @@ from alembic import context
 from sqlalchemy import engine_from_config, pool
 
 from dotenv import load_dotenv
+from app.core.config import settings
+from app.db.base import Base
 
 # carrega backend/.env
 load_dotenv()
@@ -19,7 +21,8 @@ config = context.config
 database_url = os.getenv("DATABASE_URL")
 if not database_url:
     raise RuntimeError("DATABASE_URL não encontrada. Confira backend/.env")
-config.set_main_option("sqlalchemy.url", database_url)
+
+config.set_main_option("sqlalchemy.url", settings.database_url)
 
 # Interpret the config file for Python logging.
 if config.config_file_name is not None:
