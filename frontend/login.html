@@ -262,7 +262,16 @@
 
         <div class="form-field">
           <label class="form-field__label" for="password">Senha</label>
-          <input class="form-field__input" type="password" id="password" required />
+
+          <div class="password-field">
+            <input
+              class="form-field__input password-field__input"
+              type="password"
+              id="password"
+              required
+            />
+            <button type="button" id="togglePassword" class="password-field__toggle"></button>
+          </div>
         </div>
 
         <button type="submit" class="btn btn--purple btn--full">Entrar</button>
