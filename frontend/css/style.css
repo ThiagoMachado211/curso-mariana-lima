@@ -407,6 +407,58 @@ img {
   line-height: 1.5;
 }
 
+/* =========================================================
+   HOME SPLIT (Imagem + Texto)
+========================================================= */
+
+.home-hero-split {
+  background: #000;
+  min-height: calc(100vh - 72px);
+  display: flex;
+  align-items: center;
+}
+
+.home-hero-split__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.home-hero-split__image {
+  display: flex;
+  justify-content: center;
+}
+
+.home-hero-split__image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 16px;
+}
+
+.home-hero-split__content h1 {
+  font-size: 48px;
+  line-height: 1.1;
+  margin-bottom: 20px;
+}
+
+.home-hero-split__content p {
+  font-size: 18px;
+  color: #cfcfcf;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.home-hero-split__actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
 .home-hero__actions {
   margin-top: 36px;
 }
