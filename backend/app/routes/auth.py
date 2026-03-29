@@ -62,6 +62,7 @@ def register(data: RegisterRequest, db: Session = Depends(get_db)):
     user = User(
         tenant_id=tenant.id,
         name=data.name.strip(),
+        last_name=data.last_name.strip(),
         email=data.email.strip().lower(),
         password_hash=hash_password(data.password),
         role="student",
