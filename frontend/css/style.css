@@ -557,6 +557,11 @@ img {
   margin: 0 auto;
 }
 
+.btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
 /* =========================================================
    8) CURSOS / CURSO / PERFIL PÚBLICOS
 ========================================================= */
