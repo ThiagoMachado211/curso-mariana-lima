@@ -11,6 +11,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   let editingModuleId = null;
   let coursesCache = [];
 
+  if (!modulesList) {
+    console.error("Elemento #modulesList não encontrado no HTML");
+    return;
+  }
+
   function showMessage(type, text) {
     if (!messageBox) return;
     messageBox.innerHTML = `<div class="message ${type}">${text}</div>`;
