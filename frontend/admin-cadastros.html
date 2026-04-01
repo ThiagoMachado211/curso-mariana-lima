@@ -1,25 +1,47 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cadastros</title>
-  <link rel="stylesheet" href="css/style.css" />
-</head>
-<body class="admin-page">
-  <header>
-    <h1>Cadastros realizados</h1>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastros</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
 
-  <main>
-    <div class="card">
-      <h2>Usuários cadastrados</h2>
-      <div id="usersMessage"></div>
-      <div id="usersList"></div>
-    </div>
-  </main>
 
-  <script src="js/api.js"></script>
-  <script src="js/admin-cadastros.js"></script>
-</body>
+  <body class="admin-page">
+    <header class="site-header admin-top-header">
+      <div class="page-container">
+        <div class="site-header__inner">
+          <a href="index.html" class="site-logo">
+            <img src="assets/Logo_Mariana.jpg" alt="Logo Mariana Lima" class="site-logo__img" />
+            <span class="site-logo__text">
+              <span class="site-logo__text--blue">Matemática</span><span class="site-logo__text--purple">Essencial</span>
+            </span>
+          </a>
+
+          <nav class="site-nav">
+            <a href="admin-dashboard.html" class="btn btn--dark">Voltar para o dashboard</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="admin-management-main">
+      <div class="admin-management-container">
+        <h1 class="admin-management-title">Gerenciamento de Cadastros</h1>
+
+        <div id="usersMessage"></div>
+
+        <section class="card">
+          <h2>Cadastros realizados</h2>
+          <div id="usersList"></div>
+        </section>
+      </div>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/admin-cadastros.js"></script>
+  </body>
+
+
 </html>

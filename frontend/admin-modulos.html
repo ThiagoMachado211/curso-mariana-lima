@@ -10,52 +10,71 @@
 
   
   <body class="admin-page admin-modules-page">
-    <header>
-      <h1>Gerenciamento de Módulos</h1>
+    <header class="site-header admin-top-header">
+      <div class="page-container">
+        <div class="site-header__inner">
+          <a href="index.html" class="site-logo">
+            <img
+              src="assets/Logo_Mariana.jpg"
+              alt="Logo Mariana Lima"
+              class="site-logo__img"
+            />
+            <span class="site-logo__text">
+              <span class="site-logo__text--blue">Matemática</span><span class="site-logo__text--purple">Essencial</span>
+            </span>
+          </a>
+
+          <nav class="site-nav">
+            <a href="admin-dashboard.html" class="btn btn--dark">Voltar para o dashboard</a>
+          </nav>
+        </div>
+      </div>
     </header>
 
-    <main>
-      <div class="top-actions">
-        <a class="back-link" href="admin-dashboard.html">← Voltar para o dashboard</a>
+
+    <main class="admin-management-main">
+      <div class="admin-management-container">
+        <h1 class="admin-management-title">Gerenciamento de Módulos</h1>
+
+        <div id="messageBox"></div>
+
+        <section class="card">
+          <h2 id="form-title">Novo módulo</h2>
+
+          <div class="row">
+            <div>
+              <label for="course_id">Curso</label>
+              <select id="course_id">
+                <option value="">Selecione um curso</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="order">Ordem</label>
+              <input type="number" id="order" />
+            </div>
+
+            <div class="full-width">
+              <label for="title">Título do módulo</label>
+              <input type="text" id="title" />
+            </div>
+          </div>
+
+          <div class="actions">
+            <button id="save-btn">Salvar módulo</button>
+            <button id="cancel-edit-btn" class="secondary" type="button">Cancelar edição</button>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>Lista de módulos</h2>
+<!--          <div id="modules-container" class="modules-grid"></div>  -->
+          <div id="coursesList" class="admin-list-stack"></div>
+          <div id="empty-state" class="empty-state" style="display:none;">
+            Nenhum módulo cadastrado até o momento.
+          </div>
+        </section>
       </div>
-
-      <div id="message-container"></div>
-
-      <section class="card">
-        <h2 id="form-title">Novo módulo</h2>
-
-        <div class="row">
-          <div>
-            <label for="course_id">Curso</label>
-            <select id="course_id">
-              <option value="">Selecione um curso</option>
-            </select>
-          </div>
-
-          <div>
-            <label for="order">Ordem</label>
-            <input type="number" id="order" />
-          </div>
-
-          <div class="full-width">
-            <label for="title">Título do módulo</label>
-            <input type="text" id="title" />
-          </div>
-        </div>
-
-        <div class="actions">
-          <button id="save-btn">Salvar módulo</button>
-          <button id="cancel-edit-btn" class="secondary" type="button">Cancelar edição</button>
-        </div>
-      </section>
-
-      <section class="card">
-        <h2>Lista de módulos</h2>
-        <div id="modules-container" class="modules-grid"></div>
-        <div id="empty-state" class="empty-state" style="display:none;">
-          Nenhum módulo cadastrado até o momento.
-        </div>
-      </section>
     </main>
 
     <script src="js/api.js"></script>

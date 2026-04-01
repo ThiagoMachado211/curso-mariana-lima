@@ -9,92 +9,90 @@
 
 
   
-  <body class="admin-page admin-courses-page" style="background-color: black;">
-    <header class="site-header">
+  <body class="admin-page">
+    <header class="site-header admin-top-header">
       <div class="page-container">
         <div class="site-header__inner">
           <a href="index.html" class="site-logo">
-            <img
-              src="assets/Logo_Mariana.jpg"
-              alt="Logo Mariana Lima"
-              class="site-logo__img"
-            />
+            <img src="assets/Logo_Mariana.jpg" alt="Logo Mariana Lima" class="site-logo__img" />
             <span class="site-logo__text">
               <span class="site-logo__text--blue">Matemática</span><span class="site-logo__text--purple">Essencial</span>
             </span>
           </a>
 
           <nav class="site-nav">
-            <a class="btn btn--dark" href="admin-dashboard.html">Voltar para o dashboard</a>
+            <a href="admin-dashboard.html" class="btn btn--dark">Voltar para o dashboard</a>
           </nav>
         </div>
       </div>
     </header>
 
-    <main class="admin-dashboard-main" style = "background-color: black;">
-      <div class="top-actions" style="font-size: 40px; display: flex; justify-content: center; color: purple; font-weight: bold;">
-        Gerenciamento de Cursos
-      </div>
 
-      <div id="message-container"></div>
+    <main class="admin-management-main">
+      <div class="admin-management-container">
+        <h1 class="admin-management-title">Gerenciamento de Cursos</h1>
 
-      <section class="card">
-        <h2 id="form-title">Novo curso</h2>
+        <div id="messageBox"></div>
 
-        <div class="row">
-          <div>
-            <label for="title">Título</label>
-            <input type="text" id="title" />
-          </div>
+        <section class="card">
+          <h2 id="form-title">Novo curso</h2>
 
-          <div>
-            <label for="slug">Slug</label>
-            <input type="text" id="slug" />
-          </div>
+          <div class="row">
+            <div>
+              <label for="title">Título</label>
+              <input type="text" id="title" />
+            </div>
 
-          <div class="full-width">
-            <label for="description">Descrição</label>
-            <textarea id="description"></textarea>
-          </div>
+            <div>
+              <label for="slug">Slug</label>
+              <input type="text" id="slug" />
+            </div>
 
-          <div>
-            <label for="price_cents">Preço (em centavos)</label>
-            <input type="number" id="price_cents" />
-          </div>
+            <div class="full-width">
+              <label for="description">Descrição</label>
+              <textarea id="description"></textarea>
+            </div>
 
-          <div>
-            <label for="currency">Moeda</label>
-            <input type="text" id="currency" value="BRL" />
-          </div>
+            <div>
+              <label for="price_cents">Preço (em centavos)</label>
+              <input type="number" id="price_cents" />
+            </div>
 
-          <div class="full-width">
-            <div class="checkbox-row">
-              <label class="checkbox-item">
-                <input type="checkbox" id="is_active" checked />
-                <span>Curso ativo</span>
-              </label>
+            <div>
+              <label for="currency">Moeda</label>
+              <input type="text" id="currency" value="BRL" />
+            </div>
 
-              <label class="checkbox-item">
-                <input type="checkbox" id="is_published" />
-                <span>Curso publicado</span>
-              </label>
+            <div class="full-width">
+              <div class="checkbox-row">
+                <label class="checkbox-item">
+                  <input type="checkbox" id="is_active" checked />
+                  <span>Curso ativo</span>
+                </label>
+
+                <label class="checkbox-item">
+                  <input type="checkbox" id="is_published" />
+                  <span>Curso publicado</span>
+                </label>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="actions">
-          <button id="save-btn">Salvar curso</button>
-          <button id="cancel-edit-btn" class="secondary" type="button">Cancelar edição</button>
-        </div>
-      </section>
+          <div class="actions">
+            <button id="save-btn">Salvar curso</button>
+            <button id="cancel-edit-btn" class="secondary" type="button">Cancelar edição</button>
+          </div>
+        </section>
 
-      <section class="card">
-        <h2>Lista de cursos</h2>
-        <div id="courses-container" class="courses-grid"></div>
-        <div id="empty-state" class="empty-state" style="display:none;">
-          Nenhum curso cadastrado até o momento.
-        </div>
-      </section>
+        <section class="card">
+          <h2>Lista de cursos</h2>
+          <div id="coursesList" class="admin-list-stack"></div>
+<!--          <div id="courses-container" class="courses-grid"></div> -->
+          <div id="empty-state" class="empty-state" style="display:none;">
+            Nenhum curso cadastrado até o momento.
+          </div>
+        </section>
+      </div>
     </main>
 
     <script src="js/api.js"></script>

@@ -10,62 +10,81 @@
 
   
   <body class="admin-page admin-lessons-page">
-    <header>
-      <h1>Gerenciamento de Aulas</h1>
+    <header class="site-header admin-top-header">
+      <div class="page-container">
+        <div class="site-header__inner">
+          <a href="index.html" class="site-logo">
+            <img
+              src="assets/Logo_Mariana.jpg"
+              alt="Logo Mariana Lima"
+              class="site-logo__img"
+            />
+            <span class="site-logo__text">
+              <span class="site-logo__text--blue">Matemática</span><span class="site-logo__text--purple">Essencial</span>
+            </span>
+          </a>
+
+          <nav class="site-nav">
+            <a href="admin-dashboard.html" class="btn btn--dark">Voltar para o dashboard</a>
+          </nav>
+        </div>
+      </div>
     </header>
 
-    <main>
-      <div class="top-actions">
-        <a class="back-link" href="admin-dashboard.html">← Voltar para o dashboard</a>
+
+    <main class="admin-management-main">
+      <div class="admin-management-container">
+        <h1 class="admin-management-title">Gerenciamento de Aulas</h1>
+
+        <div id="messageBox"></div>
+
+        <section class="card">
+          <h2 id="form-title">Nova aula</h2>
+
+          <div class="row">
+            <div>
+              <label for="module_id">Módulo</label>
+              <select id="module_id">
+                <option value="">Selecione um módulo</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="order">Ordem</label>
+              <input type="number" id="order" />
+            </div>
+
+            <div class="full-width">
+              <label for="title">Título da aula</label>
+              <input type="text" id="title" />
+            </div>
+
+            <div class="full-width">
+              <label for="video_embed_url">URL do vídeo (embed)</label>
+              <input type="text" id="video_embed_url" />
+            </div>
+
+            <div class="full-width">
+              <label for="pdf_url">URL do PDF</label>
+              <input type="text" id="pdf_url" />
+            </div>
+          </div>
+
+          <div class="actions">
+            <button id="save-btn">Salvar aula</button>
+            <button id="cancel-edit-btn" class="secondary" type="button">Cancelar edição</button>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>Lista de aulas</h2>
+          <div id="lessonsList" class="admin-list-stack"></div>
+<!--          <div id="lessons-container" class="lessons-grid"></div>  -->
+          <div id="empty-state" class="empty-state" style="display:none;">
+            Nenhuma aula cadastrada até o momento.
+          </div>
+        </section>
       </div>
-
-      <div id="message-container"></div>
-
-      <section class="card">
-        <h2 id="form-title">Nova aula</h2>
-
-        <div class="row">
-          <div>
-            <label for="module_id">Módulo</label>
-            <select id="module_id">
-              <option value="">Selecione um módulo</option>
-            </select>
-          </div>
-
-          <div>
-            <label for="order">Ordem</label>
-            <input type="number" id="order" />
-          </div>
-
-          <div class="full-width">
-            <label for="title">Título da aula</label>
-            <input type="text" id="title" />
-          </div>
-
-          <div class="full-width">
-            <label for="video_embed_url">URL do vídeo (embed)</label>
-            <input type="text" id="video_embed_url" />
-          </div>
-
-          <div class="full-width">
-            <label for="pdf_url">URL do PDF</label>
-            <input type="text" id="pdf_url" />
-          </div>
-        </div>
-
-        <div class="actions">
-          <button id="save-btn">Salvar aula</button>
-          <button id="cancel-edit-btn" class="secondary" type="button">Cancelar edição</button>
-        </div>
-      </section>
-
-      <section class="card">
-        <h2>Lista de aulas</h2>
-        <div id="lessons-container" class="lessons-grid"></div>
-        <div id="empty-state" class="empty-state" style="display:none;">
-          Nenhuma aula cadastrada até o momento.
-        </div>
-      </section>
     </main>
 
     <script src="js/api.js"></script>
