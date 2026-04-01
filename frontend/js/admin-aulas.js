@@ -13,6 +13,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   const lessonsList = document.getElementById("lessonsList");
   const submitButton = form?.querySelector('button[type="submit"]');
 
+  if (!lessonsList) {
+    console.error("Elemento #lessonsList não encontrado");
+    return;
+  }
+
   let editingLessonId = null;
   let coursesCache = [];
   let modulesCache = [];
