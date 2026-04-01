@@ -193,12 +193,12 @@ img {
 
 .site-logo__text--blue {
   color: var(--blue);
-  font-size: 36px;
+  font-size: 30px;
 }
 
 .site-logo__text--purple {
   color: var(--purple);
-  font-size: 36px;
+  font-size: 30px;
 }
 
 .site-nav,
@@ -991,7 +991,7 @@ img {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 46px;
+  font-size: 60px;
   line-height: 1.08;
   margin-bottom: 14px;
 }

@@ -24,48 +24,6 @@ function isAuthenticated() {
    REQUEST PADRÃO
 ========================= */
 
-/*
-async function apiRequest(endpoint, options = {}) {
-  const token = getToken();
-
-  const headers = {
-    "Content-Type": "application/json",
-    ...(options.headers || {}),
-  };
-
-  if (token) {
-    headers.Authorization = `Bearer ${token}`;
-  }
-
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-    ...options,
-    headers,
-  });
-
-  if (response.status === 401) {
-    removeToken();
-    window.location.href = "login.html";
-    return null;
-  }
-
-  const contentType = response.headers.get("content-type") || "";
-
-  const data = contentType.includes("application/json")
-    ? await response.json()
-    : await response.text();
-
-  if (!response.ok) {
-    const detail =
-      typeof data === "object" && data !== null
-        ? data.detail || JSON.stringify(data)
-        : data;
-
-    throw new Error(detail || "Erro na requisição.");
-  }
-
-  return data;
-}
-*/
 
 async function apiRequest(path, options = {}) {
   const token = localStorage.getItem("access_token");
@@ -82,29 +40,25 @@ async function apiRequest(path, options = {}) {
     headers["Authorization"] = `Bearer ${token}`;
   }
 
-  console.log("API URL:", `${API_BASE_URL}${path}`);
-  console.log("API options:", { ...options, headers });
-
   const response = await fetch(`${API_BASE_URL}${path}`, {
     ...options,
     headers,
   });
 
-  console.log("Status:", response.status);
-
   const contentType = response.headers.get("content-type") || "";
-  console.log("Content-Type:", contentType);
 
   let data = null;
 
-  if (contentType.includes("application/json")) {
-    data = await response.json();
+  // 204 = sem conteúdo
+  if (response.status === 204) {
+    data = null;
+  } else if (contentType.includes("application/json")) {
+    const text = await response.text();
+    data = text ? JSON.parse(text) : null;
   } else {
     const text = await response.text();
-    data = { detail: text };
+    data = text ? { detail: text } : null;
   }
-
-  console.log("Resposta da API:", data);
 
   if (!response.ok) {
     throw new Error(data?.detail || `Erro ${response.status}`);
