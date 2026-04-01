@@ -7,8 +7,6 @@
     <link rel="stylesheet" href="css/style.css" />
   </head>
 
-
-  
   <body class="admin-page admin-lessons-page">
     <header class="site-header admin-top-header">
       <div class="page-container">
@@ -31,7 +29,6 @@
       </div>
     </header>
 
-
     <main class="admin-management-main">
       <div class="admin-management-container">
         <h1 class="admin-management-title">Gerenciamento de Aulas</h1>
@@ -41,46 +38,56 @@
         <section class="card">
           <h2 id="form-title">Nova aula</h2>
 
-          <div class="row">
-            <div>
-              <label for="module_id">Módulo</label>
-              <select id="module_id">
-                <option value="">Selecione um módulo</option>
-              </select>
+          <form id="lessonForm">
+            <div class="row">
+              <div>
+                <label for="course_id">Curso</label>
+                <select id="course_id">
+                  <option value="">Selecione um curso</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="module_id">Módulo</label>
+                <select id="module_id" disabled>
+                  <option value="">Selecione um módulo</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="order_index">Ordem</label>
+                <input type="number" id="order_index" />
+              </div>
+
+              <div class="full-width">
+                <label for="title">Título da aula</label>
+                <input type="text" id="title" />
+              </div>
+
+              <div class="full-width">
+                <label for="video_url">URL do vídeo (embed)</label>
+                <input type="text" id="video_url" />
+              </div>
+
+              <div class="full-width">
+                <label for="pdf_url">URL do PDF</label>
+                <input type="text" id="pdf_url" />
+              </div>
             </div>
 
-            <div>
-              <label for="order">Ordem</label>
-              <input type="number" id="order" />
+            <div class="actions">
+              <button type="submit">Salvar aula</button>
+              <button id="cancelEditButton" class="secondary hidden" type="button">
+                Cancelar edição
+              </button>
             </div>
-
-            <div class="full-width">
-              <label for="title">Título da aula</label>
-              <input type="text" id="title" />
-            </div>
-
-            <div class="full-width">
-              <label for="video_embed_url">URL do vídeo (embed)</label>
-              <input type="text" id="video_embed_url" />
-            </div>
-
-            <div class="full-width">
-              <label for="pdf_url">URL do PDF</label>
-              <input type="text" id="pdf_url" />
-            </div>
-          </div>
-
-          <div class="actions">
-            <button id="save-btn">Salvar aula</button>
-            <button id="cancel-edit-btn" class="secondary" type="button">Cancelar edição</button>
-          </div>
+          </form>
         </section>
 
         <section class="card">
           <h2>Lista de aulas</h2>
-          <div id="lessonsList"></div>
-          <div id="messageBox"></div>
-            Nenhuma aula cadastrada até o momento.
+          <div id="lessonsList" class="admin-list-stack">
+            <p class="empty-state">Nenhuma aula cadastrada até o momento.</p>
           </div>
         </section>
       </div>
