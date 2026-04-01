@@ -1,15 +1,10 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  const usersMessage = document.getElementById("usersMessage");
+  const messageBox = document.getElementById("messageBox");
   const usersList = document.getElementById("usersList");
 
   function showMessage(type, text) {
-    if (!usersMessage) return;
-    usersMessage.innerHTML = `<div class="message ${type}">${text}</div>`;
-  }
-
-  function clearMessage() {
-    if (!usersMessage) return;
-    usersMessage.innerHTML = "";
+    if (!messageBox) return;
+    messageBox.innerHTML = `<div class="message ${type}">${text}</div>`;
   }
 
   function formatRole(role) {
@@ -37,27 +32,15 @@ document.addEventListener("DOMContentLoaded", async () => {
             </tr>
           </thead>
           <tbody>
-            ${users
-              .map(
-                (user) => `
-                  <tr>
-                    <td>${user.name ?? ""}</td>
-                    <td>${user.last_name ?? ""}</td>
-                    <td class="admin-table-email">${user.email ?? ""}</td>
-                    <td>
-                      <span class="admin-table-role ${user.role}">
-                        ${formatRole(user.role)}
-                      </span>
-                    </td>
-                    <td>
-                      <span class="admin-table-status ${user.is_active ? "active" : "inactive"}">
-                        ${user.is_active ? "Ativo" : "Inativo"}
-                      </span>
-                    </td>
-                  </tr>
-                `
-              )
-              .join("")}
+            ${users.map((user) => `
+              <tr>
+                <td>${user.name ?? ""}</td>
+                <td>${user.last_name ?? ""}</td>
+                <td>${user.email ?? ""}</td>
+                <td>${formatRole(user.role)}</td>
+                <td>${user.is_active ? "Ativo" : "Inativo"}</td>
+              </tr>
+            `).join("")}
           </tbody>
         </table>
       </div>
@@ -65,16 +48,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   try {
-    if (typeof requireAdmin === "function") {
-      await requireAdmin();
-    }
-
-    clearMessage();
-
+    await requireAdmin();
     const users = await apiRequest("/admin/directory/users");
     renderUsers(users);
   } catch (error) {
-    console.error("Erro ao carregar cadastros:", error);
     showMessage("error", error.message || "Erro ao carregar os cadastros.");
   }
 });

@@ -6,11 +6,8 @@
     <title>Admin - Cursos</title>
     <link rel="stylesheet" href="css/style.css" />
   </head>
-
-
-  
-  <body class="admin-page admin-dashboard-page">
-    <header class="site-header">
+  <body class="admin-page">
+    <header class="site-header admin-top-header">
       <div class="page-container">
         <div class="site-header__inner">
           <a href="index.html" class="site-logo">
@@ -19,14 +16,12 @@
               <span class="site-logo__text--blue">Matemática</span><span class="site-logo__text--purple">Essencial</span>
             </span>
           </a>
-
           <nav class="site-nav">
             <a href="admin-dashboard.html" class="btn btn--dark">Voltar para o dashboard</a>
           </nav>
         </div>
       </div>
     </header>
-
 
     <main class="admin-management-main">
       <div class="admin-management-container">
@@ -35,60 +30,59 @@
         <div id="messageBox"></div>
 
         <section class="card">
-          <h2 id="form-title">Novo curso</h2>
+          <h2 id="formTitle">Novo curso</h2>
 
-          <div class="row">
-            <div>
-              <label for="title">Título</label>
-              <input type="text" id="title" />
-            </div>
+          <form id="courseForm">
+            <div class="row">
+              <div>
+                <label for="title">Título</label>
+                <input type="text" id="title" />
+              </div>
 
-            <div>
-              <label for="slug">Slug</label>
-              <input type="text" id="slug" />
-            </div>
+              <div>
+                <label for="slug">Slug</label>
+                <input type="text" id="slug" />
+              </div>
 
-            <div class="full-width">
-              <label for="description">Descrição</label>
-              <textarea id="description"></textarea>
-            </div>
+              <div class="full-width">
+                <label for="description">Descrição</label>
+                <textarea id="description"></textarea>
+              </div>
 
-            <div>
-              <label for="price_cents">Preço (em centavos)</label>
-              <input type="number" id="price_cents" />
-            </div>
+              <div>
+                <label for="price_cents">Preço (em centavos)</label>
+                <input type="number" id="price_cents" />
+              </div>
 
-            <div>
-              <label for="currency">Moeda</label>
-              <input type="text" id="currency" value="BRL" />
-            </div>
+              <div>
+                <label for="currency">Moeda</label>
+                <input type="text" id="currency" value="BRL" />
+              </div>
 
-            <div class="full-width">
-              <div class="checkbox-row">
-                <label class="checkbox-item">
-                  <input type="checkbox" id="is_active" checked />
-                  <span>Curso ativo</span>
+              <div class="full-width">
+                <label style="display:flex; align-items:center; gap:8px;">
+                  <input type="checkbox" id="is_active" checked style="width:auto;" />
+                  Curso ativo
                 </label>
 
-                <label class="checkbox-item">
-                  <input type="checkbox" id="is_published" />
-                  <span>Curso publicado</span>
+                <label style="display:flex; align-items:center; gap:8px; margin-top:10px;">
+                  <input type="checkbox" id="is_published" style="width:auto;" />
+                  Curso publicado
                 </label>
               </div>
             </div>
-          </div>
 
-          <div class="actions">
-            <button id="save-btn">Salvar curso</button>
-            <button id="cancel-edit-btn" class="secondary" type="button">Cancelar edição</button>
-          </div>
+            <div class="actions">
+              <button type="submit">Salvar curso</button>
+              <button id="cancelEditButton" class="secondary hidden" type="button">Cancelar edição</button>
+            </div>
+          </form>
         </section>
 
         <section class="card">
           <h2>Lista de cursos</h2>
-          <div id="coursesList" class="admin-list-stack"></div>
-          <div id="empty-state" class="empty-state" style="display:none;">
-            Nenhum curso cadastrado até o momento.
+          <div id="coursesList" class="admin-list-stack">
+            <p class="empty-state">Nenhum curso cadastrado até o momento.</p>
           </div>
         </section>
       </div>

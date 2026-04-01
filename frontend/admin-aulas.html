@@ -6,22 +6,16 @@
     <title>Admin - Aulas</title>
     <link rel="stylesheet" href="css/style.css" />
   </head>
-
-  <body class="admin-page admin-dashboard-page">
-    <header class="site-header">
+  <body class="admin-page">
+    <header class="site-header admin-top-header">
       <div class="page-container">
         <div class="site-header__inner">
           <a href="index.html" class="site-logo">
-            <img
-              src="assets/Logo_Mariana.jpg"
-              alt="Logo Mariana Lima"
-              class="site-logo__img"
-            />
+            <img src="assets/Logo_Mariana.jpg" alt="Logo Mariana Lima" class="site-logo__img" />
             <span class="site-logo__text">
               <span class="site-logo__text--blue">Matemática</span><span class="site-logo__text--purple">Essencial</span>
             </span>
           </a>
-
           <nav class="site-nav">
             <a href="admin-dashboard.html" class="btn btn--dark">Voltar para o dashboard</a>
           </nav>
@@ -36,7 +30,7 @@
         <div id="messageBox"></div>
 
         <section class="card">
-          <h2 id="form-title">Nova aula</h2>
+          <h2 id="formTitle">Nova aula</h2>
 
           <form id="lessonForm">
             <div class="row">
@@ -55,8 +49,8 @@
               </div>
 
               <div>
-                <label for="order_index">Ordem</label>
-                <input type="number" id="order_index" />
+                <label for="order">Ordem</label>
+                <input type="number" id="order" />
               </div>
 
               <div class="full-width">
@@ -65,8 +59,8 @@
               </div>
 
               <div class="full-width">
-                <label for="video_url">URL do vídeo (embed)</label>
-                <input type="text" id="video_url" />
+                <label for="video_embed_url">URL do vídeo (embed)</label>
+                <input type="text" id="video_embed_url" />
               </div>
 
               <div class="full-width">
@@ -77,9 +71,7 @@
 
             <div class="actions">
               <button type="submit">Salvar aula</button>
-              <button id="cancelEditButton" class="secondary hidden" type="button">
-                Cancelar edição
-              </button>
+              <button id="cancelEditButton" class="secondary hidden" type="button">Cancelar edição</button>
             </div>
           </form>
         </section>
