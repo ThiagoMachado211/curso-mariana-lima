@@ -905,12 +905,13 @@ img {
 ========================================================= */
 
 .admin-dashboard-page {
-  background: var(--bg-dark);
+  background: white;
   color: var(--text-light);
 }
 
 .admin-dashboard-page .site-header {
-  background: white;
+  background: black;
+  margin-bottom: 5px;
 }
 
 .admin-dashboard-page main {
