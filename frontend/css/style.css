@@ -907,7 +907,6 @@ img {
 .admin-dashboard-page {
   background: black;
   color: var(--text-light);
-  border-bottom: 2px solid white;
   margin-bottom: 10px;
 }
 
