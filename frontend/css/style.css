@@ -147,7 +147,7 @@ img {
 .site-header {
   width: 100%;
   border-bottom: 1px solid var(--border-dark);
-  background: rgba(0, 0, 0, 0.95);
+  background: black;
   position: sticky;
   top: 0;
   z-index: 1000;
