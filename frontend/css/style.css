@@ -907,12 +907,14 @@ img {
 .admin-dashboard-page {
   background: black;
   color: var(--text-light);
-  border-bottom: 5px solid white;
+  border-bottom: 2px solid white;
+  margin-bottom: 10px;
 }
 
 .admin-dashboard-page .site-header {
   background: black;
-  border-bottom: 5px solid white;
+  border-bottom: 2px solid white;
+  margin-bottom: 10px;
 }
 
 .admin-dashboard-page main {
@@ -920,7 +922,8 @@ img {
   max-width: var(--container);
   margin: 0 auto;
   background: black;
-  border-bottom: 5px solid white;
+  border-bottom: 2px solid white;
+  margin-bottom: 10px;
 }
 
 .admin-page__top {
@@ -974,7 +977,8 @@ img {
   background: black;
   color: #fff;
   min-height: 100vh;
-  border-bottom: 5px solid white;
+  border-bottom: 2px solid white;
+  margin-bottom: 10px;
 }
 
 .admin-dashboard-main {
