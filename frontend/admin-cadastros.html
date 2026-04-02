@@ -1,44 +1,134 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin - Cadastros</title>
-    <link rel="stylesheet" href="css/style.css" />
-  </head>
-  <body class="admin-page admin-dashboard-page">
-    <header class="site-header">
-      <div class="page-container">
-        <div class="site-header__inner">
-          <a href="index.html" class="site-logo">
-            <img src="assets/Logo_Mariana.jpg" alt="Logo Mariana Lima" class="site-logo__img" />
-            <span class="site-logo__text">
-              <span class="site-logo__text--blue">Matemática</span><span class="site-logo__text--purple">Essencial</span>
-            </span>
-          </a>
-          <nav class="site-nav">
-            <a href="admin-dashboard.html" class="btn btn--dark" style="background-color:lightgrey; color:black;">Voltar para o dashboard</a>
-          </nav>
-        </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin | Cadastros</title>
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+<body>
+  <header class="admin-header">
+    <div class="admin-header-left">
+      <img src="./assets/logo.png" alt="Logo" class="logo" />
+      <span class="brand-name">Plataforma</span>
+    </div>
+
+    <h1 class="admin-header-title">Cadastros</h1>
+
+    <div class="admin-header-right">
+      <a href="./admin-dashboard.html" class="header-btn">Voltar para dashboard</a>
+      <button id="logoutButton" class="header-btn danger-btn" type="button">Sair</button>
+    </div>
+  </header>
+
+  <main class="admin-page">
+    <section class="page-toolbar">
+      <div>
+        <h2>Gerenciamento de usuários</h2>
+        <p>Crie, edite, desative usuários e gerencie matrículas.</p>
       </div>
-    </header>
 
-    <main class="admin-management-main">
-      <div class="admin-management-container">
-        <h1 class="admin-management-title">Gerenciamento de Cadastros</h1>
+      <button id="openCreateUserModalButton" class="primary-btn" type="button">
+        Novo cadastro
+      </button>
+    </section>
 
-        <div id="messageBox"></div>
+    <section id="feedbackMessage" class="feedback hidden"></section>
 
-        <section class="card">
-          <h2>Cadastros realizados</h2>
-          <div id="usersList">
-            <p class="empty-state">Nenhum cadastro encontrado.</p>
+    <section id="usersList" class="cards-list">
+      <div class="empty-state">Carregando usuários...</div>
+    </section>
+  </main>
+
+  <div id="userModal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="userModalTitle">Novo cadastro</h2>
+        <button type="button" id="closeUserModalButton" class="icon-close-btn">×</button>
+      </div>
+
+      <form id="userForm" class="form-grid">
+        <input type="hidden" id="userId" />
+
+        <div class="form-row">
+          <label for="name">Nome</label>
+          <input type="text" id="name" required />
+        </div>
+
+        <div class="form-row">
+          <label for="lastName">Sobrenome</label>
+          <input type="text" id="lastName" required />
+        </div>
+
+        <div class="form-row">
+          <label for="email">E-mail</label>
+          <input type="email" id="email" required />
+        </div>
+
+        <div class="form-row" id="passwordRow">
+          <label for="password">Senha</label>
+          <input type="password" id="password" minlength="6" />
+        </div>
+
+        <div class="form-row">
+          <label for="role">Perfil</label>
+          <select id="role" required>
+            <option value="student">Aluno</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <label for="isActive">Status</label>
+          <select id="isActive">
+            <option value="true">Ativo</option>
+            <option value="false">Inativo</option>
+          </select>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" id="cancelUserModalButton" class="secondary-btn">Cancelar</button>
+          <button type="submit" id="saveUserButton" class="primary-btn">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="enrollmentModal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content modal-lg">
+      <div class="modal-header">
+        <div>
+          <h2>Gerenciar matrículas</h2>
+          <p id="enrollmentStudentName" class="modal-subtitle"></p>
+        </div>
+        <button type="button" id="closeEnrollmentModalButton" class="icon-close-btn">×</button>
+      </div>
+
+      <div class="enrollment-layout">
+        <section class="enrollment-panel">
+          <h3>Matricular em curso</h3>
+          <div class="inline-form">
+            <select id="courseSelect"></select>
+            <button id="enrollButton" type="button" class="primary-btn">Matricular</button>
           </div>
         </section>
-      </div>
-    </main>
 
-    <script src="js/api.js"></script>
-    <script src="js/admin-cadastros.js"></script>
-  </body>
+        <section class="enrollment-panel">
+          <h3>Matrículas do aluno</h3>
+          <div id="studentEnrollmentsList" class="enrollment-list"></div>
+        </section>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" id="closeEnrollmentFooterButton" class="secondary-btn">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./js/api.js"></script>
+  <script src="./js/auth.js"></script>
+  <script src="./js/admin-cadastros.js"></script>
+</body>
 </html>

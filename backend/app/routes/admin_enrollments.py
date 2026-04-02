@@ -1,136 +1,157 @@
-import uuid
+from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from app.core.deps import get_current_user
 from app.db.deps import get_db
 from app.models.course import Course
 from app.models.enrollment import Enrollment
 from app.models.user import User
-from app.schemas.enrollment import EnrollmentCreate, EnrollmentOut
+from app.routes.auth import get_current_admin_user
 
-router = APIRouter(prefix="/admin/enrollments", tags=["admin-enrollments"])
-
-
-def ensure_admin(current_user: User):
-    if current_user.role != "admin":
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Apenas administradores podem acessar esta área.",
-        )
+router = APIRouter(prefix="/admin/users", tags=["Admin Enrollments"])
 
 
-@router.get("", response_model=list[EnrollmentOut])
-def list_enrollments(
+class EnrollmentCreatePayload(BaseModel):
+    course_id: UUID
+
+
+@router.get("/{user_id}/enrollments")
+def list_user_enrollments(
+    user_id: UUID,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_admin: User = Depends(get_current_admin_user),
 ):
-    ensure_admin(current_user)
-
-    enrollments = (
-        db.query(Enrollment)
-        .filter(Enrollment.tenant_id == current_user.tenant_id)
-        .order_by(Enrollment.created_at.desc())
-        .all()
-    )
-    return enrollments
-
-
-@router.post("", response_model=EnrollmentOut, status_code=status.HTTP_201_CREATED)
-def create_enrollment(
-    payload: EnrollmentCreate,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
-):
-    ensure_admin(current_user)
-
-    student = (
+    user = (
         db.query(User)
         .filter(
-            User.id == payload.user_id,
-            User.tenant_id == current_user.tenant_id,
-            User.role == "student",
-            User.is_active == True,
+            User.id == user_id,
+            User.tenant_id == current_admin.tenant_id,
         )
         .first()
     )
 
-    if not student:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Aluno não encontrado.",
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuário não encontrado.")
+
+    enrollments = (
+        db.query(Enrollment, Course)
+        .join(Course, Enrollment.course_id == Course.id)
+        .filter(
+            Enrollment.user_id == user.id,
+            Enrollment.tenant_id == current_admin.tenant_id,
+            Course.tenant_id == current_admin.tenant_id,
         )
+        .order_by(Course.title.asc())
+        .all()
+    )
+
+    return [
+        {
+            "course_id": course.id,
+            "course_title": course.title,
+            "status": enrollment.status,
+        }
+        for enrollment, course in enrollments
+    ]
+
+
+@router.post("/{user_id}/enrollments", status_code=status.HTTP_201_CREATED)
+def enroll_user_in_course(
+    user_id: UUID,
+    payload: EnrollmentCreatePayload,
+    db: Session = Depends(get_db),
+    current_admin: User = Depends(get_current_admin_user),
+):
+    user = (
+        db.query(User)
+        .filter(
+            User.id == user_id,
+            User.tenant_id == current_admin.tenant_id,
+        )
+        .first()
+    )
+
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuário não encontrado.")
 
     course = (
         db.query(Course)
         .filter(
             Course.id == payload.course_id,
-            Course.tenant_id == current_user.tenant_id,
-            Course.is_active == True,
+            Course.tenant_id == current_admin.tenant_id,
         )
         .first()
     )
 
     if not course:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Curso não encontrado.",
-        )
-
-    existing = (
-        db.query(Enrollment)
-        .filter(
-            Enrollment.tenant_id == current_user.tenant_id,
-            Enrollment.user_id == payload.user_id,
-            Enrollment.course_id == payload.course_id,
-        )
-        .first()
-    )
-
-    if existing:
-        if existing.status != "active":
-            existing.status = "active"
-            db.commit()
-            db.refresh(existing)
-        return existing
-
-    enrollment = Enrollment(
-        tenant_id=current_user.tenant_id,
-        user_id=payload.user_id,
-        course_id=payload.course_id,
-        status="active",
-    )
-
-    db.add(enrollment)
-    db.commit()
-    db.refresh(enrollment)
-
-    return enrollment
-
-
-@router.delete("/{enrollment_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_enrollment(
-    enrollment_id: uuid.UUID,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
-):
-    ensure_admin(current_user)
+        raise HTTPException(status_code=404, detail="Curso não encontrado.")
 
     enrollment = (
         db.query(Enrollment)
         .filter(
-            Enrollment.id == enrollment_id,
-            Enrollment.tenant_id == current_user.tenant_id,
+            Enrollment.user_id == user.id,
+            Enrollment.course_id == course.id,
+            Enrollment.tenant_id == current_admin.tenant_id,
+        )
+        .first()
+    )
+
+    if enrollment:
+        if enrollment.status == "active":
+            raise HTTPException(status_code=400, detail="Aluno já está matriculado neste curso.")
+
+        enrollment.status = "active"
+        db.commit()
+        return {"message": "Matrícula reativada com sucesso."}
+
+    db.add(
+        Enrollment(
+            tenant_id=current_admin.tenant_id,
+            user_id=user.id,
+            course_id=course.id,
+            status="active",
+        )
+    )
+    db.commit()
+
+    return {"message": "Aluno matriculado com sucesso."}
+
+
+@router.delete("/{user_id}/enrollments/{course_id}")
+def unenroll_user_from_course(
+    user_id: UUID,
+    course_id: UUID,
+    db: Session = Depends(get_db),
+    current_admin: User = Depends(get_current_admin_user),
+):
+    user = (
+        db.query(User)
+        .filter(
+            User.id == user_id,
+            User.tenant_id == current_admin.tenant_id,
+        )
+        .first()
+    )
+
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuário não encontrado.")
+
+    enrollment = (
+        db.query(Enrollment)
+        .filter(
+            Enrollment.user_id == user.id,
+            Enrollment.course_id == course_id,
+            Enrollment.tenant_id == current_admin.tenant_id,
         )
         .first()
     )
 
     if not enrollment:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Matrícula não encontrada.",
-        )
+        raise HTTPException(status_code=404, detail="Matrícula não encontrada.")
 
-    db.delete(enrollment)
+    enrollment.status = "cancelled"
     db.commit()
+
+    return {"message": "Aluno desmatriculado com sucesso."}

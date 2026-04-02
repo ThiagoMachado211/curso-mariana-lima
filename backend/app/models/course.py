@@ -4,7 +4,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base
-from app.models.lesson_progress import LessonProgress
+
 
 class Course(Base):
     __tablename__ = "courses"

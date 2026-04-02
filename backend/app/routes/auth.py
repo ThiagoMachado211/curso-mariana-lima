@@ -20,6 +20,15 @@ from app.core.deps import get_current_user
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
+def get_current_admin_user(user: User = Depends(get_current_user)) -> User:
+    if user.role != "admin":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Acesso permitido apenas para administradores.",
+        )
+    return user
+
+
 def build_tenant_slug_from_email(email: str) -> str:
     base = email.split("@")[0].strip().lower()
     base = re.sub(r"[^a-z0-9]+", "-", base).strip("-")
@@ -53,6 +62,7 @@ def enroll_user_in_default_course(db: Session, user: User):
         return
 
     enrollment = Enrollment(
+        tenant_id=user.tenant_id,
         user_id=user.id,
         course_id=default_course.id,
         status="active",

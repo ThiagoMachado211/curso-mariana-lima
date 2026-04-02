@@ -8,6 +8,8 @@ from app.db.deps import get_db
 from app.models.course import Course
 from app.models.user import User
 from app.schemas.course import CourseCreate, CourseOut, CourseUpdate
+from app.routes.auth import get_current_admin_user
+
 
 router = APIRouter(prefix="/admin/courses", tags=["admin-courses"])
 
@@ -128,6 +130,27 @@ def update_course(
     db.commit()
     db.refresh(course)
     return course
+
+
+@router.get("/options")
+def list_courses_options(
+    db: Session = Depends(get_db),
+    current_admin: User = Depends(get_current_admin_user),
+):
+    courses = (
+        db.query(Course)
+        .filter(Course.tenant_id == current_admin.tenant_id)
+        .order_by(Course.title.asc())
+        .all()
+    )
+
+    return [
+        {
+            "id": course.id,
+            "title": course.title,
+        }
+        for course in courses
+    ]
 
 
 @router.delete("/{course_id}", status_code=status.HTTP_204_NO_CONTENT)
