@@ -14,6 +14,9 @@ from app.routes.admin_lessons import router as admin_lessons_router
 from app.routes.admin_courses import router as admin_courses_router
 from app.routes.admin_enrollments import router as admin_enrollments_router
 from app.routes.admin_directory import router as admin_directory_router
+from app.routes.users import router as users_router
+from app.routes import student
+
 
 app = FastAPI(title=settings.app_name)
 
@@ -41,6 +44,7 @@ app.include_router(admin_billing.router)
 app.include_router(billing.router)
 app.include_router(webhooks.router)
 app.include_router(student.router)
+app.include_router(users_router)
 
 
 @app.get("/health")

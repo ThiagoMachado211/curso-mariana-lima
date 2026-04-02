@@ -3,57 +3,40 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard</title>
+    <title>Dashboard do Aluno</title>
     <link rel="stylesheet" href="css/style.css" />
-
   </head>
+  <body class="student-page">
+    <header class="site-header student-top-header">
+      <div class="page-container">
+        <div class="site-header__inner">
+          <a href="dashboard.html" class="site-logo">
+            <img src="assets/Logo_Mariana.jpg" alt="Logo Mariana Lima" class="site-logo__img" />
+            <span class="site-logo__text">
+              <span class="site-logo__text--blue">Matemática</span><span class="site-logo__text--purple">Essencial</span>
+            </span>
+          </a>
 
-
-
-  <body class="public-page courses-page">
-    <header>
-      <h1>Painel da Plataforma</h1>
-      <button id="logoutButton" class="logoutButton">Sair</button>
+          <nav class="site-nav">
+            <a href="curso.html" class="btn btn--dark">Curso</a>
+            <a href="perfil.html" class="btn btn--dark">Perfil</a>
+            <button id="logoutButton" class="btn btn--dark" type="button">Sair</button>
+          </nav>
+        </div>
+      </div>
     </header>
 
-    <main>
-      <section class="welcome-card">
-        <div id="welcome-title" class="welcome-title">Bem-vindo(a)!</div>
-        <div id="welcome-subtitle" class="welcome-subtitle">
-          Carregando informações do seu perfil...
-        </div>
-      </section>
+    <main class="student-main">
+      <div class="student-container">
+        <h1 class="student-page-title">Dashboard do Aluno</h1>
 
-      <section>
-        <h2 class="section-title">Acessos rápidos</h2>
+        <div id="messageBox" class="student-message"></div>
 
-        <div id="cards-grid" class="cards-grid">
-          <a href="cursos.html" class="nav-card" id="card-student-courses">
-            <div class="nav-card-title">Meus cursos</div>
-            <div class="nav-card-text">Acesse seus cursos, módulos, aulas e conteúdos.</div>
-          </a>
-
-          <a href="admin-cursos.html" class="nav-card hidden" id="card-admin-courses">
-            <div class="nav-card-title">Gerenciar cursos</div>
-            <div class="nav-card-text">Crie, edite e publique cursos.</div>
-          </a>
-
-          <a href="admin-modulos.html" class="nav-card hidden" id="card-admin-modules">
-            <div class="nav-card-title">Gerenciar módulos</div>
-            <div class="nav-card-text">Organize os módulos de cada curso.</div>
-          </a>
-
-          <a href="admin-aulas.html" class="nav-card hidden" id="card-admin-lessons">
-            <div class="nav-card-title">Gerenciar aulas</div>
-            <div class="nav-card-text">Cadastre vídeos, PDFs e ordem das aulas.</div>
-          </a>
-
-          <a href="admin-matriculas.html" class="nav-card hidden" id="card-admin-enrollments">
-            <div class="nav-card-title">Gerenciar matrículas</div>
-            <div class="nav-card-text">Associe alunos aos cursos manualmente.</div>
-          </a>
-        </div>
-      </section>
+        <section class="student-card">
+          <h2>Boas-vindas</h2>
+          <p id="welcomeText">Carregando informações do aluno...</p>
+        </section>
+      </div>
     </main>
 
     <script src="js/api.js"></script>

@@ -15,4 +15,4 @@ class Module(Base):
     course_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("courses.id"), index=True, nullable=False)
 
     title: Mapped[str] = mapped_column(String(200), nullable=False)
-    order: Mapped[int] = mapped_column(Integer, default=1, nullable=False)
+    order: Mapped[int] = mapped_column(nullable=False, default=0)

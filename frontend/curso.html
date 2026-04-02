@@ -3,41 +3,62 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Curso - Matemática Essencial</title>
+    <title>Curso do Aluno</title>
     <link rel="stylesheet" href="css/style.css" />
   </head>
+  <body class="student-page">
+    <header class="site-header student-top-header">
+      <div class="page-container">
+        <div class="site-header__inner">
+          <a href="dashboard.html" class="site-logo">
+            <img src="assets/Logo_Mariana.jpg" alt="Logo Mariana Lima" class="site-logo__img" />
+            <span class="site-logo__text">
+              <span class="site-logo__text--blue">Matemática</span><span class="site-logo__text--purple">Essencial</span>
+            </span>
+          </a>
 
-
-
-  <body class="public-page course-page">
-    <header class="site-header">
-      <div class="page-container site-header__inner">
-        <a href="index.html" class="site-logo">
-          <img src="assets/Logo_Mariana.jpg" alt="Logo Mariana Lima" class="site-logo__img" />
-          <span class="site-logo__text">
-            <span class="site-logo__text--blue">Matemática</span><span class="site-logo__text--purple">Essencial</span>
-          </span>
-        </a>
-
-        <nav class="site-nav">
-          <a href="dashboard.html" class="btn btn--dark">Dashboard</a>
-          <a href="cursos.html" class="btn btn--dark">Cursos</a>
-          <button id="logoutButton" class="btn btn--purple">Sair</button>
-        </nav>
+          <nav class="site-nav">
+            <a href="dashboard.html" class="btn btn--dark">Dashboard</a>
+            <a href="perfil.html" class="btn btn--dark">Perfil</a>
+            <button id="logoutButton" class="btn btn--dark" type="button">Sair</button>
+          </nav>
+        </div>
       </div>
     </header>
 
-    <main class="course-page">
-      <div id="courseFeedback" class="course-feedback"></div>
+    <main class="student-main">
+      <div class="student-container">
+        <div id="messageBox" class="student-message"></div>
 
-      <section class="course-header">
-        <h1 id="courseTitle" class="course-title">Carregando curso...</h1>
-        <p id="courseDescription" class="course-description"></p>
-        <div id="courseMeta" class="course-meta"></div>
-      </section>
+        <div class="student-course-layout">
+          <section>
+            <div class="student-course-player">
+              <div class="student-course-video" id="videoContainer">
+                <iframe
+                  id="lessonVideo"
+                  src=""
+                  title="Aula"
+                  allowfullscreen
+                ></iframe>
+              </div>
 
-      <h2 class="modules-title">Módulos</h2>
-      <div id="modulesGrid" class="modules-grid"></div>
+              <div class="student-course-content">
+                <h1 class="student-course-title" id="lessonTitle">Selecione uma aula</h1>
+                <p class="student-course-description" id="lessonDescription">
+                  Escolha uma aula no painel lateral para começar.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <aside class="student-course-sidebar">
+            <h3>Conteúdo do curso</h3>
+            <div id="courseContent">
+              <p class="empty-state">Carregando módulos e aulas...</p>
+            </div>
+          </aside>
+        </div>
+      </div>
     </main>
 
     <script src="js/api.js"></script>

@@ -3,49 +3,96 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Perfil - Matemática Essencial</title>
+    <title>Perfil do Aluno</title>
     <link rel="stylesheet" href="css/style.css" />
   </head>
+  <body class="student-page">
+    <header class="site-header student-top-header">
+      <div class="page-container">
+        <div class="site-header__inner">
+          <a href="dashboard.html" class="site-logo">
+            <img src="assets/Logo_Mariana.jpg" alt="Logo Mariana Lima" class="site-logo__img" />
+            <span class="site-logo__text">
+              <span class="site-logo__text--blue">Matemática</span><span class="site-logo__text--purple">Essencial</span>
+            </span>
+          </a>
 
-
-
-  <body class="public-page profile-page">
-    <header class="site-header">
-      <div class="page-container site-header__inner">
-        <a href="index.html" class="site-logo">
-          <img src="assets/Logo_Mariana.jpg" alt="Logo Mariana Lima" class="site-logo__img" />
-          <span class="site-logo__text">
-            <span class="site-logo__text--blue">Matemática</span><span class="site-logo__text--purple">Essencial</span>
-          </span>
-        </a>
-
-        <nav class="site-nav">
-          <a href="dashboard.html" class="btn btn--dark">Dashboard</a>
-          <a href="curso.html" class="btn btn--dark">Curso</a>
-        </nav>
+          <nav class="site-nav">
+            <a href="curso.html" class="btn btn--dark">Curso</a>
+            <a href="dashboard.html" class="btn btn--dark">Dashboard</a>
+            <button id="logoutButton" class="btn btn--dark" type="button">Sair</button>
+          </nav>
+        </div>
       </div>
     </header>
 
-    <main class="profile-page">
-      <h1 class="profile-page__title">Perfil</h1>
-      <p class="profile-page__subtitle">Área reservada para dados do aluno.</p>
+    <main class="student-main">
+      <div class="student-container">
+        <h1 class="student-page-title">Perfil</h1>
 
-      <div class="profile-grid">
-        <div class="profile-card">
-          <h3 class="profile-card__title">Nome</h3>
-          <p class="profile-card__text">Aluno da plataforma</p>
-        </div>
+        <div id="messageBox" class="student-message"></div>
 
-        <div class="profile-card">
-          <h3 class="profile-card__title">Email</h3>
-          <p class="profile-card__text">email@exemplo.com</p>
-        </div>
+        <section class="student-card" id="profileCard">
+          <h2>Dados do aluno</h2>
 
-        <div class="profile-card">
-          <h3 class="profile-card__title">Status</h3>
-          <p class="profile-card__text">Conta ativa</p>
-        </div>
+          <div class="student-profile-grid">
+            <div class="student-profile-item">
+              <span class="student-profile-label">Nome</span>
+              <span class="student-profile-value" id="profileName">-</span>
+            </div>
+
+            <div class="student-profile-item">
+              <span class="student-profile-label">Sobrenome</span>
+              <span class="student-profile-value" id="profileLastName">-</span>
+            </div>
+
+            <div class="student-profile-item">
+              <span class="student-profile-label">Email</span>
+              <span class="student-profile-value" id="profileEmail">-</span>
+            </div>
+
+            <div class="student-profile-item">
+              <span class="student-profile-label">Perfil</span>
+              <span class="student-profile-value" id="profileRole">-</span>
+            </div>
+          </div>
+
+          <div class="actions" style="margin-top: 18px;">
+            <button id="editProfileButton" type="button">Editar perfil</button>
+          </div>
+        </section>
+
+        <section class="student-card hidden" id="profileFormCard">
+          <h2>Editar perfil</h2>
+
+          <form id="profileForm" class="student-form">
+            <div class="row">
+              <div>
+                <label for="name">Nome</label>
+                <input type="text" id="name" />
+              </div>
+
+              <div>
+                <label for="last_name">Sobrenome</label>
+                <input type="text" id="last_name" />
+              </div>
+
+              <div class="full-width">
+                <label for="email">Email</label>
+                <input type="email" id="email" />
+              </div>
+            </div>
+
+            <div class="actions">
+              <button type="submit">Salvar alterações</button>
+              <button type="button" id="cancelEditProfile" class="secondary">Cancelar</button>
+            </div>
+          </form>
+        </section>
       </div>
     </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/perfil.js"></script>
   </body>
 </html>

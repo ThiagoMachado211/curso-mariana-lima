@@ -1794,6 +1794,284 @@ img {
 
 
 /* =========================================================
+   STUDENT AREA MASTER
+========================================================= */
+
+.student-page {
+  background: #000;
+  min-height: 100vh;
+  color: #fff;
+}
+
+.student-top-header {
+  background: #07122c;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.student-main {
+  background: #000;
+  min-height: calc(100vh - 72px);
+  padding: 36px 24px 80px;
+}
+
+.student-container {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.student-page-title {
+  text-align: center;
+  color: #fff;
+  font-size: 42px;
+  line-height: 1.1;
+  font-weight: 800;
+  margin-bottom: 28px;
+}
+
+.student-card {
+  background: #f3f4f6;
+  border-radius: 18px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  margin-bottom: 22px;
+  color: #0f172a;
+}
+
+.student-card h2 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: #0f172a;
+  font-size: 24px;
+}
+
+.student-card p {
+  color: #334155;
+  line-height: 1.7;
+}
+
+.student-message {
+  margin-bottom: 18px;
+}
+
+.student-profile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.student-profile-item {
+  background: #fff;
+  border: 1px solid #dbe3ef;
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.student-profile-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: #475569;
+  margin-bottom: 6px;
+}
+
+.student-profile-value {
+  font-size: 15px;
+  color: #0f172a;
+}
+
+.student-form .row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.student-form label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: bold;
+  font-size: 14px;
+  color: #0f172a;
+}
+
+.student-form input,
+.student-form textarea,
+.student-form select,
+.student-form button {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.student-form .actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.student-form button {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+}
+
+.student-form button:hover {
+  background: #1d4ed8;
+}
+
+.student-form .secondary {
+  background: #475569;
+}
+
+.student-form .secondary:hover {
+  background: #334155;
+}
+
+
+
+/* =========================================================
+   STUDENT COURSE PAGE (estilo Udemy)
+========================================================= */
+
+.student-course-layout {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 24px;
+  align-items: start;
+}
+
+.student-course-player {
+  background: #111827;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.student-course-video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+}
+
+.student-course-video iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.student-course-content {
+  background: #f3f4f6;
+  padding: 24px;
+  color: #0f172a;
+}
+
+.student-course-title {
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.student-course-description {
+  color: #334155;
+  line-height: 1.8;
+}
+
+.student-course-sidebar {
+  background: #f8fafc;
+  border-radius: 18px;
+  padding: 18px;
+  color: #0f172a;
+  border: 1px solid #dbe3ef;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  position: sticky;
+  top: 20px;
+}
+
+.student-course-sidebar h3 {
+  margin: 0 0 14px 0;
+  font-size: 22px;
+}
+
+.student-section {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 14px;
+  margin-top: 14px;
+}
+
+.student-section:first-child {
+  border-top: none;
+  padding-top: 0;
+  margin-top: 0;
+}
+
+.student-section-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.student-lesson-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.student-lesson-item {
+  display: block;
+  padding: 12px;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid #dbe3ef;
+  color: #0f172a;
+  transition: 0.2s ease;
+}
+
+.student-lesson-item:hover {
+  background: #eff6ff;
+  border-color: #93c5fd;
+}
+
+.student-lesson-item.active {
+  background: #dbeafe;
+  border-color: #2563eb;
+}
+
+.student-lesson-item-title {
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.student-lesson-item-meta {
+  font-size: 13px;
+  color: #64748b;
+}
+
+@media (max-width: 960px) {
+  .student-course-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .student-course-sidebar {
+    position: static;
+    max-height: none;
+  }
+
+  .student-profile-grid,
+  .student-form .row {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+
+
+/* =========================================================
    ADMIN MANAGEMENT PAGES
 ========================================================= */
 
