@@ -9,6 +9,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   const submitButton = form?.querySelector('button[type="submit"]');
 
   let editingModuleId = null;
+  let coursesCache = [];
+  let modulesCache = [];
 
   function showMessage(type, text) {
     if (!messageBox) return;
@@ -39,39 +41,53 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   async function loadCourses() {
     const courses = await apiRequest("/admin/directory/courses");
+    coursesCache = Array.isArray(courses) ? courses : [];
+
     courseSelect.innerHTML = `
       <option value="">Selecione um curso</option>
-      ${courses.map((course) => `<option value="${course.id}">${course.title}</option>`).join("")}
+      ${coursesCache
+        .map((course) => `<option value="${course.id}">${course.title}</option>`)
+        .join("")}
     `;
   }
 
   async function loadModules() {
     const modules = await apiRequest("/admin/modules");
+    modulesCache = Array.isArray(modules) ? modules : [];
 
-    if (!Array.isArray(modules) || modules.length === 0) {
+    if (modulesCache.length === 0) {
       modulesList.innerHTML = `<p class="empty-state">Nenhum módulo encontrado.</p>`;
       return;
     }
 
-    modulesList.innerHTML = modules.map((module) => `
-      <div class="admin-list-card">
-        <div class="admin-list-card-title">${module.title ?? ""}</div>
+    modulesList.innerHTML = modulesCache
+      .map((module) => {
+        const courseTitle =
+          module.course_title ||
+          coursesCache.find((course) => String(course.id) === String(module.course_id))?.title ||
+          "-";
 
-        <div class="admin-list-card-meta">
-          <div><strong>Curso:</strong> ${module.course_title || "-"}</div>
-          <div><strong>Ordem:</strong> ${module.order ?? "-"}</div>
-        </div>
+        return `
+          <div class="admin-list-card">
+            <div class="admin-list-card-title">${module.title ?? ""}</div>
 
-        <div style="margin-top:12px;">
-          <span class="admin-soft-badge blue">Módulo</span>
-        </div>
+            <div class="admin-list-card-meta">
+              <div><strong>Curso:</strong> ${courseTitle}</div>
+              <div><strong>Ordem:</strong> ${module.order ?? "-"}</div>
+            </div>
 
-        <div class="admin-list-card-actions">
-          <button type="button" data-action="edit" data-id="${module.id}">Editar</button>
-          <button type="button" class="danger" data-action="delete" data-id="${module.id}">Excluir</button>
-        </div>
-      </div>
-    `).join("");
+            <div style="margin-top:12px;">
+              <span class="admin-soft-badge blue">Módulo</span>
+            </div>
+
+            <div class="admin-list-card-actions">
+              <button type="button" data-action="edit" data-id="${module.id}">Editar</button>
+              <button type="button" class="danger" data-action="delete" data-id="${module.id}">Excluir</button>
+            </div>
+          </div>
+        `;
+      })
+      .join("");
   }
 
   async function handleSubmit(event) {
@@ -125,7 +141,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     const id = button.dataset.id;
 
     if (action === "edit") {
-      const module = await apiRequest(`/admin/modules/${id}`);
+      const module = modulesCache.find((item) => String(item.id) === String(id));
+
+      if (!module) {
+        showMessage("error", "Módulo não encontrado para edição.");
+        return;
+      }
+
       fillForm(module);
       return;
     }
@@ -135,7 +157,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       try {
         await apiRequest(`/admin/modules/${id}`, { method: "DELETE" });
+
         if (editingModuleId === id) resetForm();
+
         showMessage("success", "Módulo excluído com sucesso.");
         await loadModules();
       } catch (error) {
@@ -149,6 +173,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     form.addEventListener("submit", handleSubmit);
     cancelEditButton.addEventListener("click", resetForm);
     modulesList.addEventListener("click", handleListClick);
+
     resetForm();
     await loadCourses();
     await loadModules();

@@ -12,7 +12,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   const submitButton = form?.querySelector('button[type="submit"]');
 
   let editingLessonId = null;
+  let coursesCache = [];
   let modulesCache = [];
+  let lessonsCache = [];
 
   function showMessage(type, text) {
     if (!messageBox) return;
@@ -34,11 +36,23 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function fillModules(courseId, selected = "") {
-    const filtered = modulesCache.filter((m) => String(m.course_id) === String(courseId));
+    const filtered = modulesCache.filter(
+      (module) => String(module.course_id) === String(courseId)
+    );
+
     moduleSelect.innerHTML = `
       <option value="">Selecione um módulo</option>
-      ${filtered.map((m) => `<option value="${m.id}" ${String(m.id) === String(selected) ? "selected" : ""}>${m.title}</option>`).join("")}
+      ${filtered
+        .map(
+          (module) => `
+            <option value="${module.id}" ${String(module.id) === String(selected) ? "selected" : ""}>
+              ${module.title}
+            </option>
+          `
+        )
+        .join("")}
     `;
+
     moduleSelect.disabled = filtered.length === 0;
   }
 
@@ -57,9 +71,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   async function loadCourses() {
     const courses = await apiRequest("/admin/directory/courses");
+    coursesCache = Array.isArray(courses) ? courses : [];
+
     courseSelect.innerHTML = `
       <option value="">Selecione um curso</option>
-      ${courses.map((course) => `<option value="${course.id}">${course.title}</option>`).join("")}
+      ${coursesCache
+        .map((course) => `<option value="${course.id}">${course.title}</option>`)
+        .join("")}
     `;
   }
 
@@ -70,34 +88,60 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   async function loadLessons() {
     const lessons = await apiRequest("/admin/lessons");
+    lessonsCache = Array.isArray(lessons) ? lessons : [];
 
-    if (!Array.isArray(lessons) || lessons.length === 0) {
+    if (lessonsCache.length === 0) {
       lessonsList.innerHTML = `<p class="empty-state">Nenhuma aula encontrada.</p>`;
       return;
     }
 
-    lessonsList.innerHTML = lessons.map((lesson) => `
-      <div class="admin-list-card">
-        <div class="admin-list-card-title">${lesson.title ?? ""}</div>
+    lessonsList.innerHTML = lessonsCache
+      .map((lesson) => {
+        const moduleObj = modulesCache.find(
+          (module) => String(module.id) === String(lesson.module_id)
+        );
 
-        <div class="admin-list-card-meta">
-          <div><strong>Curso:</strong> ${lesson.course_title || "-"}</div>
-          <div><strong>Módulo:</strong> ${lesson.module_title || "-"}</div>
-          <div><strong>Ordem:</strong> ${lesson.order ?? "-"}</div>
-          <div><strong>Vídeo:</strong> ${lesson.video_embed_url ? `<a href="${lesson.video_embed_url}" target="_blank" rel="noopener noreferrer">Abrir vídeo</a>` : "Não informado"}</div>
-          <div><strong>PDF:</strong> ${lesson.pdf_url ? `<a href="${lesson.pdf_url}" target="_blank" rel="noopener noreferrer">Abrir PDF</a>` : "Não informado"}</div>
-        </div>
+        const moduleTitle = lesson.module_title || moduleObj?.title || "-";
 
-        <div style="margin-top:12px;">
-          <span class="admin-soft-badge purple">Aula</span>
-        </div>
+        const courseTitle =
+          lesson.course_title ||
+          coursesCache.find((course) =>
+            String(course.id) === String(lesson.course_id || moduleObj?.course_id)
+          )?.title ||
+          "-";
 
-        <div class="admin-list-card-actions">
-          <button type="button" data-action="edit" data-id="${lesson.id}">Editar</button>
-          <button type="button" class="danger" data-action="delete" data-id="${lesson.id}">Excluir</button>
-        </div>
-      </div>
-    `).join("");
+        return `
+          <div class="admin-list-card">
+            <div class="admin-list-card-title">${lesson.title ?? ""}</div>
+
+            <div class="admin-list-card-meta">
+              <div><strong>Curso:</strong> ${courseTitle}</div>
+              <div><strong>Módulo:</strong> ${moduleTitle}</div>
+              <div><strong>Ordem:</strong> ${lesson.order ?? "-"}</div>
+              <div><strong>Vídeo:</strong> ${
+                lesson.video_embed_url
+                  ? `<a href="${lesson.video_embed_url}" target="_blank" rel="noopener noreferrer">Abrir vídeo</a>`
+                  : "Não informado"
+              }</div>
+              <div><strong>PDF:</strong> ${
+                lesson.pdf_url
+                  ? `<a href="${lesson.pdf_url}" target="_blank" rel="noopener noreferrer">Abrir PDF</a>`
+                  : "Não informado"
+              }</div>
+            </div>
+
+            <div style="margin-top:12px;">
+              <span class="admin-soft-badge purple">Aula</span>
+            </div>
+
+            <div class="admin-list-card-actions">
+              <button type="button" data-action="edit" data-id="${lesson.id}">Editar</button>
+              <button type="button" class="danger" data-action="delete" data-id="${lesson.id}">Excluir</button>
+            </div>
+          </div>
+        `;
+      })
+      .join("");
   }
 
   async function handleSubmit(event) {
@@ -153,7 +197,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     const id = button.dataset.id;
 
     if (action === "edit") {
-      const lesson = await apiRequest(`/admin/lessons/${id}`);
+      const lesson = lessonsCache.find((item) => String(item.id) === String(id));
+
+      if (!lesson) {
+        showMessage("error", "Aula não encontrada para edição.");
+        return;
+      }
+
       fillForm(lesson);
       return;
     }
@@ -163,7 +213,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       try {
         await apiRequest(`/admin/lessons/${id}`, { method: "DELETE" });
+
         if (editingLessonId === id) resetForm();
+
         showMessage("success", "Aula excluída com sucesso.");
         await loadLessons();
       } catch (error) {
@@ -179,11 +231,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     courseSelect.addEventListener("change", () => {
       const selectedCourseId = courseSelect.value;
+
       if (!selectedCourseId) {
         moduleSelect.innerHTML = `<option value="">Selecione um módulo</option>`;
         moduleSelect.disabled = true;
         return;
       }
+
       fillModules(selectedCourseId);
     });
 
