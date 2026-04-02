@@ -910,7 +910,7 @@ img {
 }
 
 .admin-dashboard-page .site-header {
-  background: rgba(0, 0, 0, 0.95);
+  background: white;
 }
 
 .admin-dashboard-page main {
@@ -918,6 +918,7 @@ img {
   max-width: var(--container);
   margin: 0 auto;
   padding: 40px 24px 80px;
+  background: blue;
 }
 
 .admin-page__top {
@@ -968,7 +969,7 @@ img {
 ========================================================= */
 
 .admin-dashboard-page {
-  background: #000;
+  background: red;
   color: #fff;
   min-height: 100vh;
 }
