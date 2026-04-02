@@ -907,12 +907,12 @@ img {
 .admin-dashboard-page {
   background: black;
   color: var(--text-light);
-  margin-bottom: 5px;
+  border-bottom: 5px solid white;
 }
 
 .admin-dashboard-page .site-header {
   background: black;
-  margin-bottom: 5px;
+  border-bottom: 5px solid white;
 }
 
 .admin-dashboard-page main {
@@ -920,6 +920,7 @@ img {
   max-width: var(--container);
   margin: 0 auto;
   background: black;
+  border-bottom: 5px solid white;
 }
 
 .admin-page__top {
@@ -973,6 +974,7 @@ img {
   background: black;
   color: #fff;
   min-height: 100vh;
+  border-bottom: 5px solid white;
 }
 
 .admin-dashboard-main {
