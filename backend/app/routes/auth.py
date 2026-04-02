@@ -11,6 +11,8 @@ from app.core.security import (
 from app.db.deps import get_db
 from app.models.tenant import Tenant
 from app.models.user import User
+from app.models.course import Course
+from app.models.enrollment import Enrollment
 from app.schemas.auth import LoginRequest, TokenResponse, RegisterRequest
 from app.schemas.user import UserOut
 from app.core.deps import get_current_user
@@ -22,6 +24,42 @@ def build_tenant_slug_from_email(email: str) -> str:
     base = email.split("@")[0].strip().lower()
     base = re.sub(r"[^a-z0-9]+", "-", base).strip("-")
     return base or "tenant"
+
+
+def enroll_user_in_default_course(db: Session, user: User):
+    default_course = (
+        db.query(Course)
+        .filter(
+            Course.tenant_id == user.tenant_id,
+            Course.title == "Matemática Essencial",
+            Course.is_active == True,
+        )
+        .first()
+    )
+
+    if not default_course:
+        return
+
+    existing_enrollment = (
+        db.query(Enrollment)
+        .filter(
+            Enrollment.user_id == user.id,
+            Enrollment.course_id == default_course.id,
+        )
+        .first()
+    )
+
+    if existing_enrollment:
+        return
+
+    enrollment = Enrollment(
+        user_id=user.id,
+        course_id=default_course.id,
+        status="active",
+    )
+
+    db.add(enrollment)
+    db.commit()
 
 
 def get_or_create_default_tenant(db: Session, data: RegisterRequest) -> Tenant:
@@ -72,6 +110,8 @@ def register(data: RegisterRequest, db: Session = Depends(get_db)):
     db.add(user)
     db.commit()
     db.refresh(user)
+
+    enroll_user_in_default_course(db, user)
 
     return user
 
