@@ -905,7 +905,7 @@ img {
 ========================================================= */
 
 .admin-dashboard-page {
-  background: white;
+  background: black;
   color: var(--text-light);
 }
 
@@ -918,7 +918,6 @@ img {
   width: 100%;
   max-width: var(--container);
   margin: 0 auto;
-  padding: 40px 24px 80px;
   background: blue;
 }
 
