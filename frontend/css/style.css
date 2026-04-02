@@ -922,7 +922,6 @@ img {
   max-width: var(--container);
   margin: 0 auto;
   background: black;
-  border-bottom: 2px solid white;
   margin-bottom: 10px;
 }
 
@@ -977,7 +976,6 @@ img {
   background: black;
   color: #fff;
   min-height: 100vh;
-  border-bottom: 2px solid white;
   margin-bottom: 10px;
 }
 
