@@ -8,13 +8,6 @@ const totalUsersEl = document.getElementById("totalUsers");
 
 logoutButton?.addEventListener("click", logout);
 
-function setFallbackValues() {
-  if (totalCoursesEl) totalCoursesEl.textContent = "-";
-  if (totalModulesEl) totalModulesEl.textContent = "-";
-  if (totalLessonsEl) totalLessonsEl.textContent = "-";
-  if (totalUsersEl) totalUsersEl.textContent = "-";
-}
-
 async function safeCount(endpoint, fallback = 0) {
   try {
     const data = await apiRequest(endpoint);
@@ -49,7 +42,6 @@ async function loadAdminDashboard() {
     if (totalUsersEl) totalUsersEl.textContent = usersCount;
   } catch (error) {
     console.error("Erro ao carregar dashboard admin:", error);
-    setFallbackValues();
   }
 }
 
