@@ -2867,7 +2867,7 @@ body {
 
 /* CONTAINER CENTRAL */
 .dashboard-container {
-  height: calc(100vh - 80px);
+  height: calc(90vh);
   display: flex;
   flex-direction: column;
   justify-content: center; /* vertical */
@@ -2885,6 +2885,7 @@ body {
 .dashboard-buttons {
   display: flex;
   flex-direction: column;
+  width: 500px;
   gap: 20px;
 }
 
