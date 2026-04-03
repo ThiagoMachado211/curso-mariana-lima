@@ -97,7 +97,9 @@ def get_or_create_default_tenant(db: Session, data: RegisterRequest) -> Tenant:
 
 @router.post("/register", response_model=UserOut, status_code=status.HTTP_201_CREATED)
 def register(data: RegisterRequest, db: Session = Depends(get_db)):
-    existing = db.query(User).filter(User.email == data.email).first()
+    normalized_email = data.email.strip().lower()
+
+    existing = db.query(User).filter(User.email == normalized_email).first()
 
     if existing:
         raise HTTPException(
@@ -111,7 +113,7 @@ def register(data: RegisterRequest, db: Session = Depends(get_db)):
         tenant_id=tenant.id,
         name=data.name.strip(),
         last_name=data.last_name.strip(),
-        email=data.email.strip().lower(),
+        email=normalized_email,
         password_hash=hash_password(data.password),
         role="student",
         is_active=True,
@@ -128,7 +130,9 @@ def register(data: RegisterRequest, db: Session = Depends(get_db)):
 
 @router.post("/login", response_model=TokenResponse)
 def login(data: LoginRequest, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.email == data.email).first()
+    normalized_email = data.email.strip().lower()
+
+    user = db.query(User).filter(User.email == normalized_email).first()
 
     if not user or not user.password_hash:
         raise HTTPException(
