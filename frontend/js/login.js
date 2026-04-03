@@ -24,6 +24,22 @@ document.addEventListener("DOMContentLoaded", () => {
     </svg>
   `;
 
+  function resetSubmitButton() {
+    submitButton.disabled = false;
+    submitButton.textContent = "Entrar";
+  }
+
+  function setSubmittingState() {
+    submitButton.disabled = true;
+    submitButton.textContent = "Entrando...";
+  }
+
+  function clearSession() {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("user_role");
+    localStorage.removeItem("course_id");
+  }
+
   if (togglePasswordButton) {
     togglePasswordButton.innerHTML = eyeIcon;
     togglePasswordButton.setAttribute("aria-label", "Mostrar senha");
@@ -40,24 +56,34 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  try {
-    if (typeof isAuthenticated === "function" && isAuthenticated()) {
-      apiRequest("/auth/me")
-        .then((user) => {
-          if (user?.role === "admin") {
-            window.location.href = "admin-dashboard.html";
-          } else {
-            window.location.href = "dashboard.html";
-          }
-        })
-        .catch(() => {
-          localStorage.removeItem("access_token");
-        });
-      return;
+  async function redirectIfAlreadyAuthenticated() {
+    try {
+      if (typeof isAuthenticated === "function" && isAuthenticated()) {
+        const user = await apiRequest("/auth/me");
+
+        if (!user?.role) {
+          throw new Error("Usuário autenticado sem perfil definido.");
+        }
+
+        localStorage.setItem("user_role", user.role);
+
+        if (user.role === "admin") {
+          window.location.href = "admin-dashboard.html";
+        } else {
+          window.location.href = "dashboard.html";
+        }
+
+        return true;
+      }
+    } catch (error) {
+      console.warn("Falha ao verificar autenticação existente:", error);
+      clearSession();
     }
-  } catch (error) {
-    console.warn("Falha ao verificar autenticação existente:", error);
+
+    return false;
   }
+
+  redirectIfAlreadyAuthenticated();
 
   fetch("https://curso-mariana-lima.onrender.com/health")
     .then(() => console.log("Backend prewarmed com sucesso."))
@@ -75,10 +101,8 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    submitButton.disabled = true;
-    submitButton.textContent = "Entrando...";
-
-    localStorage.removeItem("access_token");
+    setSubmittingState();
+    clearSession();
 
     try {
       const data = await apiRequest("/auth/login", {
@@ -94,16 +118,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const user = await apiRequest("/auth/me");
 
-      if (user?.role === "admin") {
+      if (!user?.role) {
+        throw new Error("Perfil do usuário não retornado pelo servidor.");
+      }
+
+      localStorage.setItem("user_role", user.role);
+
+      if (user.role === "admin") {
         window.location.href = "admin-dashboard.html";
       } else {
         window.location.href = "dashboard.html";
       }
     } catch (error) {
       console.error("Erro no login:", error);
+      clearSession();
       errorBox.textContent = error.message || "Erro ao fazer login.";
-      submitButton.disabled = false;
-      submitButton.textContent = "Entrar";
+      resetSubmitButton();
     }
   });
 });

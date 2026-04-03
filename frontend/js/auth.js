@@ -6,14 +6,16 @@ function getUserRole() {
   return localStorage.getItem("user_role");
 }
 
+function isAuthenticated() {
+  return Boolean(getAccessToken());
+}
+
 function redirectToLogin() {
   window.location.href = "./login.html";
 }
 
 function requireAuth() {
-  const token = getAccessToken();
-
-  if (!token) {
+  if (!isAuthenticated()) {
     redirectToLogin();
     return false;
   }
@@ -22,13 +24,13 @@ function requireAuth() {
 }
 
 function requireStudent() {
-  const isAuthenticated = requireAuth();
-  if (!isAuthenticated) return false;
+  const ok = requireAuth();
+  if (!ok) return false;
 
   const role = getUserRole();
 
   if (role !== "student") {
-    window.location.href = "./login.html";
+    redirectToLogin();
     return false;
   }
 
@@ -36,13 +38,13 @@ function requireStudent() {
 }
 
 function requireAdmin() {
-  const isAuthenticated = requireAuth();
-  if (!isAuthenticated) return false;
+  const ok = requireAuth();
+  if (!ok) return false;
 
   const role = getUserRole();
 
   if (role !== "admin") {
-    window.location.href = "./login.html";
+    redirectToLogin();
     return false;
   }
 
