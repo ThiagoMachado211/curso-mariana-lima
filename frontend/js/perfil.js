@@ -1,100 +1,66 @@
-document.addEventListener("DOMContentLoaded", async () => {
-  const messageBox = document.getElementById("messageBox");
-  const logoutButton = document.getElementById("logoutButton");
-  const editProfileButton = document.getElementById("editProfileButton");
-  const cancelEditProfile = document.getElementById("cancelEditProfile");
+requireStudent();
 
-  const profileCard = document.getElementById("profileCard");
-  const profileFormCard = document.getElementById("profileFormCard");
+const logoutButton = document.getElementById("logoutButton");
+const courseNavLink = document.getElementById("courseNavLink");
 
-  const profileName = document.getElementById("profileName");
-  const profileLastName = document.getElementById("profileLastName");
-  const profileEmail = document.getElementById("profileEmail");
-  const profileRole = document.getElementById("profileRole");
+const nameField = document.getElementById("profileName");
+const lastNameField = document.getElementById("profileLastName");
+const emailField = document.getElementById("profileEmail");
+const roleField = document.getElementById("profileRole");
 
-  const form = document.getElementById("profileForm");
-  const nameInput = document.getElementById("name");
-  const lastNameInput = document.getElementById("last_name");
-  const emailInput = document.getElementById("email");
+logoutButton?.addEventListener("click", logout);
 
-  let currentUser = null;
-
-  function showMessage(type, text) {
-    if (!messageBox) return;
-    messageBox.innerHTML = `<div class="message ${type}">${text}</div>`;
-  }
-
-  function clearMessage() {
-    if (!messageBox) return;
-    messageBox.innerHTML = "";
-  }
-
-  function renderProfile(user) {
-    profileName.textContent = user.name ?? "-";
-    profileLastName.textContent = user.last_name ?? "-";
-    profileEmail.textContent = user.email ?? "-";
-    profileRole.textContent = user.role === "student" ? "Aluno" : user.role ?? "-";
-  }
-
-  function openEditForm() {
-    if (!currentUser) return;
-
-    nameInput.value = currentUser.name ?? "";
-    lastNameInput.value = currentUser.last_name ?? "";
-    emailInput.value = currentUser.email ?? "";
-
-    profileCard.classList.add("hidden");
-    profileFormCard.classList.remove("hidden");
-  }
-
-  function closeEditForm() {
-    profileFormCard.classList.add("hidden");
-    profileCard.classList.remove("hidden");
-  }
-
-  if (logoutButton) {
-    logoutButton.addEventListener("click", logout);
-  }
-
-  if (editProfileButton) {
-    editProfileButton.addEventListener("click", openEditForm);
-  }
-
-  if (cancelEditProfile) {
-    cancelEditProfile.addEventListener("click", closeEditForm);
-  }
-
+async function loadProfile() {
   try {
-    currentUser = await requireStudent();
-    renderProfile(currentUser);
-  } catch (error) {
-    showMessage("error", error.message || "Erro ao carregar perfil.");
-    return;
-  }
+    const user = await apiRequest("/auth/me");
 
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    clearMessage();
-
-    const payload = {
-      name: nameInput.value.trim(),
-      last_name: lastNameInput.value.trim(),
-      email: emailInput.value.trim().toLowerCase(),
-    };
-
-    try {
-      // Ajuste a rota se seu backend usar outro endpoint
-      const updatedUser = await apiRequest("/users/me", {
-        method: "PUT",
-        body: JSON.stringify(payload),
-      });
-
-      currentUser = updatedUser;
-      renderProfile(currentUser);
-      closeEditForm();
-      showMessage("success", "Perfil atualizado com sucesso.");
-    } catch (error) {
-      showMessage("error", error.message || "Erro ao atualizar perfil.");
+    if (!user) {
+      throw new Error("Usuário não encontrado.");
     }
-  });
-});
+
+    if (nameField) nameField.textContent = user.name || "-";
+    if (lastNameField) lastNameField.textContent = user.last_name || "-";
+    if (emailField) emailField.textContent = user.email || "-";
+    if (roleField) {
+      roleField.textContent = user.role === "student" ? "Aluno" : user.role || "-";
+    }
+
+    await ensureCourseLink();
+  } catch (error) {
+    console.error("Erro ao carregar perfil:", error);
+
+    if (nameField) nameField.textContent = "-";
+    if (lastNameField) lastNameField.textContent = "-";
+    if (emailField) emailField.textContent = "-";
+    if (roleField) roleField.textContent = "-";
+  }
+}
+
+async function ensureCourseLink() {
+  try {
+    let courseId = localStorage.getItem("course_id");
+
+    if (!courseId) {
+      const courses = await apiRequest("/student/courses");
+
+      if (Array.isArray(courses) && courses.length > 0 && courses[0]?.id) {
+        courseId = courses[0].id;
+        localStorage.setItem("course_id", courseId);
+      }
+    }
+
+    if (courseNavLink) {
+      courseNavLink.href = courseId
+        ? `./curso.html?course_id=${courseId}`
+        : "./curso.html";
+    }
+  } catch (error) {
+    console.error("Erro ao preparar link do curso:", error);
+
+    if (courseNavLink) {
+      courseNavLink.href = "./curso.html";
+    }
+  }
+}
+
+loadProfile();

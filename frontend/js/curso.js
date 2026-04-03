@@ -1,4 +1,4 @@
-requireAuth();
+requireStudent();
 
 const modulesList = document.getElementById("modulesList");
 const lessonPlayer = document.getElementById("lessonPlayer");
@@ -29,11 +29,35 @@ function showFeedback(message, type = "success") {
   }, 4000);
 }
 
-function getCourseId() {
+function getCourseIdFromUrl() {
   const params = new URLSearchParams(window.location.search);
-  const courseIdFromQuery = params.get("course_id");
+  return params.get("course_id");
+}
+
+async function resolveCourseId() {
+  const courseIdFromUrl = getCourseIdFromUrl();
+  if (courseIdFromUrl) {
+    localStorage.setItem("course_id", courseIdFromUrl);
+    return courseIdFromUrl;
+  }
+
   const courseIdFromStorage = localStorage.getItem("course_id");
-  return courseIdFromQuery || courseIdFromStorage;
+  if (courseIdFromStorage) {
+    return courseIdFromStorage;
+  }
+
+  try {
+    const courses = await apiRequest("/student/courses");
+
+    if (Array.isArray(courses) && courses.length > 0 && courses[0]?.id) {
+      localStorage.setItem("course_id", courses[0].id);
+      return courses[0].id;
+    }
+  } catch (error) {
+    console.error("Erro ao resolver course_id pelo backend:", error);
+  }
+
+  return null;
 }
 
 function normalizeEmbedUrl(url) {
@@ -210,13 +234,13 @@ function autoSelectFirstLesson(course) {
 }
 
 async function loadCourse() {
-  const courseId = getCourseId();
+  const courseId = await resolveCourseId();
 
   if (!courseId) {
     if (modulesList) {
-      modulesList.innerHTML = `<div class="sidebar-loading">Curso não encontrado.</div>`;
+      modulesList.innerHTML = `<div class="sidebar-loading">Nenhum curso encontrado para este aluno.</div>`;
     }
-    showFeedback("Nenhum course_id foi informado.", "error");
+    showFeedback("Nenhum curso encontrado.", "error");
     return;
   }
 
@@ -233,11 +257,13 @@ async function loadCourse() {
     updateProgressUI(course.progress);
     autoSelectFirstLesson(course);
   } catch (error) {
+    console.error("Erro em loadCourse:", error);
+
     if (modulesList) {
       modulesList.innerHTML = `<div class="sidebar-loading">Erro ao carregar o curso.</div>`;
     }
+
     showFeedback(error.message || "Erro ao carregar curso.", "error");
-    console.error("Erro em loadCourse:", error);
   }
 }
 
@@ -281,9 +307,9 @@ markCompletedButton?.addEventListener("click", async () => {
 
     showFeedback("Aula marcada como concluída com sucesso.", "success");
   } catch (error) {
+    console.error("Erro ao concluir aula:", error);
     showFeedback(error.message || "Erro ao concluir aula.", "error");
     updateCompleteButtonState();
-    console.error("Erro ao concluir aula:", error);
   } finally {
     if (markCompletedButton && !currentLesson?.completed) {
       markCompletedButton.disabled = false;
