@@ -21,6 +21,18 @@ def require_admin(user: User) -> None:
         )
 
 
+def serialize_lesson(lesson: Lesson) -> dict:
+    return {
+        "id": lesson.id,
+        "tenant_id": lesson.tenant_id,
+        "module_id": lesson.module_id,
+        "title": lesson.title,
+        "order": lesson.order,
+        "video_embed_url": lesson.video_embed_url,
+        "pdf_url": lesson.pdf_url,
+    }
+
+
 @router.get("", response_model=list[LessonOut])
 def list_lessons(
     db: Session = Depends(get_db),
@@ -34,7 +46,8 @@ def list_lessons(
         .order_by(Lesson.order.asc(), Lesson.title.asc())
         .all()
     )
-    return lessons
+
+    return [serialize_lesson(lesson) for lesson in lessons]
 
 
 @router.post("", response_model=LessonOut, status_code=status.HTTP_201_CREATED)
@@ -73,7 +86,8 @@ def create_lesson(
     db.add(lesson)
     db.commit()
     db.refresh(lesson)
-    return lesson
+
+    return serialize_lesson(lesson)
 
 
 @router.put("/{lesson_id}", response_model=LessonOut)
@@ -123,7 +137,8 @@ def update_lesson(
 
     db.commit()
     db.refresh(lesson)
-    return lesson
+
+    return serialize_lesson(lesson)
 
 
 @router.delete("/{lesson_id}", status_code=status.HTTP_204_NO_CONTENT)
