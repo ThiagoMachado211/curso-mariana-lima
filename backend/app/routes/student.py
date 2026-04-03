@@ -15,30 +15,37 @@ from app.models.user import User
 router = APIRouter(prefix="/student", tags=["student"])
 
 
-@router.get("/courses")
-def list_student_courses(
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
-):
-    enrollments = (
+def get_active_student_enrollments(db: Session, current_user: User):
+    return (
         db.query(Enrollment, Course)
         .join(Course, Enrollment.course_id == Course.id)
         .filter(
             Enrollment.user_id == current_user.id,
-            Enrollment.tenant_id == current_user.tenant_id,
             Enrollment.status == "active",
-            Course.tenant_id == current_user.tenant_id,
             Course.is_active == True,
         )
         .order_by(Course.title.asc())
         .all()
     )
 
+
+@router.get("/courses")
+def list_student_courses(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    enrollments = get_active_student_enrollments(db, current_user)
+
     return [
         {
             "id": str(course.id),
             "title": course.title,
+            "slug": course.slug,
             "description": course.description,
+            "price_cents": course.price_cents,
+            "currency": course.currency,
+            "is_active": course.is_active,
+            "is_published": course.is_published,
         }
         for enrollment, course in enrollments
     ]
@@ -50,32 +57,16 @@ def get_student_course(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    enrollment = (
-        db.query(Enrollment)
-        .filter(
-            Enrollment.user_id == current_user.id,
-            Enrollment.course_id == course_id,
-            Enrollment.tenant_id == current_user.tenant_id,
-            Enrollment.status == "active",
-        )
-        .first()
-    )
+    allowed_courses = get_active_student_enrollments(db, current_user)
 
-    if not enrollment:
-        raise HTTPException(status_code=404, detail="Curso não encontrado para este aluno.")
-
-    course = (
-        db.query(Course)
-        .filter(
-            Course.id == course_id,
-            Course.tenant_id == current_user.tenant_id,
-            Course.is_active == True,
-        )
-        .first()
-    )
+    course = None
+    for enrollment, enrolled_course in allowed_courses:
+        if enrolled_course.id == course_id:
+            course = enrolled_course
+            break
 
     if not course:
-        raise HTTPException(status_code=404, detail="Curso não encontrado.")
+        raise HTTPException(status_code=404, detail="Curso não encontrado para este aluno.")
 
     modules = (
         db.query(Module)
@@ -88,7 +79,6 @@ def get_student_course(
         db.query(LessonProgress)
         .filter(
             LessonProgress.user_id == current_user.id,
-            LessonProgress.tenant_id == current_user.tenant_id,
             LessonProgress.completed == True,
         )
         .all()
