@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body class="student-page">
+
     <header class="site-header student-top-header">
       <div class="page-container">
         <div class="site-header__inner">
@@ -26,6 +27,7 @@
       </div>
     </header>
 
+<!--
     <main class="student-main">
       <div class="student-container">
         <div id="messageBox" class="student-message"></div>
@@ -64,6 +66,61 @@
           </aside>
         </div>
       </div>
+    </main>
+-->
+
+    <main class="course-page">
+      <section class="course-player-section">
+        <div class="course-video-wrapper">
+          <iframe
+            id="lessonPlayer"
+            class="lesson-player"
+            src=""
+            title="Player da aula"
+            frameborder="0"
+            allowfullscreen
+          ></iframe>
+        </div>
+
+        <div class="course-lesson-info">
+          <h1 id="lessonTitle">Selecione uma aula</h1>
+          <p id="lessonMeta">Escolha uma aula no painel lateral para começar.</p>
+          <p id="lessonDescription">Escolha uma aula no painel lateral para começar.</p>
+
+          <div class="course-actions">
+            <a
+              id="lessonPdfButton"
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="secondary-btn hidden"
+            >
+              Abrir PDF
+            </a>
+
+            <button id="markCompletedButton" class="primary-btn hidden" type="button">
+              Marcar como concluída
+            </button>
+          </div>
+
+          <div id="feedbackMessage" class="feedback hidden"></div>
+        </div>
+      </section>
+
+      <aside class="course-sidebar">
+        <h2>Conteúdo do curso</h2>
+
+        <div class="sidebar-card">
+          <div id="modulesList" class="modules-list">
+            <div class="sidebar-loading">Carregando módulos e aulas...</div>
+          </div>
+
+          <p id="courseProgressText">Carregando progresso...</p>
+          <div class="progress-bar">
+            <div id="courseProgressFill" class="progress-bar-fill"></div>
+          </div>
+        </div>
+      </aside>
     </main>
 
     <script src="./js/api.js"></script>

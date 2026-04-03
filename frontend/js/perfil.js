@@ -21,9 +21,7 @@ async function loadProfile() {
     if (nameField) nameField.textContent = user.name || "-";
     if (lastNameField) lastNameField.textContent = user.last_name || "-";
     if (emailField) emailField.textContent = user.email || "-";
-    if (roleField) {
-      roleField.textContent = user.role === "student" ? "Aluno" : user.role || "-";
-    }
+    if (roleField) roleField.textContent = user.role === "student" ? "Aluno" : user.role || "-";
 
     await ensureCourseLink();
   } catch (error) {
