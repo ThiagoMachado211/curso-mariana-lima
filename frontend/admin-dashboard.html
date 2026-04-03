@@ -1,22 +1,26 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Administrador: Dashboard</title>
     <link rel="stylesheet" href="./css/style.css" />
   </head>
-
-  
-  <body>
-    <header class="header">
-      <div class="logo">
-        <img src="assets/logo.png" alt="Logo" />
-        <span>MatemáticaEssencial</span>
+  <body class="admin-page admin-dashboard-page">
+    <header class="site-header">
+      <div class="page-container">
+        <div class="site-header__inner">
+          <a href="index.html" class="site-logo">
+            <img src="assets/Logo_Mariana.jpg" alt="Logo Mariana Lima" class="site-logo__img" />
+            <span class="site-logo__text">
+              <span class="site-logo__text--blue">Matemática</span><span class="site-logo__text--purple">Essencial</span>
+            </span>
+          </a>
+          <nav class="site-nav">
+            <button id="logoutButton" class="header-btn danger-btn" type="button">Sair</button>
+          </nav>
+        </div>
       </div>
-
-      <button id="logoutButton" class="logout-btn">Sair</button>
     </header>
 
     <main class="dashboard-container">
@@ -29,6 +33,10 @@
         <a href="admin-cadastros.html" class="dashboard-btn">Cadastros</a>
       </div>
     </main>
+
+    <script src="./js/api.js"></script>
+    <script src="./js/auth.js"></script>
+    <script src="./js/admin-dashboard.js"></script>
   </body>
 
 </html>
