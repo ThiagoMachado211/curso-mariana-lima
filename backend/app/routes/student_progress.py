@@ -1,53 +1,89 @@
-import uuid
+from datetime import datetime, timezone
+from uuid import UUID
 
-from sqlalchemy import Boolean, DateTime, ForeignKey, UniqueConstraint, func
-from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import Mapped, mapped_column
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm import Session
 
-from app.db.base import Base
+from app.core.deps import get_current_user
+from app.db.deps import get_db
+from app.models.course import Course
+from app.models.enrollment import Enrollment
+from app.models.lesson import Lesson
+from app.models.lesson_progress import LessonProgress
+from app.models.module import Module
+from app.models.user import User
+
+router = APIRouter(prefix="/student", tags=["student-progress"])
 
 
-class LessonProgress(Base):
-    __tablename__ = "lesson_progress"
-    __table_args__ = (
-        UniqueConstraint("user_id", "lesson_id", name="uq_lesson_progress_user_lesson"),
+@router.post("/lessons/{lesson_id}/complete", status_code=status.HTTP_200_OK)
+def complete_lesson(
+    lesson_id: UUID,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    lesson_data = (
+        db.query(Lesson, Module, Course)
+        .join(Module, Lesson.module_id == Module.id)
+        .join(Course, Module.course_id == Course.id)
+        .filter(
+            Lesson.id == lesson_id,
+            Course.tenant_id == current_user.tenant_id,
+            Course.is_active == True,
+        )
+        .first()
     )
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True),
-        primary_key=True,
-        default=uuid.uuid4,
+    if not lesson_data:
+        raise HTTPException(status_code=404, detail="Aula não encontrada.")
+
+    lesson, module, course = lesson_data
+
+    enrollment = (
+        db.query(Enrollment)
+        .filter(
+            Enrollment.user_id == current_user.id,
+            Enrollment.course_id == course.id,
+            Enrollment.tenant_id == current_user.tenant_id,
+            Enrollment.status == "active",
+        )
+        .first()
     )
 
-    tenant_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True),
-        ForeignKey("tenants.id"),
-        index=True,
-        nullable=False,
+    if not enrollment:
+        raise HTTPException(
+            status_code=403,
+            detail="Você não está matriculado neste curso.",
+        )
+
+    progress = (
+        db.query(LessonProgress)
+        .filter(
+            LessonProgress.user_id == current_user.id,
+            LessonProgress.lesson_id == lesson.id,
+            LessonProgress.tenant_id == current_user.tenant_id,
+        )
+        .first()
     )
 
-    user_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True),
-        ForeignKey("users.id"),
-        index=True,
-        nullable=False,
+    if progress:
+        if progress.completed:
+            return {"message": "Aula já estava concluída."}
+
+        progress.completed = True
+        progress.completed_at = datetime.now(timezone.utc)
+        db.commit()
+        return {"message": "Aula marcada como concluída com sucesso."}
+
+    progress = LessonProgress(
+        tenant_id=current_user.tenant_id,
+        user_id=current_user.id,
+        lesson_id=lesson.id,
+        completed=True,
+        completed_at=datetime.now(timezone.utc),
     )
 
-    lesson_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True),
-        ForeignKey("lessons.id"),
-        index=True,
-        nullable=False,
-    )
+    db.add(progress)
+    db.commit()
 
-    completed: Mapped[bool] = mapped_column(
-        Boolean,
-        default=False,
-        nullable=False,
-    )
-
-    completed_at: Mapped[object] = mapped_column(
-        DateTime(timezone=True),
-        server_default=func.now(),
-        nullable=False,
-    )
+    return {"message": "Aula marcada como concluída com sucesso."}
