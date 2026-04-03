@@ -59,9 +59,11 @@ def get_student_course(
 ):
     allowed_courses = get_active_student_enrollments(db, current_user)
 
+    target_course_id = str(course_id)
     course = None
+
     for enrollment, enrolled_course in allowed_courses:
-        if enrolled_course.id == course_id:
+        if str(enrolled_course.id) == target_course_id:
             course = enrolled_course
             break
 
@@ -84,7 +86,7 @@ def get_student_course(
         .all()
     )
 
-    completed_lesson_ids = {row.lesson_id for row in progress_rows}
+    completed_lesson_ids = {str(row.lesson_id) for row in progress_rows}
 
     response_modules = []
     total_lessons = 0
@@ -101,7 +103,7 @@ def get_student_course(
         response_lessons = []
 
         for lesson in lessons:
-            lesson_completed = lesson.id in completed_lesson_ids
+            lesson_completed = str(lesson.id) in completed_lesson_ids
 
             total_lessons += 1
             if lesson_completed:
