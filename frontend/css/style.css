@@ -2436,6 +2436,7 @@ img {
 
 .danger-btn {
   border-color: rgba(220, 38, 38, 0.5);
+  width: 50px;
 }
 
 .admin-page {
@@ -2870,7 +2871,7 @@ body {
   height: calc(90vh);
   display: flex;
   flex-direction: column;
-  justify-content: center; /* vertical */
+  justify-content:top; /* vertical */
   align-items: center;     /* horizontal */
   text-align: center;
 }
