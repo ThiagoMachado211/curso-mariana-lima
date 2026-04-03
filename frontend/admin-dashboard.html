@@ -1,57 +1,63 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Administrador: Dashboard</title>
-  <link rel="stylesheet" href="./css/style.css" />
-</head>
-<body>
-  <header class="admin-header">
-    <div class="admin-header-left">
-      <img src="./assets/Logo_Mariana.jpg" alt="Logo" class="logo" />
-      <span class="brand-name">MatemáticaEssencial</span>
-    </div>
-
-    <div class="admin-header-right">
-      <button id="logoutButton" class="header-btn danger-btn" type="button">Sair</button>
-    </div>
-  </header>
-
-  <main class="admin-page">
-    <section class="page-title-section">
-      <h1>Administrador: Dashboard</h1>
-    </section>
-
-    <section class="cards-list">
-      <article class="admin-card">
-        <div class="admin-card-content">
-          <h3>Número de Cursos Cadastrados: <span id="totalCourses">0</span></h3>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Administrador: Dashboard</title>
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body class="admin-page admin-dashboard-page">
+    <header class="site-header">
+      <div class="page-container">
+        <div class="site-header__inner">
+          <a href="index.html" class="site-logo">
+            <img src="assets/Logo_Mariana.jpg" alt="Logo Mariana Lima" class="site-logo__img" />
+            <span class="site-logo__text">
+              <span class="site-logo__text--blue">Matemática</span><span class="site-logo__text--purple">Essencial</span>
+            </span>
+          </a>
+          <nav class="site-nav">
+            <button id="logoutButton" class="header-btn danger-btn" type="button">Sair</button>
+          </nav>
         </div>
-      </article>
+      </div>
+    </header>
 
-      <article class="admin-card">
-        <div class="admin-card-content">
-          <h3>Número de Módulos Cadastrados: <span id="totalModules">0</span></h3>
-        </div>
-      </article>
 
-      <article class="admin-card">
-        <div class="admin-card-content">
-          <h3>Número de Aulas Cadastradas: <span id="totalLessons">0</span></h3>
-        </div>
-      </article>
+    <main class="admin-page">
+      <section class="page-title-section">
+        <h1>Administrador: Dashboard</h1>
+      </section>
 
-      <article class="admin-card">
-        <div class="admin-card-content">
-          <h3>Número de Cadastros Ativos: <span id="totalUsers">0</span></h3>
-        </div>
-      </article>
-    </section>
-  </main>
+      <section class="cards-list">
+        <article class="admin-card">
+          <div class="admin-card-content">
+            <h3>Número de Cursos Cadastrados: <span id="totalCourses">0</span></h3>
+          </div>
+        </article>
 
-  <script src="./js/api.js"></script>
-  <script src="./js/auth.js"></script>
-  <script src="./js/admin-dashboard.js"></script>
-</body>
+        <article class="admin-card">
+          <div class="admin-card-content">
+            <h3>Número de Módulos Cadastrados: <span id="totalModules">0</span></h3>
+          </div>
+        </article>
+
+        <article class="admin-card">
+          <div class="admin-card-content">
+            <h3>Número de Aulas Cadastradas: <span id="totalLessons">0</span></h3>
+          </div>
+        </article>
+
+        <article class="admin-card">
+          <div class="admin-card-content">
+            <h3>Número de Cadastros Ativos: <span id="totalUsers">0</span></h3>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <script src="./js/api.js"></script>
+    <script src="./js/auth.js"></script>
+    <script src="./js/admin-dashboard.js"></script>
+  </body>
 </html>
