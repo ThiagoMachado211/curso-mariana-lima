@@ -318,4 +318,4 @@ markCompletedButton?.addEventListener("click", async () => {
   }
 });
 
-loadCourse();
+loadCourse(console.log("course_id usado:", courseId));
