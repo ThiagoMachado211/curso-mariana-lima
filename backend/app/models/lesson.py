@@ -1,5 +1,5 @@
 import uuid
-from sqlalchemy import String, Integer, ForeignKey, Text
+from sqlalchemy import String, Integer, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -13,7 +13,6 @@ class Lesson(Base):
     tenant_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("tenants.id"), index=True, nullable=False)
     module_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("modules.id"), index=True, nullable=False)
     title: Mapped[str] = mapped_column(String(200), nullable=False)
-    order: Mapped[int] = mapped_column(nullable=False, default=0)
-    video_embed_url: Mapped[str | None] = mapped_column(nullable=True)
-    pdf_url: Mapped[str | None] = mapped_column(nullable=True)
-    description: Mapped[str | None] = mapped_column(nullable=True)
+    order: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    video_embed_url: Mapped[str | None] = mapped_column(String, nullable=True)
+    pdf_url: Mapped[str | None] = mapped_column(String, nullable=True)
