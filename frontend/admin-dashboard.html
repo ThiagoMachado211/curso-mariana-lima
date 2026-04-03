@@ -1,69 +1,34 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Administrador: Dashboard</title>
     <link rel="stylesheet" href="./css/style.css" />
   </head>
-  <body class="admin-page admin-dashboard-page">
-    <header class="site-header">
-      <div class="page-container">
-        <div class="site-header__inner">
-          <a href="index.html" class="site-logo">
-            <img src="assets/Logo_Mariana.jpg" alt="Logo Mariana Lima" class="site-logo__img" />
-            <span class="site-logo__text">
-              <span class="site-logo__text--blue">Matemática</span><span class="site-logo__text--purple">Essencial</span>
-            </span>
-          </a>
-          <nav class="site-nav">
-            <button id="logoutButton" class="header-btn danger-btn" type="button">Sair</button>
-          </nav>
-        </div>
+
+  
+  <body>
+    <header class="header">
+      <div class="logo">
+        <img src="assets/logo.png" alt="Logo" />
+        <span>MatemáticaEssencial</span>
       </div>
+
+      <button id="logoutButton" class="logout-btn">Sair</button>
     </header>
 
+    <main class="dashboard-container">
+      <h1 class="dashboard-title">Administrador: Dashboard</h1>
 
-    <main class="admin-page">
-      <section class="page-title-section" style="color: white; display:flex; justify-content: center; margin-top: 20px; margin-bottom: 20px;">
-        <h1>Administrador: Dashboard</h1>
-      </section>
-
-      <section>
-        <a href="admin-cursos.html" style="height:50px; font-size: 24px; background-color: blue; color:white; display: flex; justify-content: center; 
-        align-items: center; margin-bottom: 20px; width:500px; border-radius:10px;"> 
-            Cursos Cadastrados (Quantidade: <span id="totalCourses">0</span>) 
-        </a>
-
-
-        <a href="admin-modulos.html" style="height:50px; font-size: 24px; background-color: blue; color:white; display: flex; justify-content: center; 
-        align-items: center; margin-bottom: 20px;"> 
-            Módulos Cadastrados (Quantidade: <span id="totalModules">0</span>) 
-        </a>
-
-
-        <article class="admin-card">
-          <div class="admin-card-content">
-            <h3>Número de Módulos Cadastrados: <span id="totalModules">0</span></h3>
-          </div>
-        </article>
-
-        <article class="admin-card">
-          <div class="admin-card-content">
-            <h3>Número de Aulas Cadastradas: <span id="totalLessons">0</span></h3>
-          </div>
-        </article>
-
-        <article class="admin-card">
-          <div class="admin-card-content">
-            <h3>Número de Cadastros Ativos: <span id="totalUsers">0</span></h3>
-          </div>
-        </article>
-      </section>
+      <div class="dashboard-buttons">
+        <a href="admin-cursos.html" class="dashboard-btn">Cursos</a>
+        <a href="admin-modulos.html" class="dashboard-btn">Módulos</a>
+        <a href="admin-aulas.html" class="dashboard-btn">Aulas</a>
+        <a href="admin-cadastros.html" class="dashboard-btn">Cadastros</a>
+      </div>
     </main>
-
-    <script src="./js/api.js"></script>
-    <script src="./js/auth.js"></script>
-    <script src="./js/admin-dashboard.js"></script>
   </body>
+
 </html>

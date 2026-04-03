@@ -2821,3 +2821,84 @@ img {
   color: #16a34a;
   font-weight: 700;
 }
+
+
+body {
+  background-color: #000;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* HEADER */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.logo img {
+  width: 40px;
+}
+
+/* BOTÃO SAIR */
+.logout-btn {
+  background-color: #2563eb;
+  color: #fff;
+  border: none;
+  padding: 10px 22px;
+  font-size: 16px; /* maior */
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background-color: #1d4ed8;
+}
+
+/* CONTAINER CENTRAL */
+.dashboard-container {
+  height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* vertical */
+  align-items: center;     /* horizontal */
+  text-align: center;
+}
+
+/* TÍTULO */
+.dashboard-title {
+  color: #fff;
+  margin-bottom: 40px;
+}
+
+/* BOTÕES */
+.dashboard-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* BOTÃO PADRÃO */
+.dashboard-btn {
+  background-color: #2563eb;
+  color: #fff;
+  text-decoration: none;
+  padding: 15px 60px;
+  border-radius: 10px;
+  font-size: 18px;
+  transition: 0.3s;
+}
+
+.dashboard-btn:hover {
+  background-color: #1d4ed8;
+}
