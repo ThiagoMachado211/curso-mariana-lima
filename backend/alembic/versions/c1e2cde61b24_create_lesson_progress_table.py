@@ -37,7 +37,8 @@ def upgrade() -> None:
     op.create_index(op.f('ix_lesson_progress_lesson_id'), 'lesson_progress', ['lesson_id'], unique=False)
     op.create_index(op.f('ix_lesson_progress_tenant_id'), 'lesson_progress', ['tenant_id'], unique=False)
     op.create_index(op.f('ix_lesson_progress_user_id'), 'lesson_progress', ['user_id'], unique=False)
-    op.drop_index(op.f('ix_courses_slug'), table_name='courses')
+    op.create_index(op.f("ix_courses_slug"), "courses", ["slug"], unique=False)
+    # op.drop_index(op.f('ix_courses_slug'), table_name='courses')
     # ### end Alembic commands ###
 
 

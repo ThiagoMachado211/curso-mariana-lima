@@ -14,6 +14,7 @@ from app.routes.admin_directory import router as admin_directory_router
 from app.routes.admin_users import router as admin_users_router
 from app.routes.users import router as users_router
 from app.routes.student import router as student_router
+from app.routes.student_progress import router as student_progress_router
 from app.routes import admin_billing
 from app.routes import billing
 from app.routes import webhooks
@@ -46,6 +47,7 @@ app.include_router(admin_billing.router)
 app.include_router(billing.router)
 app.include_router(webhooks.router)
 app.include_router(student_router)
+app.include_router(student_progress_router)
 app.include_router(users_router)
 
 
