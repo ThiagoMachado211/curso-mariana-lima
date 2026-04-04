@@ -169,17 +169,17 @@ function renderModules(modules) {
 
   modulesList.innerHTML = modules
     .sort((a, b) => a.order - b.order)
-    .map((module, moduleIndex) => {
+    .map((module) => {
       const lessonsHtml = (module.lessons || [])
         .sort((a, b) => a.order - b.order)
-        .map((lesson, lessonIndex) => `
+        .map((lesson) => `
           <div 
             class="lesson-item" 
             data-lesson-id="${lesson.id}"
             data-module-id="${module.id}"
           >
             <div class="lesson-item-title">
-              ${lessonIndex + 1}. ${lesson.title}
+              ${lesson.title}
             </div>
             <div class="lesson-item-meta ${lesson.completed ? "completed" : ""}">
               ${lesson.completed ? "Concluída ✔" : "Não concluída"}
@@ -192,7 +192,7 @@ function renderModules(modules) {
         <div class="module-card">
           <button class="module-header" type="button">
             <div>
-              <strong>${moduleIndex + 1}. ${module.title}</strong>
+              <strong>${module.title}</strong>
               <span>${(module.lessons || []).length} aula(s)</span>
             </div>
           </button>
