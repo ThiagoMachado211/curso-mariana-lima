@@ -3320,3 +3320,59 @@ body {
   gap: 12px;
   margin-top: 10px;
 }
+
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body.public-page.home-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #000;
+}
+
+body.public-page.home-page .site-header {
+  flex-shrink: 0;
+}
+
+body.public-page.home-page .home-hero-split {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+body.public-page.home-page .home-hero-split__container {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(320px, 620px) 1fr;
+  align-items: stretch;
+  min-height: 0;
+}
+
+body.public-page.home-page .home-hero-split__image {
+  height: 100%;
+  min-height: 0;
+}
+
+body.public-page.home-page .home-hero-split__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+body.public-page.home-page .home-hero-split__content-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  min-height: 0;
+}
+
+body.public-page.home-page .home-hero-split__content-box {
+  max-width: 500px;
+}
