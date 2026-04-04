@@ -172,14 +172,15 @@ function renderModules(modules) {
     .map((module) => {
       const lessonsHtml = (module.lessons || [])
         .sort((a, b) => a.order - b.order)
-        .map((lesson) => `
+
+        .map((lesson, lessonIndex) => `
           <div 
             class="lesson-item" 
             data-lesson-id="${lesson.id}"
             data-module-id="${module.id}"
           >
             <div class="lesson-item-title">
-              ${lesson.title}
+              ${lessonIndex + 1}. ${lesson.title}
             </div>
             <div class="lesson-item-meta ${lesson.completed ? "completed" : ""}">
               ${lesson.completed ? "Concluída ✔" : "Não concluída"}

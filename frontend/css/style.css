@@ -192,7 +192,7 @@ img {
 }
 
 .site-logo__text--blue {
-  color: var(--blue);
+  color: var(--orange);
   font-size: 30px;
 }
 
@@ -415,7 +415,7 @@ img {
 
 .home-hero-split {
   background: #000;
-  min-height: calc(100vh - 72px);
+  max-height: calc(100vh - 72px);
   display: flex;
   align-items: center;
 }
