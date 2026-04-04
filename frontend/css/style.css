@@ -442,7 +442,6 @@ img {
 
 .home-hero-split__image img {
   width: 100%;
-  height: 80%;
   max-width: 600px;
   border-radius: 20px;
 }
@@ -3362,7 +3361,6 @@ body.public-page.home-page .home-hero-split__image {
 
 body.public-page.home-page .home-hero-split__image img {
   width: 100%;
-  height: 80%;
   object-fit: cover;
   display: block;
 }
