@@ -192,7 +192,7 @@ img {
 }
 
 .site-logo__text--blue {
-  color: var(--orange);
+  color: orange;
   font-size: 30px;
 }
 
@@ -416,24 +416,27 @@ img {
 .home-hero-split {
   background: #000;
   max-height: calc(100vh - 72px);
+  width: 100vw;
   display: flex;
   align-items: center;
+  justify-content: top;
 }
 
 .home-hero-split__container {
-  max-width: 1200px;
+  max-height: calc(100vh - 72px);
+  width: 100vw;
   margin: 0 auto;
   padding: 40px 24px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: top;
   gap: 60px;
 }
 
 .home-hero-split__image {
   flex: 1;
   display: flex;
-  justify-content: center;
+  justify-content: top;
 }
 
 .home-hero-split__image img {
@@ -446,6 +449,7 @@ img {
   flex: 1;
   display: flex;
   align-items: center;
+  justify-content: top;
 }
 
 .home-hero-split__content-box {
