@@ -3483,3 +3483,19 @@ body.public-page.home-page .home-hero-split__content-box ul {
     overflow: visible;
   }
 }
+
+
+.login-links {
+  margin-top: 12px;
+  text-align: center;
+}
+
+.login-links a {
+  color: #9d4edd;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.login-links a:hover {
+  text-decoration: underline;
+}

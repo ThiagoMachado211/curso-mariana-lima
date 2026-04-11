@@ -153,3 +153,19 @@ def login(data: LoginRequest, db: Session = Depends(get_db)):
 @router.get("/me", response_model=UserOut)
 def me(user: User = Depends(get_current_user)):
     return user
+
+
+@router.post("/forgot-password")
+def forgot_password(email_data: dict, db: Session = Depends(get_db)):
+    email = email_data.get("email")
+
+    user = db.query(User).filter(User.email == email).first()
+
+    # IMPORTANTE: não revelar se o email existe ou não
+    if not user:
+        return {"message": "Se o email existir, enviaremos instruções."}
+
+    # 🔥 versão simples (sem email real)
+    print(f"[RESET PASSWORD] usuário: {email}")
+
+    return {"message": "Se o email existir, enviaremos instruções."}
