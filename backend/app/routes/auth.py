@@ -1,6 +1,9 @@
 import re
+import secrets
+from datetime import datetime, timedelta, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from pydantic import BaseModel, EmailStr, Field
 from sqlalchemy.orm import Session
 
 from app.core.security import (
@@ -13,11 +16,21 @@ from app.models.tenant import Tenant
 from app.models.user import User
 from app.models.course import Course
 from app.models.enrollment import Enrollment
+from app.models.password_reset_token import PasswordResetToken
 from app.schemas.auth import LoginRequest, TokenResponse, RegisterRequest
 from app.schemas.user import UserOut
 from app.core.deps import get_current_user
 
 router = APIRouter(prefix="/auth", tags=["auth"])
+
+
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr
+
+
+class ResetPasswordRequest(BaseModel):
+    token: str = Field(..., min_length=10)
+    password: str = Field(..., min_length=6, max_length=255)
 
 
 def get_current_admin_user(user: User = Depends(get_current_user)) -> User:
@@ -156,16 +169,83 @@ def me(user: User = Depends(get_current_user)):
 
 
 @router.post("/forgot-password")
-def forgot_password(email_data: dict, db: Session = Depends(get_db)):
-    email = email_data.get("email")
+def forgot_password(data: ForgotPasswordRequest, db: Session = Depends(get_db)):
+    normalized_email = data.email.strip().lower()
 
-    user = db.query(User).filter(User.email == email).first()
+    user = db.query(User).filter(User.email == normalized_email).first()
 
-    # IMPORTANTE: não revelar se o email existe ou não
+    # Não revela se o email existe ou não
     if not user:
-        return {"message": "Se o email existir, enviaremos instruções."}
+        return {"message": "Se o email existir, você receberá instruções para redefinir a senha."}
 
-    # 🔥 versão simples (sem email real)
-    print(f"[RESET PASSWORD] usuário: {email}")
+    # Invalida tokens ainda não usados do mesmo usuário
+    existing_tokens = (
+        db.query(PasswordResetToken)
+        .filter(
+            PasswordResetToken.user_id == user.id,
+            PasswordResetToken.used == False,
+        )
+        .all()
+    )
 
-    return {"message": "Se o email existir, enviaremos instruções."}
+    for existing_token in existing_tokens:
+        existing_token.used = True
+
+    token = secrets.token_urlsafe(48)
+
+    reset_token = PasswordResetToken(
+        user_id=user.id,
+        token=token,
+        expires_at=datetime.now(timezone.utc) + timedelta(hours=1),
+        used=False,
+    )
+
+    db.add(reset_token)
+    db.commit()
+
+    reset_link = f"https://curso-mariana-lima.vercel.app/reset-password.html?token={token}"
+    print(f"[RESET PASSWORD LINK] {reset_link}")
+
+    return {"message": "Se o email existir, você receberá instruções para redefinir a senha."}
+
+
+@router.post("/reset-password")
+def reset_password(data: ResetPasswordRequest, db: Session = Depends(get_db)):
+    reset_token = (
+        db.query(PasswordResetToken)
+        .filter(PasswordResetToken.token == data.token)
+        .first()
+    )
+
+    if not reset_token:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Token inválido ou expirado.",
+        )
+
+    if reset_token.used:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Este link de redefinição já foi utilizado.",
+        )
+
+    if reset_token.expires_at < datetime.now(timezone.utc):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Token inválido ou expirado.",
+        )
+
+    user = db.query(User).filter(User.id == reset_token.user_id).first()
+
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Usuário não encontrado.",
+        )
+
+    user.password_hash = hash_password(data.password)
+    reset_token.used = True
+
+    db.commit()
+
+    return {"message": "Senha redefinida com sucesso."}

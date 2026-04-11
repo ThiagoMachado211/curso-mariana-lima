@@ -1,4 +1,5 @@
 from sqlalchemy.orm import DeclarativeBase
+from app.models.password_reset_token import PasswordResetToken
 
 class Base(DeclarativeBase):
     pass
