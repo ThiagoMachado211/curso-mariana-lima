@@ -8,7 +8,7 @@ from sqlalchemy import engine_from_config, pool
 
 from dotenv import load_dotenv
 from app.core.config import settings
-from app.db.base import Base
+from app.db.base_class import Base
 
 # carrega backend/.env
 load_dotenv()
@@ -29,7 +29,7 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 # ---- IMPORTA METADATA DOS MODELS ----
-from app.db.base import Base  # noqa: E402
+from app.db.base_class import Base  # noqa: E402
 
 # Importa models para registrar no metadata
 from app.models.tenant import Tenant  # noqa: F401,E402
