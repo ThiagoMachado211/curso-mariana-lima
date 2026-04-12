@@ -23,9 +23,11 @@ from app.routes import webhooks
 app = FastAPI(title=settings.app_name)
 
 origins = [
-    "http://localhost:5500",
     "http://127.0.0.1:5500",
-    "https://curso-mariana-lima.vercel.app",
+    "http://localhost:5500",
+    "https://profmarianalimaessencial.com.br",
+    "https://www.profmarianalimaessencial.com.br",
+    "https://curso-mariana-lima.onrender.com",
 ]
 
 app.add_middleware(
