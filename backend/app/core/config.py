@@ -1,20 +1,8 @@
-from pydantic_settings import BaseSettings, SettingsConfigDict
+import os
 
-
-class Settings(BaseSettings):
-    app_name: str = "Curso Mariana Lima API"
-    database_url: str
-    secret_key: str
-    algorithm: str = "HS256"
-    access_token_expire_minutes: int = 60
-
-    frontend_url: str = "http://localhost:5500"
-
-    model_config = SettingsConfigDict(
-        env_file=".env",
-        env_file_encoding="utf-8",
-        extra="ignore",
-    )
-
+class Settings:
+    RESEND_API_KEY: str = os.getenv("RESEND_API_KEY", "")
+    MAIL_FROM: str = os.getenv("MAIL_FROM", "")
+    FRONTEND_URL: str = os.getenv("FRONTEND_URL", "http://127.0.0.1:5500")
 
 settings = Settings()
