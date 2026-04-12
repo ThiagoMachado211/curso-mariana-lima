@@ -1,3 +1,5 @@
+# Testing Resend
+
 import resend
 from app.core.config import settings
 
