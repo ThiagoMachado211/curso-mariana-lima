@@ -1,7 +1,6 @@
 requireStudent();
 
 const modulesList = document.getElementById("modulesList");
-const lessonPlayer = document.getElementById("lessonPlayer");
 const lessonTitle = document.getElementById("lessonTitle");
 const lessonMeta = document.getElementById("lessonMeta");
 const lessonDescription = document.getElementById("lessonDescription");
@@ -11,6 +10,14 @@ const feedbackMessage = document.getElementById("feedbackMessage");
 const courseProgressText = document.getElementById("courseProgressText");
 const logoutButton = document.getElementById("logoutButton");
 const courseProgressFill = document.getElementById("courseProgressFill");
+const videoMode = document.getElementById("videoMode");
+const pdfMode = document.getElementById("pdfMode");
+const lessonPlayer = document.getElementById("lessonPlayer");
+const pdfLessonTitle = document.getElementById("pdfLessonTitle");
+const pdfLessonMeta = document.getElementById("pdfLessonMeta");
+const pdfLessonDescription = document.getElementById("pdfLessonDescription");
+const pdfButtonsContainer = document.getElementById("pdfButtonsContainer");
+const courseMainContent = document.getElementById("courseMainContent");
 
 let currentCourse = null;
 let currentLesson = null;
@@ -65,7 +72,7 @@ function normalizeEmbedUrl(url) {
   }
 
   if (url.includes("youtu.be/")) {
-    const videoId = url.split("youtu.be/")[1];
+    const videoId = url.split("youtu.be/")[1]?.split("?")[0];
     return `https://www.youtube.com/embed/${videoId}`;
   }
 
@@ -77,7 +84,7 @@ function findLessonById(lessonId) {
 
   for (const module of currentCourse.modules) {
     for (const lesson of module.lessons || []) {
-      if (lesson.id === lessonId) {
+      if (String(lesson.id) === String(lessonId)) {
         return lesson;
       }
     }
@@ -122,19 +129,42 @@ function updateCompleteButtonState() {
   }
 }
 
-function selectLesson(lesson) {
-  currentLesson = lesson;
+function renderPdfButtons(lesson) {
+  if (!pdfButtonsContainer) return;
 
-  document.querySelectorAll(".lesson-item").forEach((item) => {
-    item.classList.toggle("active", item.dataset.lessonId === lesson.id);
-  });
+  pdfButtonsContainer.innerHTML = "";
 
-  if (lessonPlayer) {
-    lessonPlayer.src = normalizeEmbedUrl(lesson.video_embed_url || "");
+  // Compatibilidade com o modelo antigo: 1 PDF em lesson.pdf_url
+  if (lesson.pdf_url) {
+    const link = document.createElement("a");
+    link.href = lesson.pdf_url;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.className = "secondary-btn";
+    link.textContent = "Abrir PDF";
+    pdfButtonsContainer.appendChild(link);
+    return;
   }
 
+  // Novo modelo: vários PDFs em lesson.pdfs
+  if (Array.isArray(lesson.pdfs) && lesson.pdfs.length > 0) {
+    lesson.pdfs.forEach((pdf, index) => {
+      const link = document.createElement("a");
+      link.href = pdf.pdf_url;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.className = "secondary-btn";
+      link.textContent = pdf.title || `Abrir PDF ${index + 1}`;
+      pdfButtonsContainer.appendChild(link);
+    });
+  }
+}
+
+function renderLesson(lesson) {
+  const hasVideo = !!(lesson.video_embed_url && lesson.video_embed_url.trim() !== "");
+
   if (lessonTitle) {
-    lessonTitle.textContent = lesson.title || "Aula sem título";
+    lessonTitle.textContent = lesson.title || "Sem título";
   }
 
   if (lessonMeta) {
@@ -146,17 +176,66 @@ function selectLesson(lesson) {
       lesson.description || "Escolha uma aula no painel lateral para começar.";
   }
 
-  if (lessonPdfButton) {
-    if (lesson.pdf_url) {
-      lessonPdfButton.href = lesson.pdf_url;
-      lessonPdfButton.classList.remove("hidden");
-    } else {
+  if (hasVideo) {
+    videoMode?.classList.remove("hidden");
+    pdfMode?.classList.add("hidden");
+    courseMainContent?.classList.remove("pdf-only");
+
+    if (lessonPlayer) {
+      lessonPlayer.src = normalizeEmbedUrl(lesson.video_embed_url);
+    }
+
+    // No modo vídeo, o botão lateral de PDF só aparece se ainda existir pdf_url legado
+    if (lessonPdfButton) {
+      if (lesson.pdf_url) {
+        lessonPdfButton.href = lesson.pdf_url;
+        lessonPdfButton.classList.remove("hidden");
+      } else {
+        lessonPdfButton.classList.add("hidden");
+        lessonPdfButton.removeAttribute("href");
+      }
+    }
+  } else {
+    videoMode?.classList.add("hidden");
+    pdfMode?.classList.remove("hidden");
+    courseMainContent?.classList.add("pdf-only");
+
+    if (lessonPlayer) {
+      lessonPlayer.src = "";
+    }
+
+    if (pdfLessonTitle) {
+      pdfLessonTitle.textContent = lesson.title || "Sem título";
+    }
+
+    if (pdfLessonMeta) {
+      pdfLessonMeta.textContent = lesson.completed ? "Aula concluída ✔" : "Aula em andamento";
+    }
+
+    if (pdfLessonDescription) {
+      pdfLessonDescription.textContent =
+        lesson.description || "Escolha uma aula no painel lateral para começar.";
+    }
+
+    if (lessonPdfButton) {
       lessonPdfButton.classList.add("hidden");
       lessonPdfButton.removeAttribute("href");
     }
+
+    renderPdfButtons(lesson);
   }
 
   updateCompleteButtonState();
+}
+
+function selectLesson(lesson) {
+  currentLesson = lesson;
+
+  document.querySelectorAll(".lesson-item").forEach((item) => {
+    item.classList.toggle("active", item.dataset.lessonId == lesson.id);
+  });
+
+  renderLesson(lesson);
 }
 
 function renderModules(modules) {
@@ -172,10 +251,9 @@ function renderModules(modules) {
     .map((module) => {
       const lessonsHtml = (module.lessons || [])
         .sort((a, b) => a.order - b.order)
-
         .map((lesson, lessonIndex) => `
-          <div 
-            class="lesson-item" 
+          <div
+            class="lesson-item"
             data-lesson-id="${lesson.id}"
             data-module-id="${module.id}"
           >
@@ -270,7 +348,7 @@ markCompletedButton?.addEventListener("click", async () => {
     if (currentCourse?.modules) {
       for (const module of currentCourse.modules) {
         for (const lesson of module.lessons || []) {
-          if (lesson.id === currentLesson.id) {
+          if (String(lesson.id) === String(currentLesson.id)) {
             lesson.completed = true;
             currentLesson = lesson;
           }
@@ -279,7 +357,9 @@ markCompletedButton?.addEventListener("click", async () => {
     }
 
     renderModules(currentCourse.modules || []);
-    selectLesson(currentLesson);
+    if (currentLesson) {
+      selectLesson(currentLesson);
+    }
 
     const allLessons = (currentCourse.modules || []).flatMap((module) => module.lessons || []);
     const completedLessons = allLessons.filter((lesson) => lesson.completed).length;
@@ -291,7 +371,7 @@ markCompletedButton?.addEventListener("click", async () => {
     updateProgressUI({
       completed_lessons: completedLessons,
       total_lessons: totalLessons,
-      percentage: percentage
+      percentage
     });
 
     showFeedback("Aula marcada como concluída com sucesso.", "success");

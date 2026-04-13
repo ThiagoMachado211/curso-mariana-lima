@@ -7,14 +7,18 @@
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body class="student-page">
-
     <header class="site-header student-top-header">
       <div class="page-container">
         <div class="site-header__inner">
           <a href="dashboard.html" class="site-logo">
-            <img src="assets/Logo_Mariana.jpg" alt="Logo Mariana Lima" class="site-logo__img" />
+            <img
+              src="assets/Logo_Mariana.jpg"
+              alt="Logo Mariana Lima"
+              class="site-logo__img"
+            />
             <span class="site-logo__text">
-              <span class="site-logo__text--blue">Matemática </span><span class="site-logo__text--purple">Essencial</span>
+              <span class="site-logo__text--blue">Matemática </span>
+              <span class="site-logo__text--purple">Essencial</span>
             </span>
           </a>
 
@@ -27,20 +31,40 @@
       </div>
     </header>
 
-
     <main class="course-page">
-      <section class="course-player-section">
-        <div class="course-video-wrapper">
-          <iframe
-            id="lessonPlayer"
-            class="lesson-player"
-            src=""
-            title="Player da aula"
-            frameborder="0"
-            allowfullscreen
-          ></iframe>
+      <section id="courseMainContent" class="course-player-section">
+        <!-- MODO VÍDEO -->
+        <div id="videoMode" class="lesson-mode">
+          <div class="course-video-wrapper">
+            <iframe
+              id="lessonPlayer"
+              class="lesson-player"
+              src=""
+              title="Player da aula"
+              frameborder="0"
+              allowfullscreen
+            ></iframe>
+          </div>
         </div>
 
+        <!-- MODO PDF -->
+        <div id="pdfMode" class="lesson-mode hidden">
+          <div class="course-pdf-wrapper">
+            <div class="course-pdf-placeholder">
+              <h2 id="pdfLessonTitle">Selecione uma aula</h2>
+              <p id="pdfLessonMeta">Escolha uma aula no painel lateral para começar.</p>
+              <p id="pdfLessonDescription">
+                Escolha uma aula no painel lateral para começar.
+              </p>
+
+              <div id="pdfButtonsContainer" class="pdf-buttons-container">
+                <!-- Botões dos PDFs serão inseridos via JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- INFORMAÇÕES DA AULA -->
         <div class="course-lesson-info">
           <h1 id="lessonTitle">Selecione uma aula</h1>
           <p id="lessonMeta">Escolha uma aula no painel lateral para começar.</p>

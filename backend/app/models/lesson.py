@@ -1,7 +1,7 @@
 import uuid
 from sqlalchemy import String, Integer, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base_class import Base
 
@@ -15,4 +15,12 @@ class Lesson(Base):
     title: Mapped[str] = mapped_column(String(200), nullable=False)
     order: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     video_embed_url: Mapped[str | None] = mapped_column(String, nullable=True)
+
     pdf_url: Mapped[str | None] = mapped_column(String, nullable=True)
+
+    pdfs = relationship(
+        "LessonPdf",
+        back_populates="lesson",
+        cascade="all, delete-orphan",
+        order_by="LessonPdf.order",
+    )
