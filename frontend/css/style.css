@@ -2228,7 +2228,7 @@ img {
 .admin-list-card-title {
   font-size: 28px;
   font-weight: 800;
-  color: #0f172a;
+  color: white;
   margin-bottom: 8px;
 }
 
@@ -2240,7 +2240,7 @@ img {
 
 .admin-list-card-meta {
   margin-top: 12px;
-  color: #334155;
+  color: white;
   font-size: 15px;
   line-height: 1.8;
 }
