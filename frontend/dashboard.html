@@ -11,30 +11,144 @@
       <div class="page-container">
         <div class="site-header__inner">
           <a href="dashboard.html" class="site-logo">
-            <img src="assets/Logo_Mariana.jpg" alt="Logo Mariana Lima" class="site-logo__img" />
+            <img
+              src="assets/Logo_Mariana.jpg"
+              alt="Logo Mariana Lima"
+              class="site-logo__img"
+            />
             <span class="site-logo__text">
-              <span class="site-logo__text--blue">Matemática </span><span class="site-logo__text--purple">Essencial</span>
+              <span class="site-logo__text--blue">Matemática </span>
+              <span class="site-logo__text--purple">Essencial</span>
             </span>
           </a>
 
           <nav class="site-nav">
             <a href="curso.html" class="btn btn--dark">Curso</a>
-            <a href="perfil.html" class="btn btn--dark">Perfil</a>
             <button id="logoutButton" class="btn btn--dark" type="button">Sair</button>
           </nav>
         </div>
       </div>
     </header>
 
-    <main class="student-main">
-      <div class="student-container">
-        <h1 class="student-page-title">Dashboard do Aluno</h1>
-
-        <div id="messageBox" class="student-message"></div>
-
-        <section class="student-card">
-          <h2>Boas-vindas</h2>
+    <main class="student-dashboard-page">
+      <div class="page-container">
+        <section class="dashboard-hero">
+          <h1>Dashboard do Aluno</h1>
           <p id="welcomeText">Carregando informações do aluno...</p>
+        </section>
+
+        <section class="dashboard-grid">
+          <!-- COLUNA ESQUERDA -->
+          <div class="dashboard-left">
+            <div class="dashboard-card dashboard-progress-card">
+              <div class="dashboard-card__header">
+                <h2>Seu progresso</h2>
+              </div>
+
+              <div class="progress-highlight">
+                <div class="progress-highlight__value" id="progressPercentage">0%</div>
+                <div class="progress-highlight__text" id="progressSummary">
+                  0 de 0 aulas concluídas
+                </div>
+              </div>
+
+              <div class="progress-bar large">
+                <div id="courseProgressFill" class="progress-bar-fill"></div>
+              </div>
+            </div>
+
+            <div class="dashboard-card dashboard-next-lesson-card">
+              <div class="dashboard-card__header">
+                <h2>Próxima aula recomendada</h2>
+              </div>
+
+              <p id="nextLessonTitle" class="dashboard-emphasis">
+                Nenhuma aula pendente encontrada.
+              </p>
+              <p id="nextLessonModule" class="dashboard-muted"></p>
+
+              <div class="dashboard-card__actions">
+                <a id="goToCourseButton" href="curso.html" class="primary-btn">
+                  Ir para o curso
+                </a>
+              </div>
+            </div>
+
+            <div class="dashboard-card dashboard-module-progress-card">
+              <div class="dashboard-card__header">
+                <h2>Progresso por módulo</h2>
+              </div>
+
+              <div id="moduleProgressList" class="module-progress-list">
+                <p class="dashboard-muted">Carregando módulos...</p>
+              </div>
+            </div>
+
+            <div class="dashboard-card dashboard-summary-card">
+              <div class="dashboard-card__header">
+                <h2>Resumo do curso</h2>
+              </div>
+
+              <div class="summary-grid">
+                <div class="summary-item">
+                  <span class="summary-item__label">Aulas totais</span>
+                  <strong id="totalLessonsValue">0</strong>
+                </div>
+
+                <div class="summary-item">
+                  <span class="summary-item__label">Concluídas</span>
+                  <strong id="completedLessonsValue">0</strong>
+                </div>
+
+                <div class="summary-item">
+                  <span class="summary-item__label">Pendentes</span>
+                  <strong id="pendingLessonsValue">0</strong>
+                </div>
+
+                <div class="summary-item">
+                  <span class="summary-item__label">Materiais PDF</span>
+                  <strong id="pdfCountValue">0</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- COLUNA DIREITA -->
+          <aside class="dashboard-right">
+            <div class="dashboard-card dashboard-profile-card">
+              <div class="dashboard-card__header">
+                <h2>Dados do aluno</h2>
+              </div>
+
+              <div class="profile-stack">
+                <div class="profile-field">
+                  <span class="profile-field__label">Nome</span>
+                  <span id="profileName" class="profile-field__value">-</span>
+                </div>
+
+                <div class="profile-field">
+                  <span class="profile-field__label">Sobrenome</span>
+                  <span id="profileLastName" class="profile-field__value">-</span>
+                </div>
+
+                <div class="profile-field">
+                  <span class="profile-field__label">Email</span>
+                  <span id="profileEmail" class="profile-field__value">-</span>
+                </div>
+
+                <div class="profile-field">
+                  <span class="profile-field__label">Perfil</span>
+                  <span id="profileRole" class="profile-field__value">-</span>
+                </div>
+              </div>
+
+              <div class="dashboard-card__actions">
+                <button id="editProfileButton" class="secondary-btn" type="button">
+                  Editar perfil
+                </button>
+              </div>
+            </div>
+          </aside>
         </section>
       </div>
     </main>
