@@ -3542,6 +3542,7 @@ body.public-page.home-page .home-hero-split__content-box ul {
   background: #111827;
   border-radius: 18px;
   padding: 24px;
+  color: white;
 }
 
 .pdfs-section {
@@ -3584,6 +3585,7 @@ body.public-page.home-page .home-hero-split__content-box ul {
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.05);
   margin-bottom: 12px;
+  color:white;
 }
 
 .admin-item-card__actions {
@@ -3617,4 +3619,15 @@ body.public-page.home-page .home-hero-split__content-box ul {
   .admin-item-card__actions {
     flex-direction: row;
   }
+}
+
+
+
+
+
+.admin-page-header {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 20px 48px;
+  color: white;
 }
