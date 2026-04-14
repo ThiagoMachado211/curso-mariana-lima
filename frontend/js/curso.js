@@ -134,31 +134,41 @@ function renderPdfButtons(lesson) {
 
   pdfButtonsContainer.innerHTML = "";
 
-  // Compatibilidade com o modelo antigo: 1 PDF em lesson.pdf_url
-  if (lesson.pdf_url) {
+  // Compatibilidade com modelo antigo
+  if (lesson.pdf_url && (!lesson.pdfs || lesson.pdfs.length === 0)) {
     const link = document.createElement("a");
     link.href = lesson.pdf_url;
     link.target = "_blank";
     link.rel = "noopener noreferrer";
-    link.className = "secondary-btn";
+    link.className = "pdf-action-btn";
     link.textContent = "Abrir PDF";
     pdfButtonsContainer.appendChild(link);
     return;
   }
 
-  // Novo modelo: vários PDFs em lesson.pdfs
+  // Novo modelo: vários PDFs
   if (Array.isArray(lesson.pdfs) && lesson.pdfs.length > 0) {
-    lesson.pdfs.forEach((pdf, index) => {
-      const link = document.createElement("a");
-      link.href = pdf.pdf_url;
-      link.target = "_blank";
-      link.rel = "noopener noreferrer";
-      link.className = "secondary-btn";
-      link.textContent = pdf.title || `Abrir PDF ${index + 1}`;
-      pdfButtonsContainer.appendChild(link);
-    });
+    lesson.pdfs
+      .slice()
+      .sort((a, b) => a.order - b.order)
+      .forEach((pdf, index) => {
+        const link = document.createElement("a");
+        link.href = pdf.pdf_url;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.className = "pdf-action-btn";
+        link.textContent = pdf.title?.trim() || `PDF ${index + 1}`;
+        pdfButtonsContainer.appendChild(link);
+      });
+    return;
   }
+
+  const emptyMessage = document.createElement("p");
+  emptyMessage.className = "pdf-empty-message";
+  emptyMessage.textContent = "Nenhum PDF disponível para esta aula.";
+  pdfButtonsContainer.appendChild(emptyMessage);
 }
+
 
 function renderLesson(lesson) {
   const hasVideo = !!(lesson.video_embed_url && lesson.video_embed_url.trim() !== "");
@@ -185,7 +195,6 @@ function renderLesson(lesson) {
       lessonPlayer.src = normalizeEmbedUrl(lesson.video_embed_url);
     }
 
-    // No modo vídeo, o botão lateral de PDF só aparece se ainda existir pdf_url legado
     if (lessonPdfButton) {
       if (lesson.pdf_url) {
         lessonPdfButton.href = lesson.pdf_url;
@@ -227,6 +236,7 @@ function renderLesson(lesson) {
 
   updateCompleteButtonState();
 }
+
 
 function selectLesson(lesson) {
   currentLesson = lesson;
