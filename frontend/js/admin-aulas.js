@@ -1,254 +1,399 @@
-document.addEventListener("DOMContentLoaded", async () => {
-  const messageBox = document.getElementById("messageBox");
-  const form = document.getElementById("lessonForm");
-  const courseSelect = document.getElementById("course_id");
-  const moduleSelect = document.getElementById("module_id");
-  const titleInput = document.getElementById("title");
-  const orderInput = document.getElementById("order");
-  const videoInput = document.getElementById("video_embed_url");
-  const pdfInput = document.getElementById("pdf_url");
-  const cancelEditButton = document.getElementById("cancelEditButton");
-  const lessonsList = document.getElementById("lessonsList");
-  const submitButton = form?.querySelector('button[type="submit"]');
+requireAdmin();
 
-  let editingLessonId = null;
-  let coursesCache = [];
-  let modulesCache = [];
-  let lessonsCache = [];
+const logoutButton = document.getElementById("logoutButton");
+const lessonForm = document.getElementById("lessonForm");
+const lessonIdInput = document.getElementById("lessonId");
+const moduleSelect = document.getElementById("moduleSelect");
+const lessonTitleInput = document.getElementById("lessonTitle");
+const lessonOrderInput = document.getElementById("lessonOrder");
+const videoEmbedUrlInput = document.getElementById("videoEmbedUrl");
+const addPdfButton = document.getElementById("addPdfButton");
+const pdfList = document.getElementById("pdfList");
+const lessonsList = document.getElementById("lessonsList");
+const formTitle = document.getElementById("formTitle");
+const cancelEditButton = document.getElementById("cancelEditButton");
+const formError = document.getElementById("formError");
+const formSuccess = document.getElementById("formSuccess");
+const saveLessonButton = document.getElementById("saveLessonButton");
 
-  function showMessage(type, text) {
-    if (!messageBox) return;
-    messageBox.innerHTML = `<div class="message ${type}">${text}</div>`;
+let allModules = [];
+let allLessons = [];
+
+logoutButton?.addEventListener("click", logout);
+
+function showMessage(type, message) {
+  formError.classList.add("hidden");
+  formSuccess.classList.add("hidden");
+
+  if (type === "error") {
+    formError.textContent = message;
+    formError.classList.remove("hidden");
+  } else {
+    formSuccess.textContent = message;
+    formSuccess.classList.remove("hidden");
+  }
+}
+
+function clearMessages() {
+  formError.classList.add("hidden");
+  formSuccess.classList.add("hidden");
+}
+
+function createPdfRow(pdf = { title: "", pdf_url: "", order: "" }) {
+  const wrapper = document.createElement("div");
+  wrapper.className = "pdf-item-admin";
+
+  wrapper.innerHTML = `
+    <div class="form-group">
+      <label>Título do PDF</label>
+      <input type="text" class="pdf-title-input" maxlength="255" value="${escapeHtml(pdf.title || "")}" />
+    </div>
+
+    <div class="form-group">
+      <label>URL do PDF</label>
+      <input type="url" class="pdf-url-input" value="${escapeHtml(pdf.pdf_url || "")}" />
+    </div>
+
+    <div class="form-group">
+      <label>Ordem</label>
+      <input type="number" class="pdf-order-input" min="1" value="${escapeHtml(String(pdf.order || ""))}" />
+    </div>
+
+    <div class="form-group pdf-remove-group">
+      <label>&nbsp;</label>
+      <button type="button" class="secondary-btn remove-pdf-button">Remover</button>
+    </div>
+  `;
+
+  const removeButton = wrapper.querySelector(".remove-pdf-button");
+  removeButton.addEventListener("click", () => {
+    wrapper.remove();
+    syncVideoAndPdfState();
+  });
+
+  const titleInput = wrapper.querySelector(".pdf-title-input");
+  const urlInput = wrapper.querySelector(".pdf-url-input");
+  const orderInput = wrapper.querySelector(".pdf-order-input");
+
+  [titleInput, urlInput, orderInput].forEach((input) => {
+    input.addEventListener("input", syncVideoAndPdfState);
+  });
+
+  pdfList.appendChild(wrapper);
+  syncVideoAndPdfState();
+}
+
+function getPdfRows() {
+  return [...pdfList.querySelectorAll(".pdf-item-admin")];
+}
+
+function collectPdfs() {
+  return getPdfRows()
+    .map((row, index) => {
+      const title = row.querySelector(".pdf-title-input").value.trim();
+      const pdfUrl = row.querySelector(".pdf-url-input").value.trim();
+      const orderRaw = row.querySelector(".pdf-order-input").value.trim();
+
+      if (!title && !pdfUrl) return null;
+
+      return {
+        title,
+        pdf_url: pdfUrl,
+        order: orderRaw ? Number(orderRaw) : index + 1,
+      };
+    })
+    .filter(Boolean);
+}
+
+function syncVideoAndPdfState() {
+  const hasVideo = videoEmbedUrlInput.value.trim() !== "";
+  const pdfs = collectPdfs();
+  const hasPdfs = pdfs.length > 0;
+
+  if (hasVideo) {
+    addPdfButton.disabled = true;
+    getPdfRows().forEach((row) => {
+      row.querySelectorAll("input, button").forEach((el) => {
+        if (!el.classList.contains("remove-pdf-button")) {
+          el.disabled = true;
+        }
+      });
+    });
+  } else {
+    addPdfButton.disabled = getPdfRows().length >= 25;
+    getPdfRows().forEach((row) => {
+      row.querySelectorAll("input, button").forEach((el) => {
+        el.disabled = false;
+      });
+    });
   }
 
-  function clearMessage() {
-    if (!messageBox) return;
-    messageBox.innerHTML = "";
+  if (hasPdfs) {
+    videoEmbedUrlInput.disabled = true;
+  } else {
+    videoEmbedUrlInput.disabled = false;
   }
 
-  function resetForm() {
-    editingLessonId = null;
-    form.reset();
-    moduleSelect.innerHTML = `<option value="">Selecione um módulo</option>`;
-    moduleSelect.disabled = true;
-    submitButton.textContent = "Salvar aula";
-    cancelEditButton.classList.add("hidden");
+  if (getPdfRows().length >= 25) {
+    addPdfButton.disabled = true;
+  }
+}
+
+function resetForm() {
+  lessonForm.reset();
+  lessonIdInput.value = "";
+  pdfList.innerHTML = "";
+  formTitle.textContent = "Nova aula";
+  cancelEditButton.classList.add("hidden");
+  clearMessages();
+  videoEmbedUrlInput.disabled = false;
+  addPdfButton.disabled = false;
+  syncVideoAndPdfState();
+}
+
+function validateFormData(payload) {
+  const hasVideo = !!payload.video_embed_url;
+  const pdfCount = payload.pdfs.length;
+
+  if (hasVideo && pdfCount > 0) {
+    throw new Error("A aula pode ter vídeo ou PDFs, mas não ambos.");
   }
 
-  function fillModules(courseId, selected = "") {
-    const filtered = modulesCache.filter(
-      (module) => String(module.course_id) === String(courseId)
-    );
-
-    moduleSelect.innerHTML = `
-      <option value="">Selecione um módulo</option>
-      ${filtered
-        .map(
-          (module) => `
-            <option value="${module.id}" ${String(module.id) === String(selected) ? "selected" : ""}>
-              ${module.title}
-            </option>
-          `
-        )
-        .join("")}
-    `;
-
-    moduleSelect.disabled = filtered.length === 0;
+  if (!hasVideo && pdfCount === 0) {
+    throw new Error("A aula deve ter um vídeo ou pelo menos um PDF.");
   }
 
-  function fillForm(lesson) {
-    editingLessonId = lesson.id;
-    courseSelect.value = lesson.course_id ?? "";
-    fillModules(lesson.course_id, lesson.module_id);
-    titleInput.value = lesson.title ?? "";
-    orderInput.value = lesson.order ?? "";
-    videoInput.value = lesson.video_embed_url ?? "";
-    pdfInput.value = lesson.pdf_url ?? "";
-    submitButton.textContent = "Atualizar aula";
-    cancelEditButton.classList.remove("hidden");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  if (pdfCount > 25) {
+    throw new Error("A aula pode ter no máximo 25 PDFs.");
   }
 
-  async function loadCourses() {
-    const courses = await apiRequest("/admin/directory/courses");
-    coursesCache = Array.isArray(courses) ? courses : [];
-
-    courseSelect.innerHTML = `
-      <option value="">Selecione um curso</option>
-      ${coursesCache
-        .map((course) => `<option value="${course.id}">${course.title}</option>`)
-        .join("")}
-    `;
-  }
-
-  async function loadModules() {
-    const modules = await apiRequest("/admin/modules");
-    modulesCache = Array.isArray(modules) ? modules : [];
-  }
-
-  async function loadLessons() {
-    const lessons = await apiRequest("/admin/lessons");
-    lessonsCache = Array.isArray(lessons) ? lessons : [];
-
-    if (lessonsCache.length === 0) {
-      lessonsList.innerHTML = `<p class="empty-state">Nenhuma aula encontrada.</p>`;
-      return;
+  for (const pdf of payload.pdfs) {
+    if (!pdf.title) {
+      throw new Error("Todos os PDFs precisam ter título.");
     }
+    if (!pdf.pdf_url) {
+      throw new Error("Todos os PDFs precisam ter URL.");
+    }
+  }
+}
 
-    lessonsList.innerHTML = lessonsCache
-      .map((lesson) => {
-        const moduleObj = modulesCache.find(
-          (module) => String(module.id) === String(lesson.module_id)
-        );
+function buildPayload() {
+  const payload = {
+    module_id: moduleSelect.value,
+    title: lessonTitleInput.value.trim(),
+    order: Number(lessonOrderInput.value),
+    video_embed_url: videoEmbedUrlInput.value.trim() || null,
+    pdfs: collectPdfs(),
+  };
 
-        const moduleTitle = lesson.module_title || moduleObj?.title || "-";
+  validateFormData(payload);
+  return payload;
+}
 
-        const courseTitle =
-          lesson.course_title ||
-          coursesCache.find((course) =>
-            String(course.id) === String(lesson.course_id || moduleObj?.course_id)
-          )?.title ||
-          "-";
+function escapeHtml(value) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
 
-        return `
-          <div class="admin-list-card">
-            <div class="admin-list-card-title">${lesson.title ?? ""}</div>
+function renderModulesOptions() {
+  moduleSelect.innerHTML = `<option value="">Selecione um módulo</option>`;
 
-            <div class="admin-list-card-meta">
-              <div><strong>Curso:</strong> ${courseTitle}</div>
-              <div><strong>Módulo:</strong> ${moduleTitle}</div>
-              <div><strong>Ordem:</strong> ${lesson.order ?? "-"}</div>
-              <div><strong>Vídeo:</strong> ${
-                lesson.video_embed_url
-                  ? `<a href="${lesson.video_embed_url}" target="_blank" rel="noopener noreferrer">Abrir vídeo</a>`
-                  : "Não informado"
-              }</div>
-              <div><strong>PDF:</strong> ${
-                lesson.pdf_url
-                  ? `<a href="${lesson.pdf_url}" target="_blank" rel="noopener noreferrer">Abrir PDF</a>`
-                  : "Não informado"
-              }</div>
-            </div>
+  allModules
+    .sort((a, b) => a.order - b.order)
+    .forEach((module) => {
+      const option = document.createElement("option");
+      option.value = module.id;
+      option.textContent = `${module.title}`;
+      moduleSelect.appendChild(option);
+    });
+}
 
-            <div style="margin-top:12px;">
-              <span class="admin-soft-badge purple">Aula</span>
-            </div>
+function renderLessonsList() {
+  if (!allLessons.length) {
+    lessonsList.innerHTML = `<div class="sidebar-loading">Nenhuma aula cadastrada.</div>`;
+    return;
+  }
 
-            <div class="admin-list-card-actions">
-              <button type="button" data-action="edit" data-id="${lesson.id}">Editar</button>
-              <button type="button" class="danger" data-action="delete" data-id="${lesson.id}">Excluir</button>
+  lessonsList.innerHTML = allLessons
+    .slice()
+    .sort((a, b) => a.order - b.order)
+    .map((lesson) => {
+      const hasVideo = !!lesson.video_embed_url;
+      const pdfCount = Array.isArray(lesson.pdfs)
+        ? lesson.pdfs.length
+        : lesson.pdf_url
+          ? 1
+          : 0;
+
+      return `
+        <div class="admin-item-card">
+          <div class="admin-item-card__content">
+            <strong>${escapeHtml(lesson.title)}</strong>
+            <div>Módulo: ${escapeHtml(findModuleTitle(lesson.module_id))}</div>
+            <div>Ordem: ${lesson.order}</div>
+            <div>
+              Tipo:
+              ${hasVideo ? "Vídeo" : "PDF(s)"}
+              ${!hasVideo ? `• ${pdfCount} PDF(s)` : ""}
             </div>
           </div>
-        `;
-      })
-      .join("");
-  }
 
-  async function handleSubmit(event) {
-    event.preventDefault();
-    clearMessage();
+          <div class="admin-item-card__actions">
+            <button type="button" class="secondary-btn edit-lesson-btn" data-id="${lesson.id}">
+              Editar
+            </button>
+            <button type="button" class="danger-btn delete-lesson-btn" data-id="${lesson.id}">
+              Excluir
+            </button>
+          </div>
+        </div>
+      `;
+    })
+    .join("");
 
-    const payload = {
-      module_id: moduleSelect.value,
-      title: titleInput.value.trim(),
-      order: Number(orderInput.value || 0),
-      video_embed_url: videoInput.value.trim() || null,
-      pdf_url: pdfInput.value.trim() || null,
-    };
+  document.querySelectorAll(".edit-lesson-btn").forEach((button) => {
+    button.addEventListener("click", () => {
+      const lesson = allLessons.find((item) => String(item.id) === String(button.dataset.id));
+      if (lesson) populateFormForEdit(lesson);
+    });
+  });
 
-    if (!courseSelect.value || !payload.module_id || !payload.title) {
-      showMessage("error", "Selecione curso, módulo e informe o título da aula.");
-      return;
-    }
-
-    try {
-      submitButton.disabled = true;
-      submitButton.textContent = editingLessonId ? "Atualizando..." : "Salvando...";
-
-      if (editingLessonId) {
-        await apiRequest(`/admin/lessons/${editingLessonId}`, {
-          method: "PUT",
-          body: JSON.stringify(payload),
-        });
-        showMessage("success", "Aula atualizada com sucesso.");
-      } else {
-        await apiRequest("/admin/lessons", {
-          method: "POST",
-          body: JSON.stringify(payload),
-        });
-        showMessage("success", "Aula criada com sucesso.");
-      }
-
-      resetForm();
-      await loadLessons();
-    } catch (error) {
-      showMessage("error", error.message || "Erro ao salvar aula.");
-    } finally {
-      submitButton.disabled = false;
-      submitButton.textContent = editingLessonId ? "Atualizar aula" : "Salvar aula";
-    }
-  }
-
-  async function handleListClick(event) {
-    const button = event.target.closest("button[data-action]");
-    if (!button) return;
-
-    const action = button.dataset.action;
-    const id = button.dataset.id;
-
-    if (action === "edit") {
-      const lesson = lessonsCache.find((item) => String(item.id) === String(id));
-
-      if (!lesson) {
-        showMessage("error", "Aula não encontrada para edição.");
-        return;
-      }
-
-      fillForm(lesson);
-      return;
-    }
-
-    if (action === "delete") {
-      if (!window.confirm("Tem certeza que deseja excluir esta aula?")) return;
+  document.querySelectorAll(".delete-lesson-btn").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const confirmed = window.confirm("Deseja excluir esta aula?");
+      if (!confirmed) return;
 
       try {
-        await apiRequest(`/admin/lessons/${id}`, { method: "DELETE" });
-
-        if (editingLessonId === id) resetForm();
+        await apiRequest(`/admin/lessons/${button.dataset.id}`, {
+          method: "DELETE",
+        });
 
         showMessage("success", "Aula excluída com sucesso.");
-        await loadLessons();
+        await loadInitialData();
+        resetForm();
       } catch (error) {
         showMessage("error", error.message || "Erro ao excluir aula.");
       }
-    }
+    });
+  });
+}
+
+function findModuleTitle(moduleId) {
+  const module = allModules.find((item) => String(item.id) === String(moduleId));
+  return module ? module.title : "Módulo não encontrado";
+}
+
+function populateFormForEdit(lesson) {
+  lessonIdInput.value = lesson.id;
+  moduleSelect.value = lesson.module_id;
+  lessonTitleInput.value = lesson.title || "";
+  lessonOrderInput.value = lesson.order || "";
+  videoEmbedUrlInput.value = lesson.video_embed_url || "";
+  pdfList.innerHTML = "";
+
+  if (Array.isArray(lesson.pdfs) && lesson.pdfs.length > 0) {
+    lesson.pdfs
+      .slice()
+      .sort((a, b) => a.order - b.order)
+      .forEach((pdf) => createPdfRow(pdf));
+  } else if (lesson.pdf_url) {
+    createPdfRow({
+      title: "Material da aula",
+      pdf_url: lesson.pdf_url,
+      order: 1,
+    });
   }
+
+  formTitle.textContent = "Editar aula";
+  cancelEditButton.classList.remove("hidden");
+  clearMessages();
+  syncVideoAndPdfState();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+async function loadModules() {
+  allModules = await apiRequest("/admin/modules");
+  renderModulesOptions();
+}
+
+async function loadLessons() {
+  allLessons = await apiRequest("/admin/lessons");
+  renderLessonsList();
+}
+
+async function loadInitialData() {
+  await Promise.all([loadModules(), loadLessons()]);
+}
+
+addPdfButton?.addEventListener("click", () => {
+  if (getPdfRows().length >= 25) {
+    showMessage("error", "Você pode adicionar no máximo 25 PDFs.");
+    return;
+  }
+
+  createPdfRow({
+    title: "",
+    pdf_url: "",
+    order: getPdfRows().length + 1,
+  });
+});
+
+videoEmbedUrlInput?.addEventListener("input", syncVideoAndPdfState);
+
+cancelEditButton?.addEventListener("click", resetForm);
+
+lessonForm?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  clearMessages();
 
   try {
-    await requireAdmin();
+    saveLessonButton.disabled = true;
+    saveLessonButton.textContent = "Salvando...";
 
-    form.addEventListener("submit", handleSubmit);
+    const payload = buildPayload();
+    const lessonId = lessonIdInput.value.trim();
 
-    courseSelect.addEventListener("change", () => {
-      const selectedCourseId = courseSelect.value;
+    if (!payload.module_id) {
+      throw new Error("Selecione um módulo.");
+    }
 
-      if (!selectedCourseId) {
-        moduleSelect.innerHTML = `<option value="">Selecione um módulo</option>`;
-        moduleSelect.disabled = true;
-        return;
-      }
+    if (!payload.title) {
+      throw new Error("Informe o título da aula.");
+    }
 
-      fillModules(selectedCourseId);
-    });
+    if (!payload.order || Number.isNaN(payload.order)) {
+      throw new Error("Informe uma ordem válida para a aula.");
+    }
 
-    cancelEditButton.addEventListener("click", resetForm);
-    lessonsList.addEventListener("click", handleListClick);
+    if (lessonId) {
+      await apiRequest(`/admin/lessons/${lessonId}`, {
+        method: "PUT",
+        body: JSON.stringify(payload),
+      });
+      showMessage("success", "Aula atualizada com sucesso.");
+    } else {
+      await apiRequest("/admin/lessons", {
+        method: "POST",
+        body: JSON.stringify(payload),
+      });
+      showMessage("success", "Aula criada com sucesso.");
+    }
 
-    resetForm();
-    await loadCourses();
-    await loadModules();
     await loadLessons();
+    resetForm();
   } catch (error) {
-    showMessage("error", error.message || "Erro ao carregar a página.");
+    showMessage("error", error.message || "Erro ao salvar aula.");
+  } finally {
+    saveLessonButton.disabled = false;
+    saveLessonButton.textContent = "Salvar aula";
   }
+});
+
+loadInitialData().catch((error) => {
+  console.error("Erro ao carregar dados do admin de aulas:", error);
+  showMessage("error", "Erro ao carregar módulos e aulas.");
 });

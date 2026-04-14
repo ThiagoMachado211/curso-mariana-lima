@@ -9,12 +9,16 @@ from app.db.base_class import Base
 class LessonPdf(Base):
     __tablename__ = "lesson_pdfs"
 
-    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        primary_key=True,
+        default=uuid.uuid4
+    )
     lesson_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
         ForeignKey("lessons.id", ondelete="CASCADE"),
         index=True,
-        nullable=False,
+        nullable=False
     )
     title: Mapped[str] = mapped_column(String(255), nullable=False)
     pdf_url: Mapped[str] = mapped_column(String, nullable=False)

@@ -109,13 +109,26 @@ def get_student_course(
             if lesson_completed:
                 completed_lessons += 1
 
+            lesson_pdfs = []
+            if hasattr(lesson, "pdfs") and lesson.pdfs:
+                lesson_pdfs = [
+                    {
+                        "id": str(pdf.id),
+                        "title": pdf.title,
+                        "pdf_url": pdf.pdf_url,
+                        "order": pdf.order,
+                    }
+                    for pdf in sorted(lesson.pdfs, key=lambda x: x.order)
+                ]
+
             response_lessons.append(
                 {
                     "id": str(lesson.id),
                     "title": lesson.title,
                     "order": lesson.order,
                     "video_embed_url": lesson.video_embed_url,
-                    "pdf_url": lesson.pdf_url,
+                    "pdf_url": lesson.pdf_url,  # legado
+                    "pdfs": lesson_pdfs,        # novo modelo
                     "completed": lesson_completed,
                 }
             )

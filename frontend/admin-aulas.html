@@ -6,87 +6,115 @@
     <title>Admin - Aulas</title>
     <link rel="stylesheet" href="css/style.css" />
   </head>
-  <body class="admin-page admin-dashboard-page">
-    <header class="site-header">
+  <body class="admin-page">
+    <header class="site-header admin-top-header">
       <div class="page-container">
         <div class="site-header__inner">
-          <a href="index.html" class="site-logo">
-            <img src="assets/Logo_Mariana.jpg" alt="Logo Mariana Lima" class="site-logo__img" />
+          <a href="admin-dashboard.html" class="site-logo">
+            <img
+              src="assets/Logo_Mariana.jpg"
+              alt="Logo Mariana Lima"
+              class="site-logo__img"
+            />
             <span class="site-logo__text">
-              <span class="site-logo__text--blue">Matemática </span><span class="site-logo__text--purple">Essencial</span>
+              <span class="site-logo__text--blue">Matemática </span>
+              <span class="site-logo__text--purple">Essencial</span>
             </span>
           </a>
+
           <nav class="site-nav">
-            <a href="admin-dashboard.html" class="btn btn--dark" style="background-color:lightgrey; color:black;">Voltar para o dashboard</a>
+            <a href="admin-dashboard.html" class="btn btn--dark">Dashboard</a>
+            <a href="admin-cursos.html" class="btn btn--dark">Cursos</a>
+            <a href="admin-modulos.html" class="btn btn--dark">Módulos</a>
+            <button id="logoutButton" class="btn btn--dark" type="button">Sair</button>
           </nav>
         </div>
       </div>
     </header>
 
-    <main class="admin-management-main">
-      <div class="admin-management-container">
-        <h1 class="admin-management-title">Gerenciamento de Aulas</h1>
+    <main class="page-container admin-lessons-page">
+      <section class="admin-page-header">
+        <h1>Gerenciar aulas</h1>
+        <p>Cadastre aulas com vídeo ou com até 25 PDFs.</p>
+      </section>
 
-        <div id="messageBox"></div>
-
-        <section class="card">
+      <section class="admin-layout">
+        <div class="admin-form-card">
           <h2 id="formTitle">Nova aula</h2>
 
           <form id="lessonForm">
-            <div class="row">
-              <div>
-                <label for="course_id">Curso</label>
-                <select id="course_id">
-                  <option value="">Selecione um curso</option>
-                </select>
-              </div>
+            <input type="hidden" id="lessonId" />
 
-              <div>
-                <label for="module_id">Módulo</label>
-                <select id="module_id" disabled>
-                  <option value="">Selecione um módulo</option>
-                </select>
-              </div>
-
-              <div>
-                <label for="order">Ordem</label>
-                <input type="number" id="order" />
-              </div>
-
-              <div class="full-width">
-                <label for="title">Título da aula</label>
-                <input type="text" id="title" />
-              </div>
-
-              <div class="full-width">
-                <label for="video_embed_url">URL do vídeo (embed)</label>
-                <input type="text" id="video_embed_url" />
-              </div>
-
-              <div class="full-width">
-                <label for="pdf_url">URL do PDF</label>
-                <input type="text" id="pdf_url" />
-              </div>
+            <div class="form-group">
+              <label for="moduleSelect">Módulo</label>
+              <select id="moduleSelect" required>
+                <option value="">Selecione um módulo</option>
+              </select>
             </div>
 
-            <div class="actions">
-              <button type="submit">Salvar aula</button>
-              <button id="cancelEditButton" class="secondary hidden" type="button">Cancelar edição</button>
+            <div class="form-group">
+              <label for="lessonTitle">Título da aula</label>
+              <input type="text" id="lessonTitle" required maxlength="200" />
+            </div>
+
+            <div class="form-group">
+              <label for="lessonOrder">Ordem</label>
+              <input type="number" id="lessonOrder" required min="1" />
+            </div>
+
+            <div class="form-group">
+              <label for="videoEmbedUrl">URL do vídeo</label>
+              <input
+                type="url"
+                id="videoEmbedUrl"
+                placeholder="https://www.youtube.com/watch?v=..."
+              />
+              <small class="form-help">
+                Se preencher vídeo, os PDFs serão desabilitados.
+              </small>
+            </div>
+
+            <div class="pdfs-section">
+              <div class="pdfs-section-header">
+                <div>
+                  <label>PDFs da aula</label>
+                  <small class="form-help">
+                    Se adicionar PDFs, o vídeo será desabilitado.
+                  </small>
+                </div>
+                <button type="button" id="addPdfButton" class="secondary-btn">
+                  + Adicionar PDF
+                </button>
+              </div>
+
+              <div id="pdfList" class="pdf-list-admin"></div>
+            </div>
+
+            <div id="formError" class="feedback error hidden"></div>
+            <div id="formSuccess" class="feedback success hidden"></div>
+
+            <div class="form-actions">
+              <button type="submit" id="saveLessonButton" class="primary-btn">
+                Salvar aula
+              </button>
+              <button type="button" id="cancelEditButton" class="secondary-btn hidden">
+                Cancelar edição
+              </button>
             </div>
           </form>
-        </section>
+        </div>
 
-        <section class="card">
-          <h2>Lista de aulas</h2>
-          <div id="lessonsList" class="admin-list-stack">
-            <p class="empty-state">Nenhuma aula cadastrada até o momento.</p>
+        <div class="admin-list-card">
+          <h2>Aulas cadastradas</h2>
+          <div id="lessonsList">
+            <div class="sidebar-loading">Carregando aulas...</div>
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
     </main>
 
-    <script src="js/api.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/admin-aulas.js"></script>
+    <script src="./js/api.js"></script>
+    <script src="./js/auth.js"></script>
+    <script src="./js/admin-aulas.js"></script>
   </body>
 </html>
