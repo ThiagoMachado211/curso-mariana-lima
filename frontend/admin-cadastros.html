@@ -7,21 +7,24 @@
     <link rel="stylesheet" href="./css/style.css" />
   </head>
   <body>
-      <header class="site-header">
-        <div class="page-container">
-          <div class="site-header__inner">
-            <a href="index.html" class="site-logo">
-              <img src="assets/Logo_Mariana.jpg" alt="Logo Mariana Lima" class="site-logo__img" />
-              <span class="site-logo__text">
-                <span class="site-logo__text--blue">Matemática </span><span class="site-logo__text--purple">Essencial</span>
-              </span>
+    <header class="site-header">
+      <div class="page-container">
+        <div class="site-header__inner">
+          <a href="index.html" class="site-logo">
+            <img src="assets/Logo_Mariana.jpg" alt="Logo Mariana Lima" class="site-logo__img" />
+            <span class="site-logo__text">
+              <span class="site-logo__text--blue">Matemática </span><span class="site-logo__text--purple">Essencial</span>
+            </span>
+          </a>
+
+          <nav class="site-nav">
+            <a href="admin-dashboard.html" class="btn btn--dark" style="background-color: lightgrey; color: black;">
+              Voltar para o dashboard
             </a>
-            <nav class="site-nav">
-              <a href="admin-dashboard.html" class="btn btn--dark" style="background-color:lightgrey; color:black;">Voltar para o dashboard</a>
-            </nav>
-          </div>
+          </nav>
         </div>
-      </header>
+      </div>
+    </header>
 
     <main class="admin-page">
       <section class="page-toolbar">
@@ -37,8 +40,26 @@
 
       <section id="feedbackMessage" class="feedback hidden"></section>
 
-      <section id="usersList" class="cards-list">
-        <div class="empty-state">Carregando usuários...</div>
+      <section class="admin-table-card">
+        <div class="admin-table-wrapper">
+          <table class="admin-users-table">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Sobrenome</th>
+                <th>E-mail</th>
+                <th>Perfil</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="usersList">
+              <tr>
+                <td colspan="6" class="empty-state">Carregando usuários...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </section>
     </main>
 

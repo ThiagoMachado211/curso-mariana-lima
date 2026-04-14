@@ -3977,3 +3977,56 @@ body.public-page.home-page .home-hero-split__content-box ul {
 .sidebar-card {
   max-height: none;
 }
+
+
+.admin-table-card {
+  background: #e9e9eb;
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.admin-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.admin-users-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+}
+
+.admin-users-table th,
+.admin-users-table td {
+  text-align: left;
+  padding: 14px 16px;
+  border-bottom: 1px solid #d8dce4;
+  vertical-align: middle;
+}
+
+.admin-users-table th {
+  color: #061b52;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.admin-users-table td {
+  color: #111827;
+}
+
+.table-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.table-actions .action-btn {
+  min-width: 100px;
+  justify-content: center;
+}
+
+@media (max-width: 900px) {
+  .table-actions {
+    flex-direction: column;
+  }
+}

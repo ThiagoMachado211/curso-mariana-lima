@@ -72,42 +72,56 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
+function sortUsersByFirstName(users) {
+  return [...users].sort((a, b) =>
+    String(a.name || "").localeCompare(String(b.name || ""), "pt-BR", {
+      sensitivity: "base",
+    })
+  );
+}
+
 function renderUsers(users) {
   if (!users?.length) {
-    usersList.innerHTML = `<div class="empty-state">Nenhum cadastro encontrado.</div>`;
+    usersList.innerHTML = `
+      <tr>
+        <td colspan="6" class="empty-state">Nenhum cadastro encontrado.</td>
+      </tr>
+    `;
     return;
   }
 
-  usersList.innerHTML = users
+  const sortedUsers = sortUsersByFirstName(users);
+
+  usersList.innerHTML = sortedUsers
     .map((user) => {
-      const fullName = `${user.name || ""} ${user.last_name || ""}`.trim();
-
       return `
-        <article class="admin-card">
-          <div class="admin-card-content">
-            <h3>${escapeHtml(fullName || "Usuário sem nome")}</h3>
-            <p><strong>E-mail:</strong> ${escapeHtml(user.email)}</p>
-            <p><strong>Perfil:</strong> ${escapeHtml(user.role)}</p>
-            <p><strong>Status:</strong> ${user.is_active ? "Ativo" : "Inativo"}</p>
-          </div>
+        <tr>
+          <td>${escapeHtml(user.name || "")}</td>
+          <td>${escapeHtml(user.last_name || "")}</td>
+          <td>${escapeHtml(user.email || "")}</td>
+          <td>${escapeHtml(user.role || "")}</td>
+          <td>${user.is_active ? "Ativo" : "Inativo"}</td>
+          <td>
+            <div class="table-actions">
+              <button class="action-btn edit edit-user-btn" data-user-id="${user.id}" type="button">
+                Editar
+              </button>
 
-          <div class="admin-card-actions">
-            <button class="action-btn edit edit-user-btn" data-user-id="${user.id}" type="button">
-              Editar
-            </button>
-            <button class="action-btn delete delete-user-btn" data-user-id="${user.id}" type="button">
-              Desativar
-            </button>
-            <button
-              class="action-btn enrollment manage-enrollments-btn"
-              data-user-id="${user.id}"
-              data-user-name="${escapeHtml(fullName)}"
-              type="button"
-            >
-              Matrículas
-            </button>
-          </div>
-        </article>
+              <button
+                class="action-btn enrollment manage-enrollments-btn"
+                data-user-id="${user.id}"
+                data-user-name="${escapeHtml(`${user.name || ""} ${user.last_name || ""}`.trim())}"
+                type="button"
+              >
+                Matrículas
+              </button>
+
+              <button class="action-btn delete delete-user-btn" data-user-id="${user.id}" type="button">
+                Bloquear
+              </button>
+            </div>
+          </td>
+        </tr>
       `;
     })
     .join("");
@@ -132,13 +146,21 @@ function bindUserActions() {
 }
 
 async function loadUsers() {
-  usersList.innerHTML = `<div class="empty-state">Carregando usuários...</div>`;
+  usersList.innerHTML = `
+    <tr>
+      <td colspan="6" class="empty-state">Carregando usuários...</td>
+    </tr>
+  `;
 
   try {
     const users = await apiRequest("/admin/users");
     renderUsers(users);
   } catch (error) {
-    usersList.innerHTML = `<div class="empty-state">Erro ao carregar usuários.</div>`;
+    usersList.innerHTML = `
+      <tr>
+        <td colspan="6" class="empty-state">Erro ao carregar usuários.</td>
+      </tr>
+    `;
     showFeedback(error.message || "Erro ao carregar usuários.", "error");
   }
 }
@@ -166,7 +188,7 @@ async function handleEditUser(userId) {
 }
 
 async function handleDeleteUser(userId) {
-  const confirmed = window.confirm("Deseja realmente desativar este cadastro?");
+  const confirmed = window.confirm("Deseja realmente bloquear este cadastro?");
   if (!confirmed) return;
 
   try {
@@ -174,10 +196,10 @@ async function handleDeleteUser(userId) {
       method: "DELETE"
     });
 
-    showFeedback("Cadastro desativado com sucesso.", "success");
+    showFeedback("Cadastro bloqueado com sucesso.", "success");
     await loadUsers();
   } catch (error) {
-    showFeedback(error.message || "Erro ao desativar cadastro.", "error");
+    showFeedback(error.message || "Erro ao bloquear cadastro.", "error");
   }
 }
 
