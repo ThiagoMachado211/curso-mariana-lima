@@ -4030,3 +4030,98 @@ body.public-page.home-page .home-hero-split__content-box ul {
     flex-direction: column;
   }
 }
+
+
+.admin-table-card {
+  background: #e9e9eb;
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.admin-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.admin-users-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 820px;
+}
+
+.admin-users-table th,
+.admin-users-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #d8dce4;
+  vertical-align: middle;
+}
+
+.admin-users-table th {
+  text-align: center;
+  color: #061b52;
+  font-size: 0.95rem;
+  font-weight: 700;
+  background: rgba(6, 27, 82, 0.04);
+}
+
+.admin-users-table td {
+  text-align: left;
+  color: #111827;
+}
+
+.admin-users-table tbody tr:nth-child(odd) {
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.admin-users-table tbody tr:nth-child(even) {
+  background: rgba(6, 27, 82, 0.03);
+}
+
+.admin-users-table tbody tr:hover {
+  background: rgba(59, 130, 246, 0.08);
+}
+
+.table-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.compact-btn {
+  min-width: 82px;
+  padding: 8px 10px;
+  font-size: 0.9rem;
+  justify-content: center;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.status-active {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.status-inactive {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.status-cancelled {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+@media (max-width: 900px) {
+  .table-actions {
+    flex-wrap: wrap;
+  }
+}

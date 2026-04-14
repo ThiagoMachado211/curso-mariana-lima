@@ -84,7 +84,7 @@ function renderUsers(users) {
   if (!users?.length) {
     usersList.innerHTML = `
       <tr>
-        <td colspan="6" class="empty-state">Nenhum cadastro encontrado.</td>
+        <td colspan="5" class="empty-state">Nenhum cadastro encontrado.</td>
       </tr>
     `;
     return;
@@ -94,29 +94,34 @@ function renderUsers(users) {
 
   usersList.innerHTML = sortedUsers
     .map((user) => {
+      const fullName = `${user.name || ""} ${user.last_name || ""}`.trim();
+
       return `
         <tr>
-          <td>${escapeHtml(user.name || "")}</td>
-          <td>${escapeHtml(user.last_name || "")}</td>
+          <td>${escapeHtml(fullName || "Usuário sem nome")}</td>
           <td>${escapeHtml(user.email || "")}</td>
           <td>${escapeHtml(user.role || "")}</td>
-          <td>${user.is_active ? "Ativo" : "Inativo"}</td>
+          <td>
+            <span class="status-badge ${user.is_active ? "status-active" : "status-inactive"}">
+              ${user.is_active ? "Ativo" : "Inativo"}
+            </span>
+          </td>
           <td>
             <div class="table-actions">
-              <button class="action-btn edit edit-user-btn" data-user-id="${user.id}" type="button">
+              <button class="action-btn edit edit-user-btn compact-btn" data-user-id="${user.id}" type="button">
                 Editar
               </button>
 
               <button
-                class="action-btn enrollment manage-enrollments-btn"
+                class="action-btn enrollment manage-enrollments-btn compact-btn"
                 data-user-id="${user.id}"
-                data-user-name="${escapeHtml(`${user.name || ""} ${user.last_name || ""}`.trim())}"
+                data-user-name="${escapeHtml(fullName)}"
                 type="button"
               >
                 Matrículas
               </button>
 
-              <button class="action-btn delete delete-user-btn" data-user-id="${user.id}" type="button">
+              <button class="action-btn delete delete-user-btn compact-btn" data-user-id="${user.id}" type="button">
                 Bloquear
               </button>
             </div>
@@ -148,7 +153,7 @@ function bindUserActions() {
 async function loadUsers() {
   usersList.innerHTML = `
     <tr>
-      <td colspan="6" class="empty-state">Carregando usuários...</td>
+      <td colspan="5" class="empty-state">Carregando usuários...</td>
     </tr>
   `;
 
@@ -158,7 +163,7 @@ async function loadUsers() {
   } catch (error) {
     usersList.innerHTML = `
       <tr>
-        <td colspan="6" class="empty-state">Erro ao carregar usuários.</td>
+        <td colspan="5" class="empty-state">Erro ao carregar usuários.</td>
       </tr>
     `;
     showFeedback(error.message || "Erro ao carregar usuários.", "error");
