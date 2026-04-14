@@ -3520,6 +3520,7 @@ body.public-page.home-page .home-hero-split__content-box ul {
 
 .pdf-buttons-container {
   display: flex;
+  flex-direction: column;
   flex-wrap: wrap;
   gap: 12px;
   margin-top: 20px;
