@@ -3520,8 +3520,11 @@ body.public-page.home-page .home-hero-split__content-box ul {
 
 .pdf-buttons-container {
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
   flex-wrap: wrap;
+  width: 300px;
   gap: 12px;
   margin-top: 20px;
 }
