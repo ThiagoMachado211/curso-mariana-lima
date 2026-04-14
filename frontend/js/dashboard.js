@@ -22,13 +22,21 @@ const profileName = document.getElementById("profileName");
 const profileLastName = document.getElementById("profileLastName");
 const profileEmail = document.getElementById("profileEmail");
 const profileRole = document.getElementById("profileRole");
+
+const profileViewMode = document.getElementById("profileViewMode");
+const profileEditForm = document.getElementById("profileEditForm");
 const editProfileButton = document.getElementById("editProfileButton");
+const cancelProfileEditButton = document.getElementById("cancelProfileEditButton");
+const saveProfileButton = document.getElementById("saveProfileButton");
+const profileFeedback = document.getElementById("profileFeedback");
+
+const editName = document.getElementById("editName");
+const editLastName = document.getElementById("editLastName");
+const editEmail = document.getElementById("editEmail");
+
+let currentUser = null;
 
 logoutButton?.addEventListener("click", logout);
-
-editProfileButton?.addEventListener("click", () => {
-  alert("A edição de perfil será conectada aqui.");
-});
 
 function formatRole(role) {
   if (role === "student") return "Aluno";
@@ -171,10 +179,84 @@ function renderProfile(user) {
   profileRole.textContent = formatRole(user.role);
 }
 
+function fillProfileForm(user) {
+  editName.value = user.name || "";
+  editLastName.value = user.last_name || "";
+  editEmail.value = user.email || "";
+}
+
 function renderWelcome(user) {
   const fullName = [user.name, user.last_name].filter(Boolean).join(" ");
   welcomeText.textContent = `Bem-vindo, ${fullName || "aluno"}! Acompanhe seu progresso e continue seus estudos.`;
 }
+
+function showProfileFeedback(message, type = "success") {
+  profileFeedback.textContent = message;
+  profileFeedback.className = `feedback ${type}`;
+  profileFeedback.classList.remove("hidden");
+}
+
+function hideProfileFeedback() {
+  profileFeedback.classList.add("hidden");
+}
+
+function enterProfileEditMode() {
+  if (!currentUser) return;
+
+  fillProfileForm(currentUser);
+  hideProfileFeedback();
+  profileViewMode.classList.add("hidden");
+  profileEditForm.classList.remove("hidden");
+}
+
+function exitProfileEditMode() {
+  hideProfileFeedback();
+  profileEditForm.classList.add("hidden");
+  profileViewMode.classList.remove("hidden");
+}
+
+editProfileButton?.addEventListener("click", enterProfileEditMode);
+cancelProfileEditButton?.addEventListener("click", exitProfileEditMode);
+
+profileEditForm?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  try {
+    saveProfileButton.disabled = true;
+    saveProfileButton.textContent = "Salvando...";
+
+    const payload = {
+      name: editName.value.trim(),
+      last_name: editLastName.value.trim(),
+      email: editEmail.value.trim(),
+    };
+
+    if (!payload.name || !payload.last_name || !payload.email) {
+      throw new Error("Preencha todos os campos do perfil.");
+    }
+
+    const updatedUser = await apiRequest("/users/me", {
+      method: "PUT",
+      body: JSON.stringify(payload),
+    });
+
+    currentUser = updatedUser;
+
+    renderProfile(updatedUser);
+    renderWelcome(updatedUser);
+    showProfileFeedback("Perfil atualizado com sucesso.", "success");
+
+    setTimeout(() => {
+      exitProfileEditMode();
+    }, 1000);
+  } catch (error) {
+    console.error("Erro ao atualizar perfil:", error);
+    showProfileFeedback(error.message || "Erro ao atualizar perfil.", "error");
+  } finally {
+    saveProfileButton.disabled = false;
+    saveProfileButton.textContent = "Salvar alterações";
+  }
+});
 
 async function loadDashboard() {
   try {
@@ -182,6 +264,8 @@ async function loadDashboard() {
       apiRequest("/auth/me"),
       resolveCourseId(),
     ]);
+
+    currentUser = user;
 
     const course = await apiRequest(`/student/courses/${courseId}`);
 

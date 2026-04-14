@@ -120,7 +120,8 @@
                 <h2>Dados do aluno</h2>
               </div>
 
-              <div class="profile-stack">
+              <!-- MODO VISUALIZAÇÃO -->
+              <div id="profileViewMode" class="profile-stack">
                 <div class="profile-field">
                   <span class="profile-field__label">Nome</span>
                   <span id="profileName" class="profile-field__value">-</span>
@@ -140,15 +141,45 @@
                   <span class="profile-field__label">Perfil</span>
                   <span id="profileRole" class="profile-field__value">-</span>
                 </div>
+
+                <div class="dashboard-card__actions">
+                  <button id="editProfileButton" class="secondary-btn" type="button">
+                    Editar perfil
+                  </button>
+                </div>
               </div>
 
-              <div class="dashboard-card__actions">
-                <button id="editProfileButton" class="secondary-btn" type="button">
-                  Editar perfil
-                </button>
-              </div>
+              <!-- MODO EDIÇÃO -->
+              <form id="profileEditForm" class="profile-edit-form hidden">
+                <div class="form-group">
+                  <label for="editName">Nome</label>
+                  <input type="text" id="editName" maxlength="100" required />
+                </div>
+
+                <div class="form-group">
+                  <label for="editLastName">Sobrenome</label>
+                  <input type="text" id="editLastName" maxlength="100" required />
+                </div>
+
+                <div class="form-group">
+                  <label for="editEmail">Email</label>
+                  <input type="email" id="editEmail" maxlength="255" required />
+                </div>
+
+                <div id="profileFeedback" class="feedback hidden"></div>
+
+                <div class="dashboard-card__actions profile-edit-actions">
+                  <button type="submit" id="saveProfileButton" class="primary-btn">
+                    Salvar alterações
+                  </button>
+                  <button type="button" id="cancelProfileEditButton" class="secondary-btn">
+                    Cancelar
+                  </button>
+                </div>
+              </form>
             </div>
           </aside>
+
         </section>
       </div>
     </main>
