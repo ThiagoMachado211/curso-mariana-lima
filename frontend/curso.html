@@ -24,7 +24,6 @@
 
           <nav class="site-nav">
             <a href="dashboard.html" class="btn btn--dark">Dashboard</a>
-            <a href="perfil.html" class="btn btn--dark">Perfil</a>
             <button id="logoutButton" class="btn btn--dark" type="button">Sair</button>
           </nav>
         </div>
@@ -51,12 +50,34 @@
         <div id="pdfMode" class="lesson-mode hidden">
           <div class="course-pdf-wrapper">
             <div class="course-pdf-placeholder">
-              <h2 id="pdfLessonTitle" style="display: flex; flex:center;">Selecione uma aula</h2>
+              <h2 id="pdfLessonTitle">Selecione uma aula</h2>
+              <p id="pdfLessonMeta" class="hidden">Material pendente</p>
+              <p id="pdfLessonDescription" class="hidden">
+                Escolha uma aula no painel lateral para começar.
+              </p>
+
               <div id="pdfButtonsContainer" class="pdf-buttons-container">
                 <!-- Botões dos PDFs serão inseridos via JS -->
               </div>
             </div>
           </div>
+        </div>
+
+        <!-- INFORMAÇÕES / AÇÕES DA AULA -->
+        <div class="course-lesson-info">
+          <h1 id="lessonTitle">Selecione uma aula</h1>
+          <p id="lessonMeta">Escolha uma aula no painel lateral para começar.</p>
+          <p id="lessonDescription" class="hidden">
+            Escolha uma aula no painel lateral para começar.
+          </p>
+
+          <div class="course-actions">
+            <button id="markCompletedButton" class="primary-btn hidden" type="button">
+              Marcar como concluída
+            </button>
+          </div>
+
+          <div id="feedbackMessage" class="feedback hidden"></div>
         </div>
       </section>
 
@@ -69,6 +90,7 @@
           </div>
 
           <p id="courseProgressText">Carregando progresso...</p>
+
           <div class="progress-bar">
             <div id="courseProgressFill" class="progress-bar-fill"></div>
           </div>

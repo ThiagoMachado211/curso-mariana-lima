@@ -3919,3 +3919,61 @@ body.public-page.home-page .home-hero-split__content-box ul {
   outline: none;
   border-color: #2563eb;
 }
+
+
+.pdf-buttons-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+
+.pdf-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 18px;
+  background: #2563eb;
+  color: #ffffff;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 700;
+  transition: 0.2s ease;
+}
+
+.pdf-action-btn:hover {
+  background: #1d4ed8;
+}
+
+.course-page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 28px;
+  align-items: start;
+  height: calc(100vh - 120px);
+}
+
+.course-sidebar {
+  height: calc(100vh - 120px);
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.course-sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.course-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+}
+
+.course-sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-card {
+  max-height: none;
+}
