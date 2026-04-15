@@ -224,21 +224,30 @@ def delete_user(
 def hard_delete_user(
     user_id: UUID,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_admin: User = Depends(get_current_admin_user),
 ):
     user = (
         db.query(User)
-        .filter(User.id == user_id, User.tenant_id == current_user.tenant_id)
+        .filter(
+            User.id == user_id,
+            User.tenant_id == current_admin.tenant_id,
+        )
         .first()
     )
 
     if not user:
         raise HTTPException(status_code=404, detail="Usuário não encontrado.")
 
+    if str(user.id) == str(current_admin.id):
+        raise HTTPException(
+            status_code=400,
+            detail="Você não pode excluir seu próprio usuário.",
+        )
+
     if user.is_active:
         raise HTTPException(
             status_code=400,
-            detail="Apenas usuários bloqueados podem ser excluídos definitivamente."
+            detail="Apenas usuários bloqueados podem ser excluídos definitivamente.",
         )
 
     db.delete(user)
