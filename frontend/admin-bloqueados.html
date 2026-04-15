@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin | Cadastros</title>
+    <title>Admin | Usuários Bloqueados</title>
     <link rel="stylesheet" href="./css/style.css" />
   </head>
   <body>
@@ -16,6 +16,7 @@
               <span class="site-logo__text--blue">Matemática </span><span class="site-logo__text--purple">Essencial</span>
             </span>
           </a>
+
           <nav class="site-nav">
             <a href="admin-dashboard.html" class="btn btn--dark" style="background-color: lightgrey; color: black;">
               Voltar para o dashboard
@@ -28,13 +29,9 @@
     <main class="admin-page">
       <section class="page-toolbar">
         <div>
-          <h2>Gerenciamento de usuários</h2>
-          <p>Crie, edite, gerencie matrículas e visualize apenas usuários ativos.</p>
+          <h2>Usuários bloqueados</h2>
+          <p>Visualize, edite e desbloqueie usuários inativos.</p>
         </div>
-
-        <button id="openCreateUserModalButton" class="primary-btn" type="button">
-          Novo cadastro
-        </button>
       </section>
 
       <section id="feedbackMessage" class="feedback hidden"></section>
@@ -50,9 +47,9 @@
                 <th>Ações</th>
               </tr>
             </thead>
-            <tbody id="usersList">
+            <tbody id="blockedUsersList">
               <tr>
-                <td colspan="4" class="empty-state">Carregando usuários...</td>
+                <td colspan="4" class="empty-state">Carregando usuários bloqueados...</td>
               </tr>
             </tbody>
           </table>
@@ -64,7 +61,7 @@
       <div class="modal-backdrop"></div>
       <div class="modal-content">
         <div class="modal-header">
-          <h2 id="userModalTitle">Novo cadastro</h2>
+          <h2 id="userModalTitle">Editar cadastro</h2>
           <button type="button" id="closeUserModalButton" class="icon-close-btn">×</button>
         </div>
 
@@ -84,11 +81,6 @@
           <div class="form-row">
             <label for="email">E-mail</label>
             <input type="email" id="email" required />
-          </div>
-
-          <div class="form-row" id="passwordRow">
-            <label for="password">Senha</label>
-            <input type="password" id="password" minlength="6" />
           </div>
 
           <div class="form-row">
@@ -115,40 +107,8 @@
       </div>
     </div>
 
-    <div id="enrollmentModal" class="modal hidden">
-      <div class="modal-backdrop"></div>
-      <div class="modal-content modal-lg">
-        <div class="modal-header">
-          <div>
-            <h2>Gerenciar matrículas</h2>
-            <p id="enrollmentStudentName" class="modal-subtitle"></p>
-          </div>
-          <button type="button" id="closeEnrollmentModalButton" class="icon-close-btn">×</button>
-        </div>
-
-        <div class="enrollment-layout">
-          <section class="enrollment-panel">
-            <h3>Matricular em curso</h3>
-            <div class="inline-form">
-              <select id="courseSelect"></select>
-              <button id="enrollButton" type="button" class="primary-btn">Matricular</button>
-            </div>
-          </section>
-
-          <section class="enrollment-panel">
-            <h3>Matrículas do aluno</h3>
-            <div id="studentEnrollmentsList" class="enrollment-list"></div>
-          </section>
-        </div>
-
-        <div class="modal-actions">
-          <button type="button" id="closeEnrollmentFooterButton" class="secondary-btn">Fechar</button>
-        </div>
-      </div>
-    </div>
-
     <script src="./js/api.js"></script>
     <script src="./js/auth.js"></script>
-    <script src="./js/admin-cadastros.js"></script>
+    <script src="./js/admin-bloqueados.js"></script>
   </body>
 </html>

@@ -4125,3 +4125,24 @@ body.public-page.home-page .home-hero-split__content-box ul {
     flex-wrap: wrap;
   }
 }
+
+
+.action-btn.success {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+
+.table-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.compact-btn {
+  min-width: 92px;
+  padding: 8px 10px;
+  font-size: 0.9rem;
+  justify-content: center;
+}

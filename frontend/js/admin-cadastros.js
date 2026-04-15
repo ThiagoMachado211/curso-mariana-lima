@@ -81,18 +81,18 @@ function sortUsersByFirstName(users) {
 }
 
 function renderUsers(users) {
-  if (!users?.length) {
+  const activeUsers = sortUsersByFirstName((users || []).filter((user) => user.is_active));
+
+  if (!activeUsers.length) {
     usersList.innerHTML = `
       <tr>
-        <td colspan="5" class="empty-state">Nenhum cadastro encontrado.</td>
+        <td colspan="4" class="empty-state">Nenhum usuário ativo encontrado.</td>
       </tr>
     `;
     return;
   }
 
-  const sortedUsers = sortUsersByFirstName(users);
-
-  usersList.innerHTML = sortedUsers
+  usersList.innerHTML = activeUsers
     .map((user) => {
       const fullName = `${user.name || ""} ${user.last_name || ""}`.trim();
 
@@ -101,11 +101,6 @@ function renderUsers(users) {
           <td>${escapeHtml(fullName || "Usuário sem nome")}</td>
           <td>${escapeHtml(user.email || "")}</td>
           <td>${escapeHtml(user.role || "")}</td>
-          <td>
-            <span class="status-badge ${user.is_active ? "status-active" : "status-inactive"}">
-              ${user.is_active ? "Ativo" : "Inativo"}
-            </span>
-          </td>
           <td>
             <div class="table-actions">
               <button class="action-btn edit edit-user-btn compact-btn" data-user-id="${user.id}" type="button">
@@ -153,7 +148,7 @@ function bindUserActions() {
 async function loadUsers() {
   usersList.innerHTML = `
     <tr>
-      <td colspan="5" class="empty-state">Carregando usuários...</td>
+      <td colspan="4" class="empty-state">Carregando usuários...</td>
     </tr>
   `;
 
@@ -163,7 +158,7 @@ async function loadUsers() {
   } catch (error) {
     usersList.innerHTML = `
       <tr>
-        <td colspan="5" class="empty-state">Erro ao carregar usuários.</td>
+        <td colspan="4" class="empty-state">Erro ao carregar usuários.</td>
       </tr>
     `;
     showFeedback(error.message || "Erro ao carregar usuários.", "error");
@@ -218,9 +213,7 @@ async function loadCoursesOptions() {
     }
 
     courseSelect.innerHTML = courses
-      .map(
-        (course) => `<option value="${course.id}">${escapeHtml(course.title)}</option>`
-      )
+      .map((course) => `<option value="${course.id}">${escapeHtml(course.title)}</option>`)
       .join("");
   } catch (error) {
     courseSelect.innerHTML = `<option value="">Erro ao carregar cursos</option>`;
