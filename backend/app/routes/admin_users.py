@@ -218,3 +218,30 @@ def delete_user(
     db.commit()
 
     return {"message": "Usuário desativado com sucesso."}
+
+
+@router.delete("/{user_id}/hard-delete")
+def hard_delete_user(
+    user_id: UUID,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    user = (
+        db.query(User)
+        .filter(User.id == user_id, User.tenant_id == current_user.tenant_id)
+        .first()
+    )
+
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuário não encontrado.")
+
+    if user.is_active:
+        raise HTTPException(
+            status_code=400,
+            detail="Apenas usuários bloqueados podem ser excluídos definitivamente."
+        )
+
+    db.delete(user)
+    db.commit()
+
+    return {"message": "Usuário excluído definitivamente."}

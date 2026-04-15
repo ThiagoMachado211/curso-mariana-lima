@@ -4146,3 +4146,17 @@ body.public-page.home-page .home-hero-split__content-box ul {
   font-size: 0.9rem;
   justify-content: center;
 }
+
+
+.dashboard-admin-btn--danger {
+  background: #dc2626;
+}
+
+.dashboard-admin-btn--danger:hover {
+  background: #b91c1c;
+}
+
+.action-btn.success {
+  background: #dcfce7;
+  color: #15803d;
+}

@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Administrador: Dashboard</title>
+    <title>Admin | Dashboard</title>
     <link rel="stylesheet" href="./css/style.css" />
   </head>
-  <body class="admin-page admin-dashboard-page">
+  <body>
     <header class="site-header">
       <div class="page-container">
         <div class="site-header__inner">
@@ -16,23 +16,40 @@
               <span class="site-logo__text--blue">Matemática </span><span class="site-logo__text--purple">Essencial</span>
             </span>
           </a>
+
           <nav class="site-nav">
-            <button id="logoutButton" class="header-btn danger-btn" type="button">Sair</button>
+            <button id="logoutButton" class="btn btn--dark" type="button">Sair</button>
           </nav>
         </div>
       </div>
     </header>
 
+    <main class="admin-page">
+      <section class="admin-dashboard-hero">
+        <h1>Administrador: Dashboard</h1>
+      </section>
 
-    <main class="dashboard-container">
-      <h1 class="dashboard-title" style="margin-top: 30px;">Administrador: Dashboard</h1>
+      <section id="dashboardActions" class="admin-dashboard-actions">
+        <a href="admin-cursos.html" class="dashboard-admin-btn">
+          Cursos Ativos (Quantidade: <span id="coursesCount">0</span>)
+        </a>
 
-      <div class="dashboard-buttons">
-        <a href="admin-cursos.html" class="dashboard-btn"> Cursos Ativos (Quantidade: <span id="totalCourses">0</span>) </a>
-        <a href="admin-modulos.html" class="dashboard-btn">Módulos Ativos (Quantidade: <span id="totalModules">0</span>)</a>
-        <a href="admin-aulas.html" class="dashboard-btn">Aulas Ativas (Quantidade: <span id="totalLessons">0</span>)</a>
-        <a href="admin-cadastros.html" class="dashboard-btn">Cadastros Realizados (Quantidade: <span id="totalUsers">0</span>)</a>
-      </div>
+        <a href="admin-modulos.html" class="dashboard-admin-btn">
+          Módulos Ativos (Quantidade: <span id="modulesCount">0</span>)
+        </a>
+
+        <a href="admin-aulas.html" class="dashboard-admin-btn">
+          Aulas Ativas (Quantidade: <span id="lessonsCount">0</span>)
+        </a>
+
+        <a href="admin-cadastros.html" class="dashboard-admin-btn">
+          Cadastros Ativos (Quantidade: <span id="activeUsersCount">0</span>)
+        </a>
+
+        <a href="admin-bloqueados.html" class="dashboard-admin-btn dashboard-admin-btn--danger">
+          Usuários Bloqueados (Quantidade: <span id="blockedUsersCount">0</span>)
+        </a>
+      </section>
     </main>
 
     <script src="./js/api.js"></script>

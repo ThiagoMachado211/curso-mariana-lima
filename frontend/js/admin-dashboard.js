@@ -1,48 +1,35 @@
-requireAdmin();
+requireAuth();
 
 const logoutButton = document.getElementById("logoutButton");
-const totalCoursesEl = document.getElementById("totalCourses");
-const totalModulesEl = document.getElementById("totalModules");
-const totalLessonsEl = document.getElementById("totalLessons");
-const totalUsersEl = document.getElementById("totalUsers");
+
+const coursesCount = document.getElementById("coursesCount");
+const modulesCount = document.getElementById("modulesCount");
+const lessonsCount = document.getElementById("lessonsCount");
+const activeUsersCount = document.getElementById("activeUsersCount");
+const blockedUsersCount = document.getElementById("blockedUsersCount");
 
 logoutButton?.addEventListener("click", logout);
 
-async function safeCount(endpoint, fallback = 0) {
+async function loadDashboardStats() {
   try {
-    const data = await apiRequest(endpoint);
-
-    if (Array.isArray(data)) {
-      return data.length;
-    }
-
-    if (data && Array.isArray(data.items)) {
-      return data.items.length;
-    }
-
-    return fallback;
-  } catch (error) {
-    console.error(`Erro ao carregar ${endpoint}:`, error);
-    return fallback;
-  }
-}
-
-async function loadAdminDashboard() {
-  try {
-    const [coursesCount, modulesCount, lessonsCount, usersCount] = await Promise.all([
-      safeCount("/admin/courses", 0),
-      safeCount("/admin/modules", 0),
-      safeCount("/admin/lessons", 0),
-      safeCount("/admin/users", 0),
+    const [courses, modules, lessons, users] = await Promise.all([
+      apiRequest("/admin/courses"),
+      apiRequest("/admin/modules"),
+      apiRequest("/admin/lessons"),
+      apiRequest("/admin/users"),
     ]);
 
-    if (totalCoursesEl) totalCoursesEl.textContent = coursesCount;
-    if (totalModulesEl) totalModulesEl.textContent = modulesCount;
-    if (totalLessonsEl) totalLessonsEl.textContent = lessonsCount;
-    if (totalUsersEl) totalUsersEl.textContent = usersCount;
+    const activeUsers = (users || []).filter((user) => user.is_active);
+    const blockedUsers = (users || []).filter((user) => !user.is_active);
+
+    if (coursesCount) coursesCount.textContent = String((courses || []).length);
+    if (modulesCount) modulesCount.textContent = String((modules || []).length);
+    if (lessonsCount) lessonsCount.textContent = String((lessons || []).length);
+    if (activeUsersCount) activeUsersCount.textContent = String(activeUsers.length);
+    if (blockedUsersCount) blockedUsersCount.textContent = String(blockedUsers.length);
   } catch (error) {
-    console.error("Erro ao carregar dashboard admin:", error);
+    console.error("Erro ao carregar estatísticas do dashboard:", error);
   }
 }
 
-loadAdminDashboard();
+loadDashboardStats();

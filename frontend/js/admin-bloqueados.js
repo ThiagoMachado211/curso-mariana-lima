@@ -2,7 +2,6 @@ requireAuth();
 
 const blockedUsersList = document.getElementById("blockedUsersList");
 const feedbackMessage = document.getElementById("feedbackMessage");
-const logoutButton = document.getElementById("logoutButton");
 
 const userModal = document.getElementById("userModal");
 const userModalTitle = document.getElementById("userModalTitle");
@@ -17,8 +16,6 @@ const saveUserButton = document.getElementById("saveUserButton");
 
 const closeUserModalButton = document.getElementById("closeUserModalButton");
 const cancelUserModalButton = document.getElementById("cancelUserModalButton");
-
-logoutButton?.addEventListener("click", logout);
 
 function showFeedback(message, type = "success") {
   feedbackMessage.textContent = message;
@@ -95,6 +92,10 @@ function renderBlockedUsers(users) {
               <button class="action-btn success unlock-user-btn compact-btn" data-user-id="${user.id}" type="button">
                 Desbloquear
               </button>
+
+              <button class="action-btn delete hard-delete-user-btn compact-btn" data-user-id="${user.id}" type="button">
+                Excluir
+              </button>
             </div>
           </td>
         </tr>
@@ -112,6 +113,10 @@ function bindBlockedUserActions() {
 
   document.querySelectorAll(".unlock-user-btn").forEach((button) => {
     button.addEventListener("click", () => handleUnlockUser(button.dataset.userId));
+  });
+
+  document.querySelectorAll(".hard-delete-user-btn").forEach((button) => {
+    button.addEventListener("click", () => handleHardDeleteUser(button.dataset.userId));
   });
 }
 
@@ -175,6 +180,24 @@ async function handleUnlockUser(userId) {
     await loadBlockedUsers();
   } catch (error) {
     showFeedback(error.message || "Erro ao desbloquear usuário.", "error");
+  }
+}
+
+async function handleHardDeleteUser(userId) {
+  const confirmed = window.confirm(
+    "Deseja realmente excluir este usuário do banco de dados? Esta ação não pode ser desfeita."
+  );
+  if (!confirmed) return;
+
+  try {
+    await apiRequest(`/admin/users/${userId}/hard-delete`, {
+      method: "DELETE",
+    });
+
+    showFeedback("Usuário excluído com sucesso.", "success");
+    await loadBlockedUsers();
+  } catch (error) {
+    showFeedback(error.message || "Erro ao excluir usuário.", "error");
   }
 }
 
