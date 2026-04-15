@@ -4160,3 +4160,76 @@ body.public-page.home-page .home-hero-split__content-box ul {
   background: #dcfce7;
   color: #15803d;
 }
+
+
+.admin-dashboard-hero {
+  text-align: center;
+  margin: 48px 0 32px;
+}
+
+.admin-dashboard-hero h1 {
+  color: #ffffff;
+  font-size: 2.4rem;
+  margin: 0;
+}
+
+.admin-dashboard-actions {
+  max-width: 560px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dashboard-admin-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 64px;
+  padding: 0 20px;
+  border-radius: 14px;
+  background: #2f67e8;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.05rem;
+  text-align: center;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.dashboard-admin-btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.dashboard-admin-btn--danger {
+  background: #dc2626;
+}
+
+.dashboard-admin-btn--danger:hover {
+  background: #b91c1c;
+}
+
+.dashboard-admin-btn span {
+  margin-left: 4px;
+}
+
+@media (max-width: 768px) {
+  .admin-dashboard-hero {
+    margin: 32px 0 24px;
+  }
+
+  .admin-dashboard-hero h1 {
+    font-size: 1.9rem;
+  }
+
+  .admin-dashboard-actions {
+    max-width: 100%;
+  }
+
+  .dashboard-admin-btn {
+    min-height: 56px;
+    font-size: 0.98rem;
+    padding: 0 16px;
+  }
+}

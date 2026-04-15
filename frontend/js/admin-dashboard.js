@@ -22,11 +22,11 @@ async function loadDashboardStats() {
     const activeUsers = (users || []).filter((user) => user.is_active);
     const blockedUsers = (users || []).filter((user) => !user.is_active);
 
-    if (coursesCount) coursesCount.textContent = String((courses || []).length);
-    if (modulesCount) modulesCount.textContent = String((modules || []).length);
-    if (lessonsCount) lessonsCount.textContent = String((lessons || []).length);
-    if (activeUsersCount) activeUsersCount.textContent = String(activeUsers.length);
-    if (blockedUsersCount) blockedUsersCount.textContent = String(blockedUsers.length);
+    coursesCount.textContent = String((courses || []).length);
+    modulesCount.textContent = String((modules || []).length);
+    lessonsCount.textContent = String((lessons || []).length);
+    activeUsersCount.textContent = String(activeUsers.length);
+    blockedUsersCount.textContent = String(blockedUsers.length);
   } catch (error) {
     console.error("Erro ao carregar estatísticas do dashboard:", error);
   }
