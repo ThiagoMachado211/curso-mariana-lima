@@ -1,0 +1,228 @@
+/* =========================================================
+   admin-dashboard.css
+   Estilos usados apenas em admin-dashboard.html
+========================================================= */
+
+/* RESET / BASE */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  background: #000;
+  color: #fff;
+  line-height: 1.4;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  font: inherit;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* TOKENS */
+:root {
+  --purple: #a855f7;
+  --border-dark: rgba(255, 255, 255, 0.08);
+  --radius-md: 12px;
+  --container: 1280px;
+}
+
+/* CONTAINER */
+.page-container {
+  width: 100%;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* HEADER */
+.site-header {
+  width: 100%;
+  border-bottom: 1px solid var(--border-dark);
+  background: #000;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.site-header__inner {
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.site-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 700;
+}
+
+.site-logo__img {
+  height: 60px;
+  width: auto;
+  border-radius: 8px;
+}
+
+.site-logo__text {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.site-logo__text--blue {
+  color: orange;
+  font-size: 30px;
+}
+
+.site-logo__text--purple {
+  color: var(--purple);
+  font-size: 30px;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* BOTÃO SAIR */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 20px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+
+.btn--dark {
+  background: #0a0a0a;
+  color: #fff;
+  border: 1px solid var(--border-dark);
+}
+
+.btn--dark:hover {
+  background: #151515;
+}
+
+/* MAIN */
+.admin-page {
+  min-height: calc(100vh - 72px);
+  padding: 0 24px 60px;
+  background: #000;
+}
+
+/* HERO */
+.admin-dashboard-hero {
+  text-align: center;
+  margin: 48px 0 32px;
+}
+
+.admin-dashboard-hero h1 {
+  color: #fff;
+  font-size: 2.4rem;
+  margin: 0;
+}
+
+/* AÇÕES */
+.admin-dashboard-actions {
+  max-width: 560px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dashboard-admin-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 64px;
+  padding: 0 20px;
+  border-radius: 14px;
+  background: #2f67e8;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.05rem;
+  text-align: center;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.dashboard-admin-btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.dashboard-admin-btn--danger {
+  background: #dc2626;
+}
+
+.dashboard-admin-btn--danger:hover {
+  background: #b91c1c;
+}
+
+.dashboard-admin-btn span {
+  margin-left: 4px;
+}
+
+/* RESPONSIVO */
+@media (max-width: 768px) {
+  .site-header__inner {
+    min-height: 72px;
+    height: auto;
+    padding: 16px 0;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .site-nav {
+    justify-content: center;
+  }
+
+  .admin-dashboard-hero {
+    margin: 32px 0 24px;
+  }
+
+  .admin-dashboard-hero h1 {
+    font-size: 1.9rem;
+  }
+
+  .admin-dashboard-actions {
+    max-width: 100%;
+  }
+
+  .dashboard-admin-btn {
+    min-height: 56px;
+    font-size: 0.98rem;
+    padding: 0 16px;
+  }
+
+  .site-logo__text--blue,
+  .site-logo__text--purple {
+    font-size: 24px;
+  }
+}
