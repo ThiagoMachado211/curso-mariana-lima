@@ -427,25 +427,29 @@ button:hover,
   font-size: 20px;
   font-weight: 700;
   color: #fff;
-  background: #0b0b0b;
-  border: 1px solid var(--border-dark);
+
+  /* 🔵 NOVO: azul padrão */
+  background: #2563eb;
+  border: 1px solid rgba(37, 99, 235, 0.4);
+
   border-radius: var(--radius-lg);
   transition: 0.2s ease;
 }
 
 .dashboard-admin-btn:hover {
+  background: #1d4ed8;
   transform: translateY(-2px);
-  border-color: rgba(168, 85, 247, 0.45);
-  background: #111;
 }
 
 .dashboard-admin-btn--danger {
-  border-color: rgba(220, 38, 38, 0.35);
+  background: #dc2626;
+  border: 1px solid rgba(220, 38, 38, 0.5);
 }
 
 .dashboard-admin-btn--danger:hover {
-  border-color: rgba(220, 38, 38, 0.6);
+  background: #b91c1c;
 }
+
 
 /* LISTAS ADMIN */
 .admin-list-stack {
