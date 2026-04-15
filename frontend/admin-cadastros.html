@@ -4,20 +4,25 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin | Cadastros</title>
-    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/admin.css" />
   </head>
-  <body>
+  <body class="admin-page">
     <header class="site-header">
       <div class="page-container">
         <div class="site-header__inner">
           <a href="index.html" class="site-logo">
-            <img src="assets/Logo_Mariana.jpg" alt="Logo Mariana Lima" class="site-logo__img" />
+            <img
+              src="assets/Logo_Mariana.jpg"
+              alt="Logo Mariana Lima"
+              class="site-logo__img"
+            />
             <span class="site-logo__text">
-              <span class="site-logo__text--blue">Matemática </span><span class="site-logo__text--purple">Essencial</span>
+              <span class="site-logo__text--blue">Matemática </span
+              ><span class="site-logo__text--purple">Essencial</span>
             </span>
           </a>
           <nav class="site-nav">
-            <a href="admin-dashboard.html" class="btn btn--dark" style="background-color: lightgrey; color: black;">
+            <a href="admin-dashboard.html" class="btn btn--light">
               Voltar para o dashboard
             </a>
           </nav>
@@ -25,39 +30,58 @@
       </div>
     </header>
 
-    <main class="admin-page">
-      <section class="page-toolbar">
-        <div>
-          <h2>Gerenciamento de usuários</h2>
-          <p>Crie, edite, gerencie matrículas e visualize apenas usuários ativos.</p>
-        </div>
+    <main class="admin-management-main">
+      <div class="admin-management-container">
+        <section class="page-intro">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              gap: 16px;
+              flex-wrap: wrap;
+            "
+          >
+            <div>
+              <h2 style="margin-bottom: 6px;">Gerenciamento de usuários</h2>
+              <p>
+                Crie, edite, gerencie matrículas e visualize apenas usuários
+                ativos.
+              </p>
+            </div>
 
-        <button id="openCreateUserModalButton" class="primary-btn" type="button">
-          Novo cadastro
-        </button>
-      </section>
+            <button
+              id="openCreateUserModalButton"
+              class="primary-btn"
+              type="button"
+            >
+              Novo cadastro
+            </button>
+          </div>
+        </section>
 
-      <section id="feedbackMessage" class="feedback hidden"></section>
+        <section id="feedbackMessage" class="feedback hidden"></section>
 
-      <section class="admin-table-card">
-        <div class="admin-table-wrapper">
-          <table class="admin-users-table">
-            <thead>
-              <tr>
-                <th>Nome Completo</th>
-                <th>E-mail</th>
-                <th>Perfil</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody id="usersList">
-              <tr>
-                <td colspan="4" class="empty-state">Carregando usuários...</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
+        <section class="card">
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Nome Completo</th>
+                  <th>E-mail</th>
+                  <th>Perfil</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="usersList">
+                <tr>
+                  <td colspan="4" class="empty-state">Carregando usuários...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
     </main>
 
     <div id="userModal" class="modal hidden">
@@ -65,7 +89,13 @@
       <div class="modal-content">
         <div class="modal-header">
           <h2 id="userModalTitle">Novo cadastro</h2>
-          <button type="button" id="closeUserModalButton" class="icon-close-btn">×</button>
+          <button
+            type="button"
+            id="closeUserModalButton"
+            class="icon-close-btn"
+          >
+            ×
+          </button>
         </div>
 
         <form id="userForm" class="form-grid">
@@ -108,8 +138,16 @@
           </div>
 
           <div class="modal-actions">
-            <button type="button" id="cancelUserModalButton" class="secondary-btn">Cancelar</button>
-            <button type="submit" id="saveUserButton" class="primary-btn">Salvar</button>
+            <button
+              type="button"
+              id="cancelUserModalButton"
+              class="secondary-btn"
+            >
+              Cancelar
+            </button>
+            <button type="submit" id="saveUserButton" class="primary-btn">
+              Salvar
+            </button>
           </div>
         </form>
       </div>
@@ -123,7 +161,13 @@
             <h2>Gerenciar matrículas</h2>
             <p id="enrollmentStudentName" class="modal-subtitle"></p>
           </div>
-          <button type="button" id="closeEnrollmentModalButton" class="icon-close-btn">×</button>
+          <button
+            type="button"
+            id="closeEnrollmentModalButton"
+            class="icon-close-btn"
+          >
+            ×
+          </button>
         </div>
 
         <div class="enrollment-layout">
@@ -131,7 +175,9 @@
             <h3>Matricular em curso</h3>
             <div class="inline-form">
               <select id="courseSelect"></select>
-              <button id="enrollButton" type="button" class="primary-btn">Matricular</button>
+              <button id="enrollButton" type="button" class="primary-btn">
+                Matricular
+              </button>
             </div>
           </section>
 
@@ -142,7 +188,13 @@
         </div>
 
         <div class="modal-actions">
-          <button type="button" id="closeEnrollmentFooterButton" class="secondary-btn">Fechar</button>
+          <button
+            type="button"
+            id="closeEnrollmentFooterButton"
+            class="secondary-btn"
+          >
+            Fechar
+          </button>
         </div>
       </div>
     </div>

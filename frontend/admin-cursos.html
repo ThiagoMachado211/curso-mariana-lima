@@ -4,20 +4,28 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin - Cursos</title>
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/admin.css" />
   </head>
-  <body class="admin-page admin-dashboard-page">
+  <body class="admin-page">
     <header class="site-header">
       <div class="page-container">
         <div class="site-header__inner">
           <a href="index.html" class="site-logo">
-            <img src="assets/Logo_Mariana.jpg" alt="Logo Mariana Lima" class="site-logo__img" />
+            <img
+              src="assets/Logo_Mariana.jpg"
+              alt="Logo Mariana Lima"
+              class="site-logo__img"
+            />
             <span class="site-logo__text">
-              <span class="site-logo__text--blue">Matemática </span><span class="site-logo__text--purple">Essencial</span>
+              <span class="site-logo__text--blue">Matemática </span
+              ><span class="site-logo__text--purple">Essencial</span>
             </span>
           </a>
+
           <nav class="site-nav">
-            <a href="admin-dashboard.html" class="btn btn--dark" style="background-color:lightgrey; color:black;">Voltar para o dashboard</a>
+            <a href="admin-dashboard.html" class="btn btn--light">
+              Voltar para o dashboard
+            </a>
           </nav>
         </div>
       </div>
@@ -60,13 +68,29 @@
               </div>
 
               <div class="full-width">
-                <label style="display:flex; align-items:center; gap:8px;">
-                  <input type="checkbox" id="is_active" checked style="width:auto;" />
+                <label style="display: flex; align-items: center; gap: 8px;">
+                  <input
+                    type="checkbox"
+                    id="is_active"
+                    checked
+                    style="width: auto;"
+                  />
                   Curso ativo
                 </label>
 
-                <label style="display:flex; align-items:center; gap:8px; margin-top:10px;">
-                  <input type="checkbox" id="is_published" style="width:auto;" />
+                <label
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    margin-top: 10px;
+                  "
+                >
+                  <input
+                    type="checkbox"
+                    id="is_published"
+                    style="width: auto;"
+                  />
                   Curso publicado
                 </label>
               </div>
@@ -74,7 +98,13 @@
 
             <div class="actions">
               <button type="submit">Salvar curso</button>
-              <button id="cancelEditButton" class="secondary hidden" type="button">Cancelar edição</button>
+              <button
+                id="cancelEditButton"
+                class="secondary hidden"
+                type="button"
+              >
+                Cancelar edição
+              </button>
             </div>
           </form>
         </section>

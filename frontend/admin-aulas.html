@@ -4,10 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin - Aulas</title>
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/admin.css" />
   </head>
   <body class="admin-page">
-    <header class="site-header admin-top-header">
+    <header class="site-header">
       <div class="page-container">
         <div class="site-header__inner">
           <a href="admin-dashboard.html" class="site-logo">
@@ -26,91 +26,128 @@
             <a href="admin-dashboard.html" class="btn btn--dark">Dashboard</a>
             <a href="admin-cursos.html" class="btn btn--dark">Cursos</a>
             <a href="admin-modulos.html" class="btn btn--dark">Módulos</a>
-            <button id="logoutButton" class="btn btn--dark" type="button">Sair</button>
+            <button id="logoutButton" class="btn btn--dark" type="button">
+              Sair
+            </button>
           </nav>
         </div>
       </div>
     </header>
 
-    <main class="page-container admin-lessons-page">
-      <section class="admin-page-header">
-        <h1>Gerenciar aulas</h1>
-        <p>Cadastre aulas com vídeo ou com até 25 PDFs.</p>
-      </section>
+    <main class="admin-management-main">
+      <div class="admin-management-container">
+        <h1 class="admin-management-title">Gerenciar aulas</h1>
 
-      <section class="admin-layout">
-        <div class="admin-form-card">
+        <section class="page-intro">
+          <p>Cadastre aulas com vídeo ou com até 25 PDFs.</p>
+        </section>
+
+        <section class="card">
           <h2 id="formTitle">Nova aula</h2>
 
           <form id="lessonForm">
             <input type="hidden" id="lessonId" />
 
-            <div class="form-group">
-              <label for="moduleSelect">Módulo</label>
-              <select id="moduleSelect" required>
-                <option value="">Selecione um módulo</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="lessonTitle">Título da aula</label>
-              <input type="text" id="lessonTitle" required maxlength="200" />
-            </div>
-
-            <div class="form-group">
-              <label for="lessonOrder">Ordem</label>
-              <input type="number" id="lessonOrder" required min="1" />
-            </div>
-
-            <div class="form-group">
-              <label for="videoEmbedUrl">URL do vídeo</label>
-              <input
-                type="url"
-                id="videoEmbedUrl"
-                placeholder="https://www.youtube.com/watch?v=..."
-              />
-              <small class="form-help">
-                Se preencher vídeo, os PDFs serão desabilitados.
-              </small>
-            </div>
-
-            <div class="pdfs-section">
-              <div class="pdfs-section-header">
-                <div>
-                  <label>PDFs da aula</label>
-                  <small class="form-help">
-                    Se adicionar PDFs, o vídeo será desabilitado.
-                  </small>
-                </div>
-                <button type="button" id="addPdfButton" class="secondary-btn">
-                  + Adicionar PDF
-                </button>
+            <div class="row">
+              <div class="full-width">
+                <label for="moduleSelect">Módulo</label>
+                <select id="moduleSelect" required>
+                  <option value="">Selecione um módulo</option>
+                </select>
               </div>
 
-              <div id="pdfList" class="pdf-list-admin"></div>
+              <div class="full-width">
+                <label for="lessonTitle">Título da aula</label>
+                <input type="text" id="lessonTitle" required maxlength="200" />
+              </div>
+
+              <div>
+                <label for="lessonOrder">Ordem</label>
+                <input type="number" id="lessonOrder" required min="1" />
+              </div>
+
+              <div>
+                <label for="videoEmbedUrl">URL do vídeo</label>
+                <input
+                  type="url"
+                  id="videoEmbedUrl"
+                  placeholder="https://www.youtube.com/watch?v=..."
+                />
+              </div>
+
+              <div class="full-width">
+                <label for="videoEmbedUrl">Observação</label>
+                <p style="color: #475569; font-size: 14px; margin-top: 4px;">
+                  Se preencher vídeo, os PDFs serão desabilitados.
+                </p>
+              </div>
+
+              <div class="full-width">
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    gap: 12px;
+                    flex-wrap: wrap;
+                    margin-bottom: 12px;
+                  "
+                >
+                  <div>
+                    <label>PDFs da aula</label>
+                    <p
+                      style="
+                        color: #475569;
+                        font-size: 14px;
+                        margin-top: 4px;
+                      "
+                    >
+                      Se adicionar PDFs, o vídeo será desabilitado.
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    id="addPdfButton"
+                    class="secondary-btn"
+                  >
+                    + Adicionar PDF
+                  </button>
+                </div>
+
+                <div id="pdfList" class="admin-list-stack"></div>
+              </div>
             </div>
 
             <div id="formError" class="feedback error hidden"></div>
             <div id="formSuccess" class="feedback success hidden"></div>
 
-            <div class="form-actions">
-              <button type="submit" id="saveLessonButton" class="primary-btn">
+            <div class="actions">
+              <button
+                type="submit"
+                id="saveLessonButton"
+                class="primary-btn"
+              >
                 Salvar aula
               </button>
-              <button type="button" id="cancelEditButton" class="secondary-btn hidden">
+              <button
+                type="button"
+                id="cancelEditButton"
+                class="secondary-btn hidden"
+              >
                 Cancelar edição
               </button>
             </div>
           </form>
-        </div>
+        </section>
 
-        <div class="admin-list-card">
+        <section class="card">
           <h2>Aulas cadastradas</h2>
-          <div id="lessonsList">
-            <div class="sidebar-loading">Carregando aulas...</div>
+          <div id="lessonsList" class="admin-list-stack">
+            <div class="empty-state">Carregando aulas...</div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </main>
 
     <script src="./js/api.js"></script>

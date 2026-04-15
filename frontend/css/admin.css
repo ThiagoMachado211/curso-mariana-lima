@@ -1,0 +1,683 @@
+/* =========================================================
+   ADMIN AREA - PADRÃO ÚNICO
+========================================================= */
+
+/* RESET / BASE */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  background: #000;
+  color: #fff;
+  line-height: 1.4;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  font: inherit;
+}
+
+input,
+select,
+textarea,
+button {
+  font-size: 16px;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* TOKENS */
+:root {
+  --bg-dark: #000;
+  --bg-dark-soft: #0b0b0b;
+  --text-light: #fff;
+  --text-muted: #cfcfcf;
+  --text-soft: #bdbdbd;
+
+  --text-dark: #0f172a;
+  --text-dark-soft: #475569;
+
+  --purple: #a855f7;
+  --purple-hover: #9333ea;
+
+  --blue: #2563eb;
+  --blue-hover: #1d4ed8;
+
+  --success-bg: #dcfce7;
+  --success-text: #166534;
+  --error-bg: #fee2e2;
+  --error-text: #991b1b;
+  --info-bg: #dbeafe;
+  --info-text: #1d4ed8;
+
+  --border-light: #dbe3ef;
+  --border-soft: #e5e7eb;
+  --border-dark: rgba(255, 255, 255, 0.08);
+
+  --card-bg: #f3f4f6;
+  --card-white: #ffffff;
+  --shadow-light: 0 4px 18px rgba(0, 0, 0, 0.08);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 22px;
+
+  --container: 1180px;
+}
+
+/* UTILITÁRIOS */
+.page-container {
+  width: 100%;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.empty-state {
+  color: #64748b;
+  padding: 8px 0;
+}
+
+.message {
+  margin-bottom: 16px;
+  padding: 12px;
+  border-radius: var(--radius-sm);
+}
+
+.success {
+  background: var(--success-bg);
+  color: var(--success-text);
+}
+
+.error {
+  background: var(--error-bg);
+  color: var(--error-text);
+}
+
+/* HEADER PADRÃO */
+.site-header {
+  width: 100%;
+  border-bottom: 1px solid var(--border-dark);
+  background: #000;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.site-header__inner {
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.site-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 700;
+}
+
+.site-logo__img {
+  height: 60px;
+  width: auto;
+  border-radius: 8px;
+}
+
+.site-logo__text {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.site-logo__text--blue {
+  color: orange;
+  font-size: 30px;
+}
+
+.site-logo__text--purple {
+  color: var(--purple);
+  font-size: 30px;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* BOTÕES */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 20px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+
+.btn--dark {
+  background: #0a0a0a;
+  color: #fff;
+  border: 1px solid var(--border-dark);
+}
+
+.btn--dark:hover {
+  background: #151515;
+}
+
+.btn--light {
+  background: #e5e7eb;
+  color: #111827;
+  border: 1px solid transparent;
+}
+
+.btn--light:hover {
+  background: #d1d5db;
+}
+
+/* BASE DA ÁREA ADMIN */
+.admin-page {
+  background: #000;
+  min-height: 100vh;
+  color: #fff;
+}
+
+.admin-management-main,
+.admin-dashboard-main {
+  background: #000;
+  min-height: calc(100vh - 72px);
+  padding: 40px 24px 80px;
+}
+
+.admin-management-container,
+.admin-dashboard-container {
+  width: 100%;
+  max-width: var(--container);
+  margin: 0 auto;
+}
+
+.admin-management-title,
+.admin-dashboard-title {
+  text-align: center;
+  color: #fff;
+  font-size: 44px;
+  line-height: 1.1;
+  font-weight: 800;
+  margin-bottom: 28px;
+}
+
+.admin-dashboard-subtitle {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 18px;
+  line-height: 1.7;
+  max-width: 850px;
+  margin: 0 auto 28px;
+}
+
+/* CARDS */
+.card {
+  background: var(--card-bg);
+  color: var(--text-dark);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-light);
+  padding: 20px;
+  margin-bottom: 22px;
+}
+
+.card h2 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 24px;
+  color: var(--text-dark);
+}
+
+/* FORMULÁRIOS */
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: bold;
+  font-size: 14px;
+  color: var(--text-dark);
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid #cbd5e1;
+  font-size: 14px;
+  color: var(--text-dark);
+  background: #fff;
+}
+
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+input[type="checkbox"] {
+  width: auto;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.actions button,
+.actions .action-btn,
+.card button,
+.card .action-btn {
+  width: auto;
+  min-width: 120px;
+}
+
+button,
+.primary-btn,
+.action-btn {
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+
+button:hover,
+.primary-btn:hover,
+.action-btn:hover {
+  background: var(--blue-hover);
+}
+
+.secondary,
+.secondary-btn {
+  background: #475569;
+  color: #fff;
+}
+
+.secondary:hover,
+.secondary-btn:hover {
+  background: #334155;
+}
+
+.danger,
+.danger-btn,
+.action-btn.delete {
+  background: #dc2626;
+  color: #fff;
+}
+
+.danger:hover,
+.danger-btn:hover,
+.action-btn.delete:hover {
+  background: #b91c1c;
+}
+
+/* BADGES */
+.badge,
+.admin-soft-badge,
+.status-badge {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.badge-active,
+.status-active,
+.admin-soft-badge.green {
+  background: var(--success-bg);
+  color: var(--success-text);
+}
+
+.badge-inactive,
+.status-inactive {
+  background: var(--error-bg);
+  color: var(--error-text);
+}
+
+.badge-published,
+.admin-soft-badge.blue {
+  background: var(--info-bg);
+  color: var(--info-text);
+}
+
+.badge-draft,
+.admin-soft-badge.gray {
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.admin-soft-badge.purple {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+/* DASHBOARD */
+.admin-dashboard-hero {
+  margin-bottom: 28px;
+}
+
+.admin-dashboard-hero h1 {
+  text-align: center;
+  font-size: 48px;
+  line-height: 1.08;
+  color: #fff;
+}
+
+.admin-dashboard-actions {
+  max-width: 800px;
+  margin: 30px auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.dashboard-admin-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 88px;
+  padding: 20px 24px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  background: #0b0b0b;
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-lg);
+  transition: 0.2s ease;
+}
+
+.dashboard-admin-btn:hover {
+  transform: translateY(-2px);
+  border-color: rgba(168, 85, 247, 0.45);
+  background: #111;
+}
+
+.dashboard-admin-btn--danger {
+  border-color: rgba(220, 38, 38, 0.35);
+}
+
+.dashboard-admin-btn--danger:hover {
+  border-color: rgba(220, 38, 38, 0.6);
+}
+
+/* LISTAS ADMIN */
+.admin-list-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.admin-list-card,
+.course-card,
+.module-card,
+.lesson-card {
+  width: 100%;
+  border: 1px solid var(--border-light);
+  border-radius: 14px;
+  padding: 20px;
+  background: var(--card-white);
+  color: var(--text-dark);
+}
+
+.admin-list-card-top,
+.course-card-top,
+.module-card-top,
+.lesson-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.course-title,
+.module-title,
+.lesson-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin-bottom: 6px;
+}
+
+.course-description,
+.module-meta,
+.lesson-meta,
+.admin-list-card-text {
+  color: var(--text-dark-soft);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.course-description {
+  white-space: pre-wrap;
+}
+
+.course-meta {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.lesson-meta {
+  word-break: break-word;
+}
+
+.course-actions,
+.module-actions,
+.lesson-actions,
+.admin-list-card-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+/* LINKS DE AULA */
+.links-block a {
+  display: inline-block;
+  margin-right: 10px;
+  color: var(--info-text);
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.links-block a:hover {
+  text-decoration: underline;
+}
+
+/* TABELAS - CADASTROS / BLOQUEADOS */
+.admin-table-wrap {
+  overflow-x: auto;
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid var(--border-light);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+}
+
+.admin-table thead th {
+  background: #eaf1fb;
+  color: var(--text-dark);
+  font-size: 14px;
+  text-align: left;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.admin-table tbody td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #edf2f7;
+  color: #1e293b;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.admin-table tbody tr:hover {
+  background: #f8fbff;
+}
+
+.admin-table-email {
+  color: #334155;
+  font-weight: 600;
+}
+
+.admin-table-role {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.admin-table-role.admin {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.admin-table-role.student {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.admin-table-status {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.admin-table-status.active {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.admin-table-status.inactive {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* FILTROS / BLOCOS AUXILIARES */
+.filter-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.page-intro {
+  background: #fff;
+  color: var(--text-dark);
+  border-radius: 14px;
+  box-shadow: var(--shadow-light);
+  padding: 20px;
+  margin-bottom: 22px;
+}
+
+.page-intro p {
+  color: #64748b;
+}
+
+/* RESPONSIVO */
+@media (max-width: 900px) {
+  .admin-management-title,
+  .admin-dashboard-title,
+  .admin-dashboard-hero h1 {
+    font-size: 34px;
+  }
+
+  .site-header__inner {
+    min-height: 72px;
+    height: auto;
+    padding: 16px 0;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .site-nav {
+    justify-content: center;
+  }
+
+  .row,
+  .filter-row {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-list-card-top,
+  .course-card-top,
+  .module-card-top,
+  .lesson-card-top {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .course-actions,
+  .module-actions,
+  .lesson-actions,
+  .admin-list-card-actions,
+  .actions {
+    justify-content: flex-start;
+  }
+
+  .site-logo__text--blue,
+  .site-logo__text--purple {
+    font-size: 24px;
+  }
+
+  .dashboard-admin-btn {
+    min-height: 72px;
+    font-size: 17px;
+  }
+}

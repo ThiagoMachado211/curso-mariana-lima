@@ -1,0 +1,231 @@
+/* =========================================================
+   RESET / BASE
+========================================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  background: #000;
+  color: #fff;
+}
+
+/* =========================================================
+   TOKENS
+========================================================= */
+:root {
+  --purple: #a855f7;
+  --border-dark: rgba(255, 255, 255, 0.08);
+  --radius: 12px;
+  --container: 1180px;
+}
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+.page-container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+.site-header {
+  width: 100%;
+  border-bottom: 1px solid var(--border-dark);
+  background: #000;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.site-header__inner {
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.site-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.site-logo__img {
+  height: 60px;
+  border-radius: 8px;
+}
+
+.site-logo__text--blue {
+  color: orange;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.site-logo__text--purple {
+  color: var(--purple);
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.site-nav {
+  display: flex;
+  gap: 12px;
+}
+
+/* BOTÃO */
+.btn {
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  font-weight: 600;
+}
+
+.btn--dark {
+  background: #0a0a0a;
+  color: #fff;
+  border: 1px solid var(--border-dark);
+}
+
+/* =========================================================
+   MAIN
+========================================================= */
+.admin-management-main {
+  padding: 40px 24px 80px;
+}
+
+.admin-management-container {
+  max-width: var(--container);
+  margin: 0 auto;
+}
+
+/* TÍTULO */
+.admin-management-title {
+  text-align: center;
+  font-size: 42px;
+  margin-bottom: 30px;
+}
+
+/* =========================================================
+   CARDS
+========================================================= */
+.card {
+  background: #f3f4f6;
+  color: #0f172a;
+  border-radius: 18px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+/* =========================================================
+   FORMULÁRIO
+========================================================= */
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  border: 1px solid #cbd5e1;
+  font-size: 14px;
+}
+
+textarea {
+  min-height: 100px;
+}
+
+/* CHECKBOX */
+input[type="checkbox"] {
+  width: auto;
+}
+
+/* =========================================================
+   AÇÕES
+========================================================= */
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+button {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+button:hover {
+  background: #1d4ed8;
+}
+
+.secondary {
+  background: #475569;
+}
+
+.secondary:hover {
+  background: #334155;
+}
+
+/* =========================================================
+   LISTA DE CURSOS
+========================================================= */
+.admin-list-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.empty-state {
+  color: #64748b;
+}
+
+/* =========================================================
+   UTILITÁRIOS
+========================================================= */
+.hidden {
+  display: none !important;
+}
+
+/* =========================================================
+   RESPONSIVO
+========================================================= */
+@media (max-width: 768px) {
+  .site-header__inner {
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px 0;
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-management-title {
+    font-size: 32px;
+  }
+}
